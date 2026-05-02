@@ -1,0 +1,11 @@
+const router = require("express").Router();
+const ctrl   = require("../controllers/orderController");
+const { protect, adminOnly, deliveryOrAdmin } = require("../middleware/auth");
+router.post("/",                     protect, ctrl.create);
+router.get("/",                      protect, adminOnly, ctrl.getAll);
+router.get("/analytics",             protect, adminOnly, ctrl.getAnalytics);
+router.get("/mine",                  protect, ctrl.getMine);
+router.get("/delivery",              protect, deliveryOrAdmin, ctrl.getDeliveryOrders);
+router.patch("/:id/status",          protect, adminOnly, ctrl.updateStatus);
+router.patch("/:id/delivery-update", protect, deliveryOrAdmin, ctrl.deliveryUpdate);
+module.exports = router;

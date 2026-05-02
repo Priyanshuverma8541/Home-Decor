@@ -1,0 +1,10 @@
+const router  = require("express").Router();
+const ctrl    = require("../controllers/campaignController");
+const { protect, adminOnly } = require("../middleware/auth");
+const { upload } = require("../config/cloudinary");
+router.get("/",           protect, adminOnly, ctrl.getAll);
+router.post("/",          protect, adminOnly, upload.single("media"), ctrl.create);
+router.put("/:id",        protect, adminOnly, upload.single("media"), ctrl.update);
+router.post("/:id/send",  protect, adminOnly, ctrl.send);
+router.delete("/:id",     protect, adminOnly, ctrl.remove);
+module.exports = router;
