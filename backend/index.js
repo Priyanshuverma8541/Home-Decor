@@ -14,6 +14,8 @@ const PORT       = process.env.PORT || 8081;
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const ALLOWED = [
+  "https://home-decor-n2z6.vercel.app/",
+  "https://home-decor-inky.vercel.app/",
   "http://localhost:5175",
   "http://localhost:5176",
   "http://localhost:5173",
