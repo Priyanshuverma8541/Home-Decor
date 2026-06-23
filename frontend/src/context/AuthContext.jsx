@@ -44,11 +44,24 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("sl_token");
-    localStorage.removeItem("sl_user");
-    setToken(""); setUser(null);
-    toast.success("Logged out");
-  }, []);
+  const user = JSON.parse(
+    localStorage.getItem("sl_user")
+  );
+
+  if (user?._id) {
+    localStorage.removeItem(`sl_cart_${user._id}`);
+  }
+
+  localStorage.removeItem("sl_token");
+  localStorage.removeItem("sl_user");
+
+  setToken("");
+  setUser(null);
+
+  toast.success("Logged out");
+
+  window.dispatchEvent(new Event("storage"));
+}, []);
 
   return (
     <Ctx.Provider value={{ user, token, isAuthenticated, loading, login, register, logout }}>
