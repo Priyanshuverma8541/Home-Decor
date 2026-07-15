@@ -32,8 +32,8 @@
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
-  background: var(--cream);
-  color: var(--ink);
+  background: #0a0e27;
+  color: white;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -103,11 +103,18 @@ img { max-width: 100%; display: block; }
 
 /* ── Cards ──────────────────────────────────── */
 .card {
-  background: white; border-radius: 1rem;
-  box-shadow: 0 2px 16px rgba(26,20,9,.07);
-  transition: box-shadow .3s, transform .3s;
+  background: linear-gradient(135deg, rgba(26,31,58,0.9) 0%, rgba(15,23,41,0.9) 100%);
+  border-radius: 1rem;
+  border: 1px solid rgba(48,172,144,0.2);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  transition: all .3s ease;
+  backdrop-filter: blur(10px);
 }
-.card:hover { box-shadow: 0 8px 32px rgba(26,20,9,.12); transform: translateY(-2px); }
+.card:hover { 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(48,172,144,0.2);
+  transform: translateY(-5px);
+  border-color: rgba(48,172,144,0.4);
+}
 
 /* ── Form ───────────────────────────────────── */
 .input {
@@ -139,7 +146,8 @@ img { max-width: 100%; display: block; }
 .section-tag {
   display: inline-block; font-size: .7rem; font-family: 'DM Sans', sans-serif;
   font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--terra); margin-bottom: .5rem;
+  color: #30ac90; margin-bottom: .5rem;
+  text-shadow: 0 0 20px rgba(48,172,144,0.5);
 }
 
 /* ── Divider ─────────────────────────────────── */
@@ -152,9 +160,10 @@ img { max-width: 100%; display: block; }
 
 /* ── Skeleton ────────────────────────────────── */
 .skeleton {
-  background: linear-gradient(90deg, #ede5d8 25%, #fdf6ee 50%, #ede5d8 75%);
+  background: linear-gradient(90deg, rgba(26,31,58,0.5) 25%, rgba(48,172,144,0.1) 50%, rgba(26,31,58,0.5) 75%);
   background-size: 200% 100%;
-  animation: shimmer 1.6s infinite; border-radius: .5rem;
+  animation: shimmer 1.6s infinite; border-radius: 1rem;
+  border: 1px solid rgba(48,172,144,0.1);
 }
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 

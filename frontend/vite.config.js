@@ -1,3 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-export default defineConfig({ plugins:[react()], server:{ port:5176 } });
+
+export default defineConfig({
+  plugins: [react()],
+  server: { port: 5176 },
+  optimizeDeps: {
+    exclude: ['react-hot-toast']
+  },
+  ssr: {
+    noExternal: ['three', '@react-three/fiber', '@react-three/drei']
+  }
+});
