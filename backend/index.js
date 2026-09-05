@@ -16,6 +16,8 @@ const PORT       = process.env.PORT || 8081;
 const ALLOWED = [
   "https://home-decor-n2z6.vercel.app/",
   "https://home-decor-inky.vercel.app/",
+  "https://online-delivery-wxjr.vercel.app/",
+  "https://thikana-marketplace.vercel.app/",
   "http://localhost:5175",
   "http://localhost:5176",
   "http://localhost:5173",
@@ -59,6 +61,7 @@ app.use("/api/leads",     require("./routes/leads"));
 app.use("/api/users",     require("./routes/users"));
 app.use("/api/campaigns", require("./routes/campaigns"));
 app.use("/api/settings",  require("./routes/settings"));
+app.use("/api/marketplace", require("./routes/marketplace"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

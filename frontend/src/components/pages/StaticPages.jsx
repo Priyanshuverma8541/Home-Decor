@@ -4,7 +4,7 @@ import { Leaf, Phone, Mail, MapPin, Instagram, MessageCircle, ChevronDown } from
 import { Link } from "react-router-dom";
 
 const WA = import.meta.env.VITE_WHATSAPP  || "6207855397";
-const IG = import.meta.env.VITE_INSTAGRAM || "livingcrafts__";
+const IG = import.meta.env.VITE_INSTAGRAM || "savitrilivings";
 const up = (d=0) => ({ initial:{opacity:0,y:20}, whileInView:{opacity:1,y:0}, viewport:{once:true,margin:"-60px"}, transition:{duration:.65,delay:d} });
 
 function HeroBand({ tag, title, sub }) {
@@ -32,10 +32,10 @@ export function About() {
               <p className="section-tag">Who we are</p>
               <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", color:"#1c1409", marginBottom:"1rem" }}>Savitri Livings</h2>
               <p style={{ color:"#5c4a32", lineHeight:1.85, marginBottom:"1rem" }}>
-                We are a small family-run home decor business based in Buxar, Bihar. We specialise in handcrafted seashell products, natural home decor, and thoughtfully curated gift collections.
+                Savitri Livings is a family-run jewellery business based in Buxar, Bihar. We specialise in thoughtful earrings, rings, celebration pieces, gifts, and beautiful keepsakes.
               </p>
               <p style={{ color:"#5c4a32", lineHeight:1.85, marginBottom:"1rem" }}>
-                Every piece is made with natural materials — seashells, bamboo, jute, and wood — and crafted with care. We believe your home should tell a story, and we are here to help you tell yours.
+                Every piece is chosen with care for its finish, comfort, and meaning. We believe jewellery should tell your story, and we are here to help you find the right piece.
               </p>
               <p style={{ color:"#5c4a32", lineHeight:1.85 }}>
                 Currently delivering in Buxar, with Varanasi and Kolkata coming soon. Follow us on Instagram at <a href={`https://instagram.com/${IG}`} target="_blank" rel="noopener noreferrer" style={{ color:"#1a3c34", fontWeight:500 }}>@{IG}</a> for new arrivals and behind-the-scenes craft.
@@ -43,7 +43,7 @@ export function About() {
             </div>
             <div>
               <div style={{ borderRadius:"1.25rem", overflow:"hidden", aspectRatio:"4/3", background:"#f0e6d0" }}>
-                <img src="https://images.unsplash.com/photo-1617791160505-6f00504e3519?w=800&q=80" alt="Handcrafted seashell decor" style={{ width:"100%", height:"100%", objectFit:"cover" }} loading="lazy"/>
+                <img src="/brand/savitri-jewellers-heart-earrings.png" alt="Savitri Livings gold earrings" style={{ width:"100%", height:"100%", objectFit:"contain", background:"#f7eddf" }} loading="lazy"/>
               </div>
             </div>
           </motion.div>
@@ -149,12 +149,12 @@ export function FAQs() {
   const [open, setOpen] = useState(null);
   const faqs = [
     { q:"Where do you deliver?",             a:"Currently delivering in Buxar, Bihar. Varanasi and Kolkata are coming very soon." },
-    { q:"How do I place an order?",           a:"You can order directly on our website, via WhatsApp (+91 6207855397), or through Instagram DM (@livingcrafts__)." },
+    { q:"How do I place an order?",           a:"You can order directly on our website, via WhatsApp (+91 6207855397), or through Instagram DM (@savitrilivings)." },
     { q:"What payment methods do you accept?",a:"UPI/QR (PhonePe, GPay, Paytm), Razorpay online, and cash on delivery within Buxar." },
     { q:"How long does delivery take?",       a:"Same-day delivery in Buxar for orders placed before 2pm. Standard delivery is 1-2 days." },
     { q:"What is your return policy?",        a:"We accept returns within 7 days if the product is in original condition. WhatsApp us with a photo of the issue." },
     { q:"Can I customise a product?",         a:"Yes! Many of our pieces can be customised. Contact us on WhatsApp to discuss your requirements." },
-    { q:"Are the products eco-friendly?",     a:"Yes. We use natural, sustainably sourced materials — seashells, bamboo, jute, and natural wood." },
+    { q:"How do I choose the right jewellery?", a:"Message us or visit us for personal guidance on style, occasion, and the piece that feels right for you." },
     { q:"Can I order in bulk for events?",    a:"Absolutely. We offer bulk and event orders. WhatsApp us for pricing and timelines." },
   ];
   return (

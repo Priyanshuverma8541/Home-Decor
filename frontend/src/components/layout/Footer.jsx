@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
-import { Leaf, Phone, Mail, MapPin, Instagram } from "lucide-react";
+import { Gem, Phone, Mail, MapPin, Instagram } from "lucide-react";
 
 const WA  = import.meta.env.VITE_WHATSAPP   || "6207855397";
-const IG  = import.meta.env.VITE_INSTAGRAM  || "livingcrafts__";
+const IG  = import.meta.env.VITE_INSTAGRAM  || "savitrilivings";
 
 const COLS = {
-  "Shop":    [{ to:"/shop",              label:"All Products"   },
-              { to:"/shop?category=seashell", label:"Seashells" },
-              { to:"/shop?category=decor",    label:"Home Decor" },
-              { to:"/shop?category=gift",     label:"Gifts"     },
-              { to:"/shop?category=seasonal", label:"Seasonal"  }],
+  "Shop":    [{ to:"/shop",                 label:"All Jewellery" },
+              { to:"/shop?category=rings",    label:"Rings" },
+              { to:"/shop?category=necklaces",label:"Necklaces" },
+              { to:"/shop?category=earrings", label:"Earrings" },
+              { to:"/shop?category=bridal",   label:"Bridal" }],
   "Company": [{ to:"/about",   label:"About Us"   },
               { to:"/contact", label:"Contact"     },
               { to:"/faqs",    label:"FAQs"        }],
@@ -20,13 +20,13 @@ const COLS = {
 
 export default function Footer() {
   return (
-    <footer style={{ background:"#0f2419" }}>
+    <footer style={{ background:"#4d3219" }}>
       {/* CTA strip */}
       <div style={{ borderBottom:"1px solid rgba(255,255,255,.06)" }}>
         <div style={{ maxWidth:1280, margin:"0 auto", padding:"1.75rem 1rem", display:"flex", flexWrap:"wrap", alignItems:"center", justifyContent:"space-between", gap:"1rem" }}>
           <div>
-            <p className="section-tag" style={{ color:"#30ac90" }}>Handcrafted with love</p>
-            <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", color:"white" }}>Delivered to your door in Buxar</h3>
+            <p className="section-tag" style={{ color:"#f4ce7c" }}>Handcrafted with love</p>
+            <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.6rem", color:"white" }}>Jewellery for every milestone</h3>
           </div>
           <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
             <Link to="/shop" className="btn-terra" style={{ fontSize:"0.875rem" }}>Shop Now</Link>
@@ -43,12 +43,12 @@ export default function Footer() {
           <div style={{ gridColumn:"span 2" }} className="footer-brand">
             <Link to="/" style={{ display:"inline-flex", alignItems:"center", gap:8, marginBottom:"0.875rem", textDecoration:"none" }}>
               <div style={{ width:30, height:30, borderRadius:8, background:"linear-gradient(135deg,#30ac90,#1a3c34)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                <Leaf style={{ width:14, height:14, color:"white" }}/>
+              <Gem style={{ width:14, height:14, color:"white" }}/>
               </div>
               <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.15rem", color:"white" }}>Savitri Livings</span>
             </Link>
             <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,.45)", lineHeight:1.75, marginBottom:"1.25rem", maxWidth:260 }}>
-              Handcrafted seashell home decor, gifts and seasonal collections. Made with care, delivered with love.
+              Timeless jewellery, thoughtful gifts and home accents—made with care and chosen for your moments.
             </p>
             <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
               {[
@@ -80,7 +80,7 @@ export default function Footer() {
 
         <div style={{ height:1, background:"linear-gradient(to right,transparent,rgba(255,255,255,.1),transparent)", margin:"2rem 0" }}/>
         <p style={{ fontSize:"0.75rem", color:"rgba(255,255,255,.25)", textAlign:"center" }}>
-          &copy; {new Date().getFullYear()} Savitri Livings. All rights reserved. Designed with 🌿
+          &copy; {new Date().getFullYear()} Savitri Livings. All rights reserved.
         </p>
       </div>
       <style>{`

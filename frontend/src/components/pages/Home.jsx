@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
 import { useCity } from "../../context/CityContext.jsx";
-import ThreeBackground from "../ui/ThreeBackground.jsx";
 import Hero3D from "../ui/Hero3D.jsx";
 import Categories3D from "../ui/Categories3D.jsx";
 import Features3D from "../ui/Features3D.jsx";
@@ -10,7 +9,7 @@ import FeaturedProducts3D from "../ui/FeaturedProducts3D.jsx";
 import Reviews3D from "../ui/Reviews3D.jsx";
 import CTA3D from "../ui/CTA3D.jsx";
 
-const IG  = import.meta.env.VITE_INSTAGRAM || "livingcrafts__";
+const IG  = import.meta.env.VITE_INSTAGRAM || "savitrilivings";
 const WA  = import.meta.env.VITE_WHATSAPP  || "6207855397";
 
 
@@ -27,9 +26,6 @@ export default function Home() {
 
   return (
     <div style={{ overflowX:"hidden" }}>
-      {/* 3D Background */}
-      <ThreeBackground />
-
       {/* Hero Section */}
       <Hero3D />
 
@@ -50,4 +46,3 @@ export default function Home() {
     </div>
   );
 }
-

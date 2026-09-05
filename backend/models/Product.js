@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const productSchema = new mongoose.Schema({
   name:             { type: String, required: true, trim: true },
   description:      { type: String },
-  category:         { type: String, enum: ["seashell","decor","gift","seasonal","other"], required: true },
+  category:         { type: String, enum: ["rings","necklaces","earrings","bangles","bridal","silver","decor","gift","other"], required: true },
   subCategory:      { type: String },
   tags:             [{ type: String }],
   images:           [{ type: String }],  // Cloudinary URLs
@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
   isActive:         { type: Boolean, default: true },
   weight:           { type: Number },   // grams
   dimensions:       { type: String },   // e.g. "20x15x5 cm"
-  material:         { type: String },   // e.g. "Natural seashell, bamboo"
+  material:         { type: String },   // e.g. "22K gold-plated brass"
   careInstructions: { type: String },
   instagramPostUrl: { type: String },
   whatsappOrderMsg: { type: String },   // pre-filled WA message template

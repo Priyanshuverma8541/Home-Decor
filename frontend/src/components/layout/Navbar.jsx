@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Menu, X, Leaf, MapPin, ChevronDown, User, LogOut, Package } from "lucide-react";
+import { ShoppingCart, Menu, X, MapPin, ChevronDown, User, LogOut, Package } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useCart } from "../../context/CartContext.jsx";
 import { useCity } from "../../context/CityContext.jsx";
@@ -9,6 +9,7 @@ import { useCity } from "../../context/CityContext.jsx";
 const NAV = [
   { to:"/",         label:"Home",     end:true },
   { to:"/shop",     label:"Shop"             },
+  { to:"/marketplace", label:"Marketplace"   },
   { to:"/about",    label:"About"            },
   { to:"/contact",  label:"Contact"          },
 ];
@@ -49,7 +50,7 @@ export default function Navbar() {
       <header style={{
         position:"fixed", top:0, left:0, right:0, zIndex:100, height:64,
         // background: scrolled || open ? "rgba(26,60,52,.97)" : "transparent",
-        background: "#3E8F7F", 
+        background: scrolled || open ? "rgba(91,60,29,.97)" : "rgba(91,60,29,.94)",
         backdropFilter: scrolled ? "blur(14px)" : "none",
         borderBottom: scrolled ? "1px solid rgba(255,255,255,.1)" : "none",
         transition:"all .3s",
@@ -58,12 +59,12 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link to="/" style={{ display:"flex", alignItems:"center", gap:8, textDecoration:"none", flexShrink:0 }}>
-            <div style={{ width:34, height:34, borderRadius:10, background:"linear-gradient(135deg,#30ac90,#1a3c34)", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 16px rgba(26,60,52,.3)" }}>
-              <Leaf style={{ width:16, height:16, color:"white" }}/>
+            <div style={{ width:34, height:34, borderRadius:"50%", background:"#f5dfb8", overflow:"hidden", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 16px rgba(26,60,52,.3)" }}>
+              <img src="/brand/savitri-jewellers-mark.png" alt="Savitri Livings" style={{ width:"126%", height:"126%", objectFit:"cover", mixBlendMode:"multiply" }}/>
             </div>
             <div style={{ lineHeight:1.1 }}>
               <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", fontWeight:600, color:"white" }}>Savitri</p>
-              <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", fontWeight:600, color:"#30ac90", marginTop:-4 }}>Livings</p>
+              <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", fontWeight:600, color:"#f4ce7c", marginTop:-4 }}>Livings</p>
             </div>
           </Link>
 
@@ -74,8 +75,8 @@ export default function Navbar() {
                 style={({ isActive }) => ({
                   display:"flex", alignItems:"center", padding:"0 0.875rem",
                   fontSize:"0.875rem", fontWeight:500, textDecoration:"none",
-                  color: isActive ? "#30ac90" : "rgba(255,255,255,.7)",
-                  borderBottom: isActive ? "2px solid #30ac90" : "2px solid transparent",
+                  color: isActive ? "#f4ce7c" : "rgba(255,255,255,.76)",
+                  borderBottom: isActive ? "2px solid #f4ce7c" : "2px solid transparent",
                   transition:"color .2s",
                 })}>{label}</NavLink>
             ))}
@@ -87,12 +88,12 @@ export default function Navbar() {
             <div ref={cityRef} style={{ position:"relative" }} className="desk-nav">
               <button onClick={() => setCityMenu(!cityMenu)}
                 style={{ display:"flex", alignItems:"center", gap:4, padding:"0 10px", height:34, borderRadius:20, border:"1px solid rgba(255,255,255,.2)", background:"rgba(255,255,255,.08)", cursor:"pointer", fontSize:"0.8rem", color:"rgba(255,255,255,.8)", fontFamily:"'DM Sans',sans-serif" }}>
-                <MapPin style={{ width:12, height:12, color:"#30ac90" }}/>{city}<ChevronDown style={{ width:12, height:12 }}/>
+                <MapPin style={{ width:12, height:12, color:"#f4ce7c" }}/>{city}<ChevronDown style={{ width:12, height:12 }}/>
               </button>
               <AnimatePresence>
                 {cityMenu && (
                   <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:6 }} transition={{ duration:.15 }}
-                    style={{ position:"absolute", right:0, top:"calc(100% + 6px)", width:180, background:"#1a3c34", borderRadius:12, border:"1px solid rgba(255,255,255,.12)", boxShadow:"0 12px 40px rgba(0,0,0,.3)", overflow:"hidden", zIndex:200 }}>
+                    style={{ position:"absolute", right:0, top:"calc(100% + 6px)", width:180, background:"#5b3c1d", borderRadius:12, border:"1px solid rgba(255,255,255,.12)", boxShadow:"0 12px 40px rgba(0,0,0,.3)", overflow:"hidden", zIndex:200 }}>
                     {cities.map(c => (
                       <button key={c.name} onClick={() => { selectCity(c.name); setCityMenu(false); }}
                         style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"0.625rem 1rem", background: city===c.name ? "rgba(48,172,144,.15)" : "transparent", border:"none", cursor: c.active ? "pointer" : "default", color: c.active ? (city===c.name?"#30ac90":"rgba(255,255,255,.75)") : "rgba(255,255,255,.3)", fontSize:"0.85rem", fontFamily:"'DM Sans',sans-serif", textAlign:"left" }}>
@@ -176,10 +177,10 @@ export default function Navbar() {
               style={{ position:"fixed", inset:0, zIndex:90, background:"rgba(0,0,0,.5)", backdropFilter:"blur(4px)" }}/>
             <motion.div key="dr" initial={{ x:"100%" }} animate={{ x:0 }} exit={{ x:"100%" }}
               transition={{ type:"tween", duration:.26 }}
-              style={{ position:"fixed", top:0, right:0, bottom:0, zIndex:110, width:"82vw", maxWidth:300, background:"#1a3c34", display:"flex", flexDirection:"column" }}>
+              style={{ position:"fixed", top:0, right:0, bottom:0, zIndex:110, width:"82vw", maxWidth:300, background:"#5b3c1d", display:"flex", flexDirection:"column" }}>
               <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 1.25rem", height:64, borderBottom:"1px solid rgba(255,255,255,.1)", flexShrink:0 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                  <Leaf style={{ width:16, height:16, color:"#30ac90" }}/>
+                  <img src="/brand/savitri-jewellers-mark.png" alt="" style={{ width:24, height:24, borderRadius:"50%", objectFit:"cover", mixBlendMode:"multiply" }}/>
                   <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:"white" }}>Savitri Livings</span>
                 </div>
                 <button onClick={() => setOpen(false)} style={{ width:30, height:30, borderRadius:"50%", border:"none", background:"rgba(255,255,255,.1)", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>

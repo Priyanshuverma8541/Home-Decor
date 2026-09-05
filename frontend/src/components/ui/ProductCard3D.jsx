@@ -35,15 +35,17 @@ export default function ProductCard3D({ product, index }) {
     y.set(0);
   };
 
-  // High-quality home decor images from Unsplash
+  // Prefer the product photo uploaded in Admin; branded jewelry art is a safe fallback.
   const getImage = (product) => {
     const images = {
-      'seashell': 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80',
-      'decor': 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80',
-      'gift': 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80',
-      'seasonal': 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600&q=80'
+      'rings': '/brand/savitri-jewellers-heart-earrings.png',
+      'necklaces': '/brand/savitri-jewellers-earrings.png',
+      'earrings': '/brand/savitri-jewellers-earrings.png',
+      'bangles': '/brand/savitri-jewellers-heart-earrings.png',
+      'bridal': '/brand/savitri-jewellers-earrings.png',
+      'silver': '/brand/savitri-jewellers-heart-earrings.png'
     };
-    return images[product.category] || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80';
+    return product.images?.[0] || images[product.category] || '/brand/savitri-jewellers-earrings.png';
   };
 
   return (
@@ -65,23 +67,22 @@ export default function ProductCard3D({ product, index }) {
         whileHover={{ scale: 1.05, z: 50 }}
         style={{
           position: 'relative',
-          background: 'linear-gradient(135deg, rgba(26,31,58,0.9) 0%, rgba(15,23,41,0.9) 100%)',
+          background: 'linear-gradient(135deg, #ffffff 0%, #fdf6ee 100%)',
           borderRadius: '1.5rem',
           overflow: 'hidden',
-          border: '1px solid rgba(48,172,144,0.3)',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(48,172,144,0.2)',
+          border: '2px solid rgba(201,96,48,0.2)',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.15), 0 0 30px rgba(201,96,48,0.1)',
           transformStyle: 'preserve-3d',
-          cursor: 'pointer',
-          backdropFilter: 'blur(10px)'
+          cursor: 'pointer'
         }}
       >
-        {/* Glowing border effect */}
+        {/* Gradient border effect */}
         <div style={{
           position: 'absolute',
           inset: 0,
           borderRadius: '1.5rem',
           padding: '2px',
-          background: 'linear-gradient(135deg, #30ac90, #06b6d4, #8b5cf6)',
+          background: 'linear-gradient(135deg, #d9bb82, #9d6a27, #f5e7cf)',
           WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
@@ -93,7 +94,7 @@ export default function ProductCard3D({ product, index }) {
           <div style={{
             position: 'relative',
             aspectRatio: '1',
-            overflow: 'hidden',
+            overflow: 'hidden', background: '#f8f0e5',
             transform: 'translateZ(20px)'
           }}>
             <img
@@ -102,7 +103,7 @@ export default function ProductCard3D({ product, index }) {
               style={{
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 transition: 'transform 0.6s ease'
               }}
               loading="lazy"
@@ -112,7 +113,7 @@ export default function ProductCard3D({ product, index }) {
             <div style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to bottom, transparent 50%, rgba(10,14,39,0.9) 100%)'
+              background: 'linear-gradient(to bottom, transparent 40%, rgba(253,246,238,0.95) 100%)'
             }} />
 
             {/* Badges */}
@@ -156,15 +157,16 @@ export default function ProductCard3D({ product, index }) {
         <div style={{
           padding: '1.5rem',
           transform: 'translateZ(30px)',
-          position: 'relative'
+          position: 'relative',
+          background: 'linear-gradient(180deg, transparent 0%, #ffffff 30%)'
         }}>
           <p style={{
             fontSize: '0.7rem',
-            color: '#30ac90',
+            color: 'white',
             textTransform: 'uppercase',
             letterSpacing: '0.15em',
             marginBottom: '0.5rem',
-            fontWeight: 500
+            fontWeight: 600
           }}>
             {product.category}
           </p>
@@ -172,7 +174,7 @@ export default function ProductCard3D({ product, index }) {
           <Link to={`/product/${product._id}`} style={{ textDecoration: 'none' }}>
             <h3 style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: '1.25rem',
+              fontSize: '1.35rem',
               color: 'white',
               marginBottom: '0.75rem',
               lineHeight: 1.3,
@@ -180,7 +182,8 @@ export default function ProductCard3D({ product, index }) {
               textOverflow: 'ellipsis',
               display: '-webkit-box',
               WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical'
+              WebkitBoxOrient: 'vertical',
+              fontWeight: 600
             }}>
               {product.name}
             </h3>
@@ -192,22 +195,22 @@ export default function ProductCard3D({ product, index }) {
             justifyContent: 'space-between',
             marginTop: '1rem',
             paddingTop: '1rem',
-            borderTop: '1px solid rgba(48,172,144,0.2)'
+            borderTop: '2px solid rgba(201,96,48,0.2)'
           }}>
             <div>
               <span style={{
                 fontFamily: "'Cormorant Garamond', serif",
-                fontSize: '1.5rem',
-                color: '#30ac90',
-                fontWeight: 600,
-                textShadow: '0 0 20px rgba(48,172,144,0.5)'
+                fontSize: '1.75rem',
+                color: 'white',
+                fontWeight: 700,
+                textShadow: '0 2px 4px rgba(201,96,48,0.2)'
               }}>
                 Rs.{product.price?.toLocaleString('en-IN')}
               </span>
               {product.comparePrice && product.comparePrice > product.price && (
                 <span style={{
                   fontSize: '0.875rem',
-                  color: 'rgba(255,255,255,0.4)',
+                  color: 'white',
                   textDecoration: 'line-through',
                   marginLeft: '0.5rem'
                 }}>
@@ -222,12 +225,12 @@ export default function ProductCard3D({ product, index }) {
               onClick={() => addToCart(product)}
               disabled={product.stock === 0}
               style={{
-                width: 40,
-                height: 40,
+                width: 45,
+                height: 45,
                 borderRadius: '50%',
                 background: product.stock === 0 
-                  ? 'rgba(255,255,255,0.1)' 
-                  : 'linear-gradient(135deg, #30ac90, #06b6d4)',
+                  ? 'rgba(0,0,0,0.1)' 
+                  : 'linear-gradient(135deg, #c96030, #e38345)',
                 color: 'white',
                 border: 'none',
                 cursor: product.stock === 0 ? 'not-allowed' : 'pointer',
@@ -236,11 +239,11 @@ export default function ProductCard3D({ product, index }) {
                 justifyContent: 'center',
                 boxShadow: product.stock === 0 
                   ? 'none' 
-                  : '0 4px 15px rgba(48,172,144,0.4)',
+                  : '0 4px 15px rgba(201,96,48,0.4)',
                 opacity: product.stock === 0 ? 0.5 : 1
               }}
             >
-              <ShoppingBag size={18} />
+              <ShoppingBag size={20} />
             </motion.button>
           </div>
         </div>
@@ -250,7 +253,7 @@ export default function ProductCard3D({ product, index }) {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle at center, rgba(48,172,144,0.1) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at center, rgba(201,96,48,0.15) 0%, transparent 70%)',
             opacity: 0,
             pointerEvents: 'none',
             transition: 'opacity 0.3s'

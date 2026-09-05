@@ -250,7 +250,7 @@ export default function Cart() {
   const grandTotal   = totalPrice + deliveryFee;
 
   if (items.length === 0) return (
-    <EmptyState title="Your cart is empty" message="Discover our seashell home decor and gift collections."
+    <EmptyState title="Your cart is empty" message="Discover Savitri Livings earrings, rings, and celebration pieces."
       action={<Link to="/shop" className="btn-primary">Browse Collection <ArrowRight style={{ width:15,height:15 }}/></Link>}/>
   );
 
@@ -445,4 +445,3 @@ export default function Cart() {
     </div>
   );
 }
-

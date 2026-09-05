@@ -207,8 +207,17 @@ export function AuthProvider({ children }) {
   window.dispatchEvent(new Event("storage"));
 }, []);
 
+  // Used when an account gains marketplace-seller capabilities without a new login.
+  const refreshUser = useCallback(async () => {
+    const { data } = await authAPI.me();
+    const nextUser = data.user;
+    localStorage.setItem("sl_user", JSON.stringify(nextUser));
+    setUser(nextUser);
+    return nextUser;
+  }, []);
+
   return (
-    <Ctx.Provider value={{ user, token, isAuthenticated, loading, login, register, logout }}>
+    <Ctx.Provider value={{ user, token, isAuthenticated, loading, login, register, logout, refreshUser }}>
       {children}
     </Ctx.Provider>
   );

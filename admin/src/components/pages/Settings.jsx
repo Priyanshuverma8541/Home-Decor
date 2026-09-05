@@ -126,7 +126,7 @@ export default function Settings() {
           <input className="input" value={settings.whatsappNumber||""} onChange={set("whatsappNumber")} placeholder="6207855397"/>
         </Field>
         <Field label="Instagram Handle">
-          <input className="input" value={settings.instagramHandle||""} onChange={set("instagramHandle")} placeholder="livingcrafts__"/>
+          <input className="input" value={settings.instagramHandle||""} onChange={set("instagramHandle")} placeholder="savitrilivings"/>
         </Field>
         <Field label="Contact Phone">
           <input className="input" value={settings.contactPhone||""} onChange={set("contactPhone")}/>

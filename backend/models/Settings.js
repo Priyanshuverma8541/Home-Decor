@@ -12,7 +12,7 @@ const settingsSchema = new mongoose.Schema({
   contactEmail:      { type: String, default: "" },
   contactPhone:      { type: String, default: "6207855397" },
   whatsappNumber:    { type: String, default: "6207855397" },
-  instagramHandle:   { type: String, default: "livingcrafts__" },
+  instagramHandle:   { type: String, default: "savitrilivings" },
 
   // Cities
   activeCities:      { type: [String], default: ["Buxar"] },

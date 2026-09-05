@@ -17,6 +17,7 @@ import { Login, Register }             from "./components/pages/AuthPages.jsx";
 import { MyAccount, MyOrders }         from "./components/pages/AccountPages.jsx";
 import { About, Contact, FAQs, Legal } from "./components/pages/StaticPages.jsx";
 import { NotFound }                    from "./components/ui/Shared.jsx";
+import { MarketplaceHome, ListingDetail, SellerHub } from "./components/pages/Marketplace.jsx";
 
 export default function App() {
   return (
@@ -38,6 +39,9 @@ export default function App() {
                 <Route path="legal"      element={<Legal />}         />
                 <Route path="account"    element={<MyAccount />}     />
                 <Route path="account/orders" element={<MyOrders />}  />
+                <Route path="marketplace" element={<MarketplaceHome />} />
+                <Route path="marketplace/listing/:id" element={<ListingDetail />} />
+                <Route path="marketplace/sell" element={<SellerHub />} />
                 <Route path="*"          element={<NotFound />}      />
               </Route>
 

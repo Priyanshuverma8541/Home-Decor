@@ -214,7 +214,7 @@ export function Campaigns() {
                 </div>
               </div>
               <div><label className="label">Message *</label>
-                <textarea required className="input" rows={4} style={{ resize:"vertical" }} placeholder="Hi {name}! Check out our new seashell collection…" value={form.message} onChange={e=>setForm(f=>({...f,message:e.target.value}))}/>
+                <textarea required className="input" rows={4} style={{ resize:"vertical" }} placeholder="Hi {name}! Explore our new Savitri Livings collection…" value={form.message} onChange={e=>setForm(f=>({...f,message:e.target.value}))}/>
               </div>
               <div style={{ display:"flex", gap:8, justifyContent:"flex-end" }}>
                 <Button variant="ghost" onClick={()=>setShowAdd(false)} type="button">Cancel</Button>

@@ -50,4 +50,13 @@ export const leadAPI = {
   create: (d) => api.post("/api/leads", d),
 };
 
+export const marketplaceAPI = {
+  categories: () => api.get("/api/marketplace/categories"),
+  listings: (params) => api.get("/api/marketplace/listings", { params }),
+  listing: (id) => api.get(`/api/marketplace/listings/${id}`),
+  becomeSeller: (data) => api.post("/api/marketplace/become-seller", data),
+  myListings: () => api.get("/api/marketplace/me/listings"),
+  createListing: (data) => api.post("/api/marketplace/listings", data),
+};
+
 export default api;

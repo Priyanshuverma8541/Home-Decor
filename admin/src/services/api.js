@@ -68,4 +68,13 @@ export const settingsAPI = {
   uploadQR: (d) => api.post("/api/settings/qr", d, { headers: { "Content-Type": "multipart/form-data" } }),
 };
 
+export const marketplaceAPI = {
+  summary:    () => api.get("/api/marketplace/admin/summary"),
+  listings:   (status) => api.get("/api/marketplace/admin/listings", { params: status ? { status } : {} }),
+  moderate:   (id, data) => api.patch(`/api/marketplace/admin/listings/${id}`, data),
+  categories: () => api.get("/api/marketplace/admin/categories"),
+  addCategory:(data) => api.post("/api/marketplace/admin/categories", data),
+  updateCategory:(id, data) => api.patch(`/api/marketplace/admin/categories/${id}`, data),
+};
+
 export default api;

@@ -20,6 +20,13 @@ const userSchema = new mongoose.Schema({
   commissionRate:    { type: Number, default: 10 }, // percent
   isApproved:        { type: Boolean, default: false },
   isActive:          { type: Boolean, default: true },
+  // Marketplace seller profile.  Kept on the existing account so customers do
+  // not need a second login when they start selling through Thikana.
+  marketplaceStoreName: { type: String, trim: true },
+  marketplaceStoreSlug: { type: String, trim: true, lowercase: true, sparse: true, unique: true },
+  marketplaceBio:       { type: String, maxlength: 300 },
+  marketplaceAvatar:    { type: String },
+  marketplaceVerified:  { type: Boolean, default: false },
   // Social
   source:            { type: String, enum: ["website","whatsapp","instagram","referral","direct"], default: "website" },
   notes:             { type: String },
@@ -36,4 +43,3 @@ userSchema.methods.matchPassword = function (pwd) {
 };
 
 module.exports = mongoose.model("User", userSchema);
-

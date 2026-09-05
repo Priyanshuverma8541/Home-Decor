@@ -5,11 +5,11 @@ import { productAPI } from "../../services/api.js";
 import { PageLoader, EmptyState, Modal, Button } from "../ui/index.jsx";
 import toast from "react-hot-toast";
 
-const CATS    = ["seashell","decor","gift","seasonal","other"];
+const CATS    = ["rings","necklaces","earrings","bangles","bridal","silver","decor","gift","other"];
 const CITIES  = ["Buxar","Varanasi","Kolkata"];
 
 function ProductForm({ initial, onSave, onClose }) {
-  const [form, setForm] = useState(initial || { name:"", description:"", category:"seashell", price:"", comparePrice:"", stock:"", availableCities:["Buxar"], tags:"", material:"", isFeatured:false, isSeasonal:false, isActive:true });
+  const [form, setForm] = useState(initial || { name:"", description:"", category:"earrings", price:"", comparePrice:"", stock:"", availableCities:["Buxar"], tags:"", material:"", isFeatured:false, isSeasonal:false, isActive:true });
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState(initial?.images || []);
   const [saving, setSaving] = useState(false);
@@ -47,7 +47,7 @@ function ProductForm({ initial, onSave, onClose }) {
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
         <div style={{ gridColumn:"span 2" }}>
           <label className="label">Product Name *</label>
-          <input required className="input" placeholder="e.g. Hand-painted Conch Shell Frame" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/>
+          <input required className="input" placeholder="e.g. Handcrafted Gold Heart Earrings" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))}/>
         </div>
         <div>
           <label className="label">Category *</label>
@@ -57,7 +57,7 @@ function ProductForm({ initial, onSave, onClose }) {
         </div>
         <div>
           <label className="label">Material</label>
-          <input className="input" placeholder="e.g. Seashell, bamboo" value={form.material||""} onChange={e=>setForm(f=>({...f,material:e.target.value}))}/>
+          <input className="input" placeholder="e.g. 22K gold-plated brass" value={form.material||""} onChange={e=>setForm(f=>({...f,material:e.target.value}))}/>
         </div>
         <div>
           <label className="label">Price (Rs.) *</label>
@@ -73,7 +73,7 @@ function ProductForm({ initial, onSave, onClose }) {
         </div>
         <div>
           <label className="label">Tags (comma separated)</label>
-          <input className="input" placeholder="beach, coastal, gift" value={form.tags||""} onChange={e=>setForm(f=>({...f,tags:e.target.value}))}/>
+          <input className="input" placeholder="gold, handmade, gift" value={form.tags||""} onChange={e=>setForm(f=>({...f,tags:e.target.value}))}/>
         </div>
         <div style={{ gridColumn:"span 2" }}>
           <label className="label">Description</label>

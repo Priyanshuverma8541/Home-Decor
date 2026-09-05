@@ -9,6 +9,7 @@ import CRM                            from "./components/pages/CRM.jsx";
 import Settings                       from "./components/pages/Settings.jsx";
 import { Partners, Campaigns } from "./components/pages/OtherPages.jsx";
 import Analytics from "./components/pages/Analytics.jsx";
+import Marketplace from "./components/pages/Marketplace.jsx";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="partners" element={<Partners />}   />
             <Route path="campaigns"element={<Campaigns />}  />
             <Route path="analytics"element={<Analytics />}  />
+            <Route path="marketplace" element={<Marketplace />} />
             <Route path="settings" element={<Settings />}   />
           </Route>
         </Routes>

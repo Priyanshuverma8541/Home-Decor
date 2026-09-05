@@ -93,7 +93,7 @@ export function usePayment() {
         amount:      data.order.grandTotal * 100,
         currency:    "INR",
         name:        BRAND,
-        description: "Home Decor Order",
+        description: "Savitri Livings Order",
         order_id:    data.order.razorpayOrderId,
         prefill:     { name: orderPayload.guestName, contact: orderPayload.guestPhone },
         handler:     async () => {
@@ -129,7 +129,7 @@ export function usePayment() {
   /* ── WhatsApp order ─────────────────────────────────── */
   const orderViaWhatsApp = useCallback(({ items, totalPrice, city, address }) => {
     const itemList = items.map(i => `• ${i.name} x${i.quantity} = Rs.${(i.price * i.quantity).toLocaleString("en-IN")}`).join("\n");
-    const msg = `Hi Savitri Livings! 🌿\n\nI'd like to place an order:\n\n${itemList}\n\nTotal: Rs.${totalPrice.toLocaleString("en-IN")}\nCity: ${city}\nAddress: ${address}\n\nPlease confirm. Thank you!`;
+    const msg = `Hi Savitri Livings! ✨\n\nI'd like to place an order:\n\n${itemList}\n\nTotal: Rs.${totalPrice.toLocaleString("en-IN")}\nCity: ${city}\nAddress: ${address}\n\nPlease confirm. Thank you!`;
     window.open(`https://wa.me/91${WA_NUM}?text=${encodeURIComponent(msg)}`, "_blank");
   }, []);
 
