@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Savitri Livings Marketing Cloud</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" data-page="dashboard"><span>SL</span><div><strong>Savitri Livings</strong><small>Marketing Cloud</small></div></a>
+      <nav class="nav" aria-label="Marketing Cloud navigation">
+        <button class="nav-link active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+        <button class="nav-link" data-page="audience">♟ <span>Audience</span></button>
+        <button class="nav-link" data-page="email">✉ <span>Email Marketing</span></button>
+        <button class="nav-link" data-page="studio">▣ <span>Content Studio</span></button>
+        <button class="nav-link" data-page="captions">✦ <span>Caption Studio</span></button>
+        <button class="nav-link" data-page="analytics">◔ <span>Analytics</span></button>
+      </nav>
+      <div class="future"><p>Future integrations</p><small>Instagram API<br>WhatsApp Business API<br>SMS · Meta Ads</small></div>
+    </aside>
+
+    <main class="main-content">
+      <section class="page active" id="dashboard">
+        <header class="page-header"><div><p class="eyebrow">Marketing overview</p><h1>Everything for your next campaign.</h1><p>Build audiences, plan emails and create social-ready content from one place.</p></div><button class="button primary" data-go="studio">✦ Create content</button></header>
+        <div class="metrics"><article><p>Emails sent</p><strong>0</strong><small>Connect email to begin</small></article><article><p>Campaigns created</p><strong>0</strong><small>Start with a template</small></article><article><p>Creatives generated</p><strong id="creative-count">0</strong><small>Download-ready assets</small></article><article><p>Engagement</p><strong>—</strong><small>Coming soon</small></article></div>
+        <section class="panel"><p class="eyebrow">Get started</p><h2>Your next campaign in three steps</h2><div class="steps"><button data-go="audience"><b>1</b><strong>Choose an audience</strong><span>Fetch customers or add them manually.</span></button><button data-go="email"><b>2</b><strong>Select an email</strong><span>Use a ready Savitri Livings template.</span></button><button data-go="studio"><b>3</b><strong>Create social content</strong><span>Generate an asset ready to download.</span></button></div></section>
+      </section>
+
+      <section class="page" id="audience">
+        <header class="page-header"><div><p class="eyebrow">Audience</p><h1>Customers and segments</h1><p>Select people for a campaign. Customer data can be fetched from the Savitri Livings backend.</p></div><div class="button-row"><button class="button secondary" id="fetch-customers">Fetch Savitri customers</button><button class="button primary" id="add-customer">+ Add customer</button></div></header>
+        <section class="panel"><div class="panel-title"><h2>All customers</h2><span id="selected-count">0 selected</span></div><div class="customer-list" id="customer-list"></div><div class="save-row"><input id="audience-name" placeholder="Audience name, e.g. Diwali jewellery customers" /><button class="button primary" id="save-audience">Save audience</button></div></section>
+      </section>
+
+      <section class="page" id="email">
+        <header class="page-header"><div><p class="eyebrow">Email Marketing</p><h1>Prepare your next email</h1><p>Select a reusable template, personalise it, and connect the email sender when ready.</p></div></header>
+        <div class="email-grid"><section class="panel"><h2>Choose a template</h2><div id="email-templates"></div></section><section class="email-preview"><p class="from">From: Savitri Livings &lt;savitrilivings@gmail.com&gt;</p><h2 id="email-subject"></h2><pre id="email-body"></pre><div class="button-row"><button class="button secondary" id="copy-email">Copy content</button><button class="button primary" id="send-email">Send to selected audience</button></div></section></div>
+      </section>
+
+      <section class="page" id="studio">
+        <header class="page-header"><div><p class="eyebrow">Content Studio</p><h1>Make a beautiful creative</h1><p>Create Instagram posts, Stories, WhatsApp Status visuals and ad-ready artwork.</p></div></header>
+        <div class="studio-grid"><section class="panel form-panel"><label>Format<select id="creative-format"><option value="square">Instagram post · 1080 × 1080</option><option value="story">Instagram Story · 1080 × 1920</option><option value="story">WhatsApp Status · 1080 × 1920</option><option value="banner">Website banner · 1920 × 1080</option></select></label><label>Theme<select id="creative-theme"><option>New collection</option><option>Limited offer</option><option>Festival sale</option><option>Jewellery collection</option></select></label><label>Offer text<input id="creative-text" value="Something special, just for you" /></label><button class="button primary" id="download-creative">↓ Download creative</button></section><section class="creative-preview" id="creative-preview"><p>SAVITRI LIVINGS</p><h2 id="creative-heading">Something special,<br>just for you</h2><div class="image-placeholder">YOUR PRODUCT<br>IMAGE</div><strong id="creative-theme-label">NEW COLLECTION</strong><small>Handmade jewellery &amp; home décor</small></section></div>
+      </section>
+
+      <section class="page" id="captions"><header class="page-header"><div><p class="eyebrow">Caption Studio</p><h1>Words for your content</h1><p>Save captions for Instagram, Stories, product promotions and festive offers.</p></div></header><section class="panel"><select id="caption-type"><option>Instagram caption</option><option>Story text</option><option>Product promotion</option><option>Festival offer</option></select><textarea id="caption" rows="9">✨ Add a touch of elegance to your collection! ✨
+
+Discover our latest designs from Savitri Livings 💛
+
+#SavitriLivings #Jewellery #Fashion</textarea><div class="button-row"><button class="button secondary" id="copy-caption">Copy caption</button><button class="button primary" id="save-caption">Save caption</button></div></section></section>
+
+      <section class="page" id="analytics"><header class="page-header"><div><p class="eyebrow">Analytics</p><h1>Campaign performance</h1><p>Performance reporting will grow as you connect email and social channels.</p></div></header><div class="metrics"><article><p>Emails sent</p><strong>0</strong><small>No delivery data yet</small></article><article><p>Opened</p><strong>—</strong><small>Available after email setup</small></article><article><p>Clicked</p><strong>—</strong><small>Available after tracking setup</small></article><article><p>Social engagement</p><strong>—</strong><small>Future integration</small></article></div><section class="panel empty"><span>◔</span><h2>No campaign history yet</h2><p>Create your first campaign in Email Marketing or Content Studio.</p></section></section>
+    </main>
+  </div>
+  <div id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

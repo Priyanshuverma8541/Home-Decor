@@ -2,6 +2,8 @@
 
 The primary `frontend`, `backend`, and `admin` applications are now the single product. The old `03_full stack` and `thikana` folders are retained as source archives and are not runtime dependencies.
 
+`marketing-cloud` is a sibling standalone application for marketing operations. It uses the existing backend's admin authentication when `VITE_API_URL` is configured.
+
 ## New user paths
 
 - `/marketplace` — Thikana discovery and search.
@@ -17,3 +19,13 @@ The primary `frontend`, `backend`, and `admin` applications are now the single p
 4. Make at least one existing account an `admin` in MongoDB before using the moderation panel.
 
 The marketplace deliberately uses `MarketplaceListing` and `MarketplaceCategory` collections. It does not alter existing product, order, cart, or customer records.
+
+
+
+
+
+
+
+
+
+Grocery
