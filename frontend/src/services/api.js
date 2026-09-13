@@ -50,12 +50,15 @@ export const leadAPI = {
   create: (d) => api.post("/api/leads", d),
 };
 
+export const ecosystemAPI = { getAll: () => api.get("/api/ecosystem") };
+
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),
   listings: (params) => api.get("/api/marketplace/listings", { params }),
   listing: (id) => api.get(`/api/marketplace/listings/${id}`),
   becomeSeller: (data) => api.post("/api/marketplace/become-seller", data),
   myListings: () => api.get("/api/marketplace/me/listings"),
+  uploadListingImage: (data) => api.post("/api/marketplace/upload", data, { headers: { "Content-Type": "multipart/form-data" } }),
   createListing: (data) => api.post("/api/marketplace/listings", data),
 };
 

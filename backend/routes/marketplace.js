@@ -3,6 +3,7 @@ const slugify = (value = "") => value.toLowerCase().trim().replace(/[^a-z0-9]+/g
 const Category = require("../models/MarketplaceCategory");
 const Listing = require("../models/MarketplaceListing");
 const User = require("../models/User");
+const { upload, uploadedFileUrl } = require("../config/cloudinary");
 const { protect, optionalProtect, adminOnly } = require("../middleware/auth");
 
 const safeSeller = "fullName marketplaceStoreName marketplaceStoreSlug marketplaceAvatar marketplaceVerified city";
@@ -57,6 +58,10 @@ router.post("/become-seller", protect, async (req, res, next) => {
 });
 router.get("/me/listings", protect, async (req, res, next) => {
   try { res.json({ success: true, listings: await Listing.find({ sellerId: req.user._id }).sort({ createdAt: -1 }) }); } catch (err) { next(err); }
+});
+router.post("/upload", protect, upload.single("image"), (req, res) => {
+  if (!req.file?.path) return fail(res, 400, "Choose a JPG, PNG or WebP image up to 5 MB");
+  res.status(201).json({ success: true, url: uploadedFileUrl(req.file) });
 });
 router.post("/listings", protect, async (req, res, next) => {
   try {

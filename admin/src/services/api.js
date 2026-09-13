@@ -77,4 +77,10 @@ export const marketplaceAPI = {
   updateCategory:(id, data) => api.patch(`/api/marketplace/admin/categories/${id}`, data),
 };
 
+export const marketingAPI = {
+  dashboard: () => api.get("/api/marketing/dashboard"),
+  audiences: () => api.get("/api/marketing/audiences"),
+  integrations: () => api.get("/api/marketing/integrations"),
+};
+
 export default api;

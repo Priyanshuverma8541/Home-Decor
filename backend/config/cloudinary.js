@@ -1,6 +1,10 @@
 const cloudinary   = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+
+const cloudinaryEnabled = Boolean(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,7 +12,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
+const cloudinaryStorage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder:         process.env.CLOUDINARY_FOLDER || "savitri-livings",
@@ -17,6 +21,15 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
+const localStorage = multer.diskStorage({
+  destination: (_req, _file, callback) => {
+    const directory = path.join(__dirname, "..", "public", "uploads");
+    fs.mkdirSync(directory, { recursive: true });
+    callback(null, directory);
+  },
+  filename: (_req, file, callback) => callback(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname).toLowerCase()}`),
+});
+const upload = multer({ storage: cloudinaryEnabled ? cloudinaryStorage : localStorage, limits: { fileSize: 5 * 1024 * 1024 } });
+const uploadedFileUrl = (file) => cloudinaryEnabled ? file.path : `/uploads/${file.filename}`;
 
-module.exports = { cloudinary, upload };
+module.exports = { cloudinary, upload, uploadedFileUrl };

@@ -23,7 +23,7 @@ function HeroBand({ tag, title, sub }) {
 export function About() {
   return (
     <div style={{ overflowX:"hidden" }}>
-      <HeroBand tag="Our Story" title="Handcrafted with love" sub="A family business that brings the beauty of the ocean into your home"/>
+      <HeroBand tag="Our Story" title="A connected place to build and grow" sub="Lifestyle, commerce, learning, marketing and business opportunities under one Savitri Livings umbrella."/>
 
       <section style={{ padding:"3.5rem 1rem", background:"#fdf6ee" }}>
         <div style={{ maxWidth:800, margin:"0 auto" }}>
@@ -32,13 +32,13 @@ export function About() {
               <p className="section-tag">Who we are</p>
               <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"2rem", color:"#1c1409", marginBottom:"1rem" }}>Savitri Livings</h2>
               <p style={{ color:"#5c4a32", lineHeight:1.85, marginBottom:"1rem" }}>
-                Savitri Livings is a family-run jewellery business based in Buxar, Bihar. We specialise in thoughtful earrings, rings, celebration pieces, gifts, and beautiful keepsakes.
+                Savitri Livings is a lifestyle, jewellery, home décor and business-partner platform. We bring shopping, selling, marketing, learning and business opportunities together in one connected ecosystem.
               </p>
               <p style={{ color:"#5c4a32", lineHeight:1.85, marginBottom:"1rem" }}>
-                Every piece is chosen with care for its finish, comfort, and meaning. We believe jewellery should tell your story, and we are here to help you find the right piece.
+                Alongside aesthetic and affordable jewellery, home décor and lifestyle finds, Thikana Marketplace helps individuals and small businesses buy, sell and be discovered. Our tools are designed to help creators, startups, students and entrepreneurs build, grow and connect.
               </p>
               <p style={{ color:"#5c4a32", lineHeight:1.85 }}>
-                Currently delivering in Buxar, with Varanasi and Kolkata coming soon. Follow us on Instagram at <a href={`https://instagram.com/${IG}`} target="_blank" rel="noopener noreferrer" style={{ color:"#1a3c34", fontWeight:500 }}>@{IG}</a> for new arrivals and behind-the-scenes craft.
+                SL Business, startup support, business partnerships and future project integrations are being added step by step. Follow us on Instagram at <a href={`https://instagram.com/${IG}`} target="_blank" rel="noopener noreferrer" style={{ color:"#1a3c34", fontWeight:500 }}>@{IG}</a> for new arrivals, opportunities and updates.
               </p>
             </div>
             <div>
@@ -53,10 +53,10 @@ export function About() {
       <section style={{ padding:"3rem 1rem", background:"#1a3c34" }}>
         <div style={{ maxWidth:800, margin:"0 auto", display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"1.5rem" }} className="vals-grid">
           {[
-            { emoji:"🌿", t:"Natural Materials", d:"Every product uses responsibly sourced natural materials" },
-            { emoji:"🤝", t:"Local Partnership", d:"We work with local artisans and delivery partners" },
-            { emoji:"🐚", t:"Coastal Inspiration", d:"Designs inspired by India's rich coastal traditions" },
-            { emoji:"💝", t:"Made with Love", d:"Every piece handcrafted with attention and care" },
+            { emoji:"🛍️", t:"Marketplace", d:"A place for people and businesses to buy, sell and be discovered." },
+            { emoji:"🤝", t:"Business Partnerships", d:"Connecting brands, sellers, creators and new opportunities." },
+            { emoji:"🎓", t:"SL Business", d:"Practical learning for students, startups and entrepreneurs." },
+            { emoji:"🚀", t:"Startup Support", d:"Resources and connections that help new businesses grow." },
           ].map(({ emoji, t, d }, i) => (
             <motion.div key={t} {...up(i*.1)}
               style={{ background:"rgba(255,255,255,.05)", borderRadius:"1rem", padding:"1.25rem", border:"1px solid rgba(255,255,255,.1)" }}>

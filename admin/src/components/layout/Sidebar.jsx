@@ -11,6 +11,7 @@ const LINKS = [
   { to:"/campaigns", Icon:Megaphone,       label:"Campaigns"           },
   { to:"/analytics", Icon:BarChart2,       label:"Analytics"           },
   { to:"/marketplace", Icon:Store,         label:"Marketplace"         },
+  { to:"/marketing", Icon:Megaphone,       label:"Marketing Cloud"     },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 

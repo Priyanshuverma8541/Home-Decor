@@ -377,9 +377,9 @@ export default function Cart() {
                 {/* <button onClick={handleRazorpay} disabled={busy} className="btn-primary" style={{ justifyContent:"center", gap:8 }}>
                   <CreditCard style={{ width:16,height:16 }}/>Pay Online (Razorpay)
                 </button> */}
-                <button onClick={handleUPI} disabled={busy} className="btn-outline" style={{ justifyContent:"center", gap:8 }}>
+                {/* /*<button onClick={handleUPI} disabled={busy} className="btn-outline" style={{ justifyContent:"center", gap:8 }}>
                   <QrCode style={{ width:16,height:16 }}/>Pay via UPI / QR
-                </button>
+                </button>*/ }
                 <button onClick={handleWhatsApp} className="btn-wa" style={{ justifyContent:"center", gap:8 }}>
                   <MessageCircle style={{ width:16,height:16 }}/>Order on WhatsApp (pay later)
                 </button>

@@ -18,6 +18,7 @@ import { MyAccount, MyOrders }         from "./components/pages/AccountPages.jsx
 import { About, Contact, FAQs, Legal } from "./components/pages/StaticPages.jsx";
 import { NotFound }                    from "./components/ui/Shared.jsx";
 import { MarketplaceHome, ListingDetail, SellerHub } from "./components/pages/Marketplace.jsx";
+import Ecosystem from "./components/pages/Ecosystem.jsx";
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
                 <Route path="marketplace" element={<MarketplaceHome />} />
                 <Route path="marketplace/listing/:id" element={<ListingDetail />} />
                 <Route path="marketplace/sell" element={<SellerHub />} />
+                <Route path="ecosystem"  element={<Ecosystem />} />
                 <Route path="*"          element={<NotFound />}      />
               </Route>
 

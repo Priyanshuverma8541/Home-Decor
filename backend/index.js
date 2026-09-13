@@ -22,6 +22,8 @@ const ALLOWED = [
   "http://localhost:5176",
   "http://localhost:5173",
   "http://localhost:5174",
+  "http://localhost:5177",
+  "http://localhost:5178",
   process.env.ADMIN_URL,
   process.env.CLIENT_URL,
 ].filter(Boolean).map(u => u.trim().replace(/\/$/, ""));
@@ -62,6 +64,9 @@ app.use("/api/users",     require("./routes/users"));
 app.use("/api/campaigns", require("./routes/campaigns"));
 app.use("/api/settings",  require("./routes/settings"));
 app.use("/api/marketplace", require("./routes/marketplace"));
+app.use("/api/thikana", require("./routes/thikana"));
+app.use("/api/marketing", require("./routes/marketing"));
+app.use("/api/ecosystem", require("./routes/ecosystem"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

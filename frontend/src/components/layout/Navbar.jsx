@@ -10,6 +10,7 @@ const NAV = [
   { to:"/",         label:"Home",     end:true },
   { to:"/shop",     label:"Shop"             },
   { to:"/marketplace", label:"Marketplace"   },
+  { to:"/ecosystem",   label:"Ecosystem"     },
   { to:"/about",    label:"About"            },
   { to:"/contact",  label:"Contact"          },
 ];
