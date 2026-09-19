@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const campaignSchema = new mongoose.Schema({
   name:            { type: String, required: true },
   type:            { type: String, enum: ["whatsapp","instagram","email"], default: "whatsapp" },
-  targetCity:      { type: String, enum: ["Buxar","Varanasi","Kolkata","all"], default: "all" },
+  targetCity:      { type: String, default: "all" },
   targetAudience:  { type: String, enum: ["all","leads","customers","repeat","interested"], default: "all" },
   subject:         { type: String },   // for email
   message:         { type: String, required: true },

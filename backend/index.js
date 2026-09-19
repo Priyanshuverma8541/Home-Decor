@@ -67,6 +67,7 @@ app.use("/api/marketplace", require("./routes/marketplace"));
 app.use("/api/thikana", require("./routes/thikana"));
 app.use("/api/marketing", require("./routes/marketing"));
 app.use("/api/ecosystem", require("./routes/ecosystem"));
+app.use("/api/partner-businesses", require("./routes/partnerBusinesses"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

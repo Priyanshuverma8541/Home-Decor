@@ -12,6 +12,7 @@ const LINKS = [
   { to:"/analytics", Icon:BarChart2,       label:"Analytics"           },
   { to:"/marketplace", Icon:Store,         label:"Marketplace"         },
   { to:"/marketing", Icon:Megaphone,       label:"Marketing Cloud"     },
+  { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 

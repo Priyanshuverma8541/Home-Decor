@@ -10,7 +10,7 @@ const leadSchema = new mongoose.Schema({
   name:              { type: String, trim: true },
   phone:             { type: String },
   email:             { type: String },
-  city:              { type: String, enum: ["Buxar","Varanasi","Kolkata","Other"] },
+  city:              { type: String, trim: true },
   source:            { type: String, enum: ["website","whatsapp","instagram","referral","event","admin"], default: "website" },
   status:            { type: String, enum: ["new","contacted","interested","converted","lost"], default: "new" },
 

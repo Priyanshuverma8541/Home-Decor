@@ -11,6 +11,7 @@ const NAV = [
   { to:"/shop",     label:"Shop"             },
   { to:"/marketplace", label:"Marketplace"   },
   { to:"/ecosystem",   label:"Ecosystem"     },
+  { to:"/partner-with-us", label:"Partner with us" },
   { to:"/about",    label:"About"            },
   { to:"/contact",  label:"Contact"          },
 ];

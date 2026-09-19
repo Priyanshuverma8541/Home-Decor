@@ -80,7 +80,7 @@ export function Login() {
 }
 
 export function Register() {
-  const [form, setForm] = useState({ fullName:"", phone:"", password:"", city:"Buxar" });
+  const [form, setForm] = useState({ fullName:"", phone:"", password:"", city:"" });
   const [show, setShow] = useState(false);
   const { register, loading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -113,10 +113,8 @@ export function Register() {
         ))}
         <div>
           <label style={{ display:"block", fontSize:"0.7rem", fontWeight:500, color:"rgba(255,255,255,.5)", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:6 }}>City</label>
-          <select required value={form.city} onChange={fi("city")}
-            style={{ width:"100%", height:46, paddingLeft:12, borderRadius:"0.75rem", border:"1px solid rgba(255,255,255,.15)", background:"rgba(255,255,255,.08)", color:"white", fontSize:"16px", fontFamily:"'DM Sans',sans-serif", outline:"none" }}>
-            {["Buxar","Varanasi","Kolkata"].map(c=><option key={c} value={c} style={{ background:"#1a3c34" }}>{c}</option>)}
-          </select>
+          <input value={form.city} onChange={fi("city")} placeholder="Your city (optional)"
+            style={{ width:"100%", height:46, padding:"0 12px", borderRadius:"0.75rem", border:"1px solid rgba(255,255,255,.15)", background:"rgba(255,255,255,.08)", color:"white", fontSize:"16px", fontFamily:"'DM Sans',sans-serif", outline:"none" }}/>
         </div>
         <div>
           <label style={{ display:"block", fontSize:"0.7rem", fontWeight:500, color:"rgba(255,255,255,.5)", textTransform:"uppercase", letterSpacing:"0.1em", marginBottom:6 }}>Password</label>

@@ -14,12 +14,12 @@ const settingsSchema = new mongoose.Schema({
   whatsappNumber:    { type: String, default: "6207855397" },
   instagramHandle:   { type: String, default: "savitrilivings" },
 
-  // Cities
-  activeCities:      { type: [String], default: ["Buxar"] },
+  // Shipping — Pan-India; fields remain for backwards-compatible admin settings.
+  activeCities:      { type: [String], default: ["Pan India"] },
   deliveryFee:       {
     type: Map,
     of: Number,
-    default: { Buxar: 30, Varanasi: 50, Kolkata: 60 },
+    default: { "Pan India": 0 },
   },
   freeDeliveryAbove: { type: Number, default: 500 },
 

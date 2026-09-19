@@ -83,4 +83,10 @@ export const marketingAPI = {
   integrations: () => api.get("/api/marketing/integrations"),
 };
 
+export const partnerBusinessAPI = {
+  getAll: (params) => api.get("/api/partner-businesses/admin", { params }),
+  create: (data) => api.post("/api/partner-businesses/admin", data),
+  update: (id, data) => api.patch(`/api/partner-businesses/admin/${id}`, data),
+};
+
 export default api;

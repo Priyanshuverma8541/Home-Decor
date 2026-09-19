@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   email:             { type: String, unique: true, sparse: true, lowercase: true },
   password:          { type: String },
   role:              { type: String, enum: ["customer","admin","delivery","vendor"], default: "customer" },
-  city:              { type: String, enum: ["Buxar","Varanasi","Kolkata","Other"], default: "Buxar" },
+  city:              { type: String, trim: true, default: "" },
   address:           { type: String },
   instagramHandle:   { type: String },
   whatsapp:          { type: String },

@@ -9,7 +9,7 @@ const marketplaceListingSchema = new mongoose.Schema({
   price: { type: Number, min: 0 },
   images: [{ type: String }],
   attributes: { type: mongoose.Schema.Types.Mixed, default: {} },
-  location: { area: String, city: { type: String, default: "Kolkata" } },
+  location: { area: String, city: { type: String, default: "" } },
   status: { type: String, enum: ["pending", "active", "rejected", "sold"], default: "pending", index: true },
   featured: { type: Boolean, default: false },
   views: { type: Number, default: 0 },

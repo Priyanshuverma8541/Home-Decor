@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ShoppingCart, MessageCircle, Minus, Plus, Share2, Truck, Leaf, RotateCcw } from "lucide-react";
 import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
-import { useCity } from "../../context/CityContext.jsx";
 import { PageLoader } from "../ui/Shared.jsx";
 import toast from "react-hot-toast";
 
@@ -17,7 +16,6 @@ export default function ProductDetail() {
   const [qty,        setQty]        = useState(1);
   const [activeImg,  setActiveImg]  = useState(0);
   const { addToCart } = useCart();
-  const { city } = useCity();
 
   useEffect(() => {
     productAPI.getOne(id)
@@ -36,7 +34,7 @@ export default function ProductDetail() {
 
   const images = product.images?.length ? product.images : ["https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=800&q=80"];
   const waMsg  = product.whatsappOrderMsg?.replace("{productName}", product.name).replace("{qty}", qty)
-    || `Hi! I want to order: ${product.name} x${qty}. My city: ${city}. Please confirm.`;
+    || `Hi! I want to order: ${product.name} x${qty}. Please confirm Pan-India delivery availability.`;
 
   const handleAddToCart = () => { for (let i=0; i<qty; i++) addToCart(product, i===0 ? qty : 0); };
   // above is wrong — fix:
@@ -99,7 +97,7 @@ export default function ProductDetail() {
             <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginBottom:"1.25rem" }}>
               {product.material     && <span className="badge badge-teal">Material: {product.material}</span>}
               {product.dimensions   && <span className="badge badge-sand">Size: {product.dimensions}</span>}
-              {product.availableCities?.map(c => <span key={c} className="badge badge-gray">{c}</span>)}
+              <span className="badge badge-gray">Pan-India delivery</span>
             </div>
 
             {/* Quantity */}
@@ -131,7 +129,7 @@ export default function ProductDetail() {
 
             {/* Trust badges */}
             <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"0.5rem" }}>
-              {[{ Icon:Truck, l:"Local Delivery" }, { Icon:Leaf, l:"Natural Material" }, { Icon:RotateCcw, l:"7-Day Return" }].map(({ Icon, l }) => (
+              {[{ Icon:Truck, l:"Pan-India Delivery" }, { Icon:Leaf, l:"Natural Material" }, { Icon:RotateCcw, l:"7-Day Return" }].map(({ Icon, l }) => (
                 <div key={l} style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:5, padding:"0.75rem 0.5rem", background:"#f0e6d0", borderRadius:"0.75rem", textAlign:"center" }}>
                   <Icon style={{ width:17, height:17, color:"#1a3c34" }}/>
                   <span style={{ fontSize:"0.65rem", color:"#5c4a32", fontWeight:500, lineHeight:1.3 }}>{l}</span>

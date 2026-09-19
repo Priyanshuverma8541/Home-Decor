@@ -11,7 +11,7 @@ const products = [
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI);
-  for (const product of products) await Product.findOneAndUpdate({ name: product.name }, { ...product, availableCities:["Buxar","Varanasi","Kolkata"], isActive:true }, { upsert:true, new:true, setDefaultsOnInsert:true });
+  for (const product of products) await Product.findOneAndUpdate({ name: product.name }, { ...product, availableCities:["Pan India"], isActive:true }, { upsert:true, new:true, setDefaultsOnInsert:true });
   console.log("Savitri Livings starter products seeded.");
   await mongoose.disconnect();
 })().catch((error) => { console.error(error); process.exit(1); });

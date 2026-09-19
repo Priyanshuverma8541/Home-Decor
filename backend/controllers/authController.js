@@ -83,7 +83,7 @@ exports.register = async (req, res) => {
     if (exists)
       return res.status(409).json({ success: false, message: "Account already exists" });
 
-    const user = await User.create({ fullName, phone, email, password, city: city || "Buxar", source: source || "website" });
+    const user = await User.create({ fullName, phone, email, password, city: city || "", source: source || "website" });
 
     // Auto-create CRM lead
     await Lead.create({ name: fullName, phone, email, city, source: source || "website", userId: user._id, status: "converted" });

@@ -73,7 +73,7 @@ export function About() {
 }
 
 export function Contact() {
-  const [form,    setForm]    = useState({ name:"", phone:"", city:"Buxar", message:"" });
+  const [form,    setForm]    = useState({ name:"", phone:"", city:"", message:"" });
   const [sending, setSending] = useState(false);
 
   const submit = (e) => {
@@ -95,7 +95,7 @@ export function Contact() {
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
               {[{ Icon:Phone,     t:`+91 ${WA}`,          href:`tel:+91${WA}`,                desc:"Call or WhatsApp" },
                 { Icon:Instagram, t:`@${IG}`,              href:`https://instagram.com/${IG}`, desc:"Follow for new drops" },
-                { Icon:MapPin,    t:"Buxar, Bihar 802101", href:null,                          desc:"Launch city"         },
+                { Icon:MapPin,    t:"Pan-India", href:null,                                    desc:"Shipping across India" },
               ].map(({ Icon,t,href,desc }) => (
                 <div key={t} style={{ display:"flex", gap:12, alignItems:"flex-start" }}>
                   <div style={{ width:36, height:36, borderRadius:10, background:"#e8f5f0", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -125,9 +125,7 @@ export function Contact() {
               ))}
               <div>
                 <label className="label">City</label>
-                <select className="input" value={form.city} onChange={e=>setForm(f=>({...f,city:e.target.value}))}>
-                  {["Buxar","Varanasi","Kolkata","Other"].map(c=><option key={c} value={c}>{c}</option>)}
-                </select>
+                <input className="input" value={form.city} placeholder="Your city" onChange={e=>setForm(f=>({...f,city:e.target.value}))}/>
               </div>
               <div>
                 <label className="label">Message</label>
@@ -148,10 +146,10 @@ export function Contact() {
 export function FAQs() {
   const [open, setOpen] = useState(null);
   const faqs = [
-    { q:"Where do you deliver?",             a:"Currently delivering in Buxar, Bihar. Varanasi and Kolkata are coming very soon." },
+    { q:"Where do you deliver?",             a:"Savitri Livings delivers across India. Delivery timing and charges may vary by pincode." },
     { q:"How do I place an order?",           a:"You can order directly on our website, via WhatsApp (+91 6207855397), or through Instagram DM (@savitrilivings)." },
-    { q:"What payment methods do you accept?",a:"UPI/QR (PhonePe, GPay, Paytm), Razorpay online, and cash on delivery within Buxar." },
-    { q:"How long does delivery take?",       a:"Same-day delivery in Buxar for orders placed before 2pm. Standard delivery is 1-2 days." },
+    { q:"What payment methods do you accept?",a:"UPI/QR (PhonePe, GPay, Paytm), Razorpay online, and payment links shared after order confirmation." },
+    { q:"How long does delivery take?",       a:"Delivery timelines depend on your pincode and the product. We share an estimate once the order is confirmed." },
     { q:"What is your return policy?",        a:"We accept returns within 7 days if the product is in original condition. WhatsApp us with a photo of the issue." },
     { q:"Can I customise a product?",         a:"Yes! Many of our pieces can be customised. Contact us on WhatsApp to discuss your requirements." },
     { q:"How do I choose the right jewellery?", a:"Message us or visit us for personal guidance on style, occasion, and the piece that feels right for you." },
@@ -187,7 +185,7 @@ export function Legal() {
     { id:"terms",   t:"Terms & Conditions",  b:"By using our website or placing an order, you agree to these terms. All content on this site belongs to Savitri Livings. Prices are subject to change without notice." },
     { id:"privacy", t:"Privacy Policy",       b:"We collect your name, phone, and address only to process and deliver your order. Your data is never sold or shared with third parties." },
     { id:"returns", t:"Returns & Refunds",    b:"We accept returns within 7 days of delivery for products in original condition. WhatsApp us with a photo of the issue for fastest resolution. Refunds processed in 3-5 working days." },
-    { id:"delivery",t:"Delivery Policy",      b:"We currently deliver in Buxar. Standard delivery is 1-2 days. Express same-day delivery is available for orders placed before 2pm. Delivery fees apply for orders below Rs.500." },
+    { id:"delivery",t:"Delivery Policy",      b:"We deliver across India. Delivery timelines and charges depend on pincode, package size and the selected shipping service. We confirm the expected delivery date after your order is placed." },
     { id:"contact", t:"Report an Issue",      b:`For any complaints or issues, reach us on WhatsApp at +91 ${WA} or Instagram @${IG}. We respond within 24 hours.` },
   ];
   return (

@@ -51,6 +51,10 @@ export const leadAPI = {
 };
 
 export const ecosystemAPI = { getAll: () => api.get("/api/ecosystem") };
+export const partnerBusinessAPI = {
+  getAll: (params) => api.get("/api/partner-businesses", { params }),
+  apply: (data) => api.post("/api/partner-businesses/apply", data),
+};
 
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),

@@ -54,7 +54,7 @@ export default function Footer() {
               {[
                 { Icon:Phone,   text: `+91 ${WA}`,           href:`tel:+91${WA}` },
                 { Icon:Mail,    text:"priyanshuverma8541@gmail.com", href:"mailto:priyanshuverma8541@gmail.com" },
-                { Icon:MapPin,  text:"Buxar, Bihar",          href:null },
+                { Icon:MapPin,  text:"Delivering across India", href:null },
                 { Icon:Instagram, text:`@${IG}`,              href:`https://instagram.com/${IG}` },
               ].map(({ Icon, text, href }) => (
                 <div key={text} style={{ display:"flex", alignItems:"flex-start", gap:8, fontSize:"0.8rem", color:"rgba(255,255,255,.45)" }}>

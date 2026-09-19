@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema({
   comparePrice:     { type: Number },    // strikethrough price
   stock:            { type: Number, default: 0 },
   sku:              { type: String },
-  availableCities:  [{ type: String, enum: ["Buxar","Varanasi","Kolkata"] }],
+  availableCities:  [{ type: String }], // retained for older records; Savitri Livings ships Pan-India
   vendorId:         { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   isFeatured:       { type: Boolean, default: false },
   isSeasonal:       { type: Boolean, default: false },

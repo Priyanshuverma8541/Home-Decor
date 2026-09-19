@@ -226,7 +226,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ArrowRight, ShoppingCart, CreditCard, QrCode, MessageCircle } from "lucide-react";
 import { useCart }    from "../../context/CartContext.jsx";
 import { useAuth }    from "../../context/AuthContext.jsx";
-import { useCity }    from "../../context/CityContext.jsx";
 import { usePayment } from "../../hooks/usePayment.js";
 import { EmptyState, QRPayModal } from "../ui/Shared.jsx";
 import { orderAPI }   from "../../services/api.js";
@@ -235,12 +234,11 @@ import toast from "react-hot-toast";
 export default function Cart() {
   const { items, removeFromCart, updateQty, totalPrice, totalItems, clearCart } = useCart();
   const { isAuthenticated, user } = useAuth();
-  const { city }   = useCity();
   const { placeWithUPI, payWithRazorpay, orderViaWhatsApp, UPI_ID } = usePayment();
   const navigate   = useNavigate();
 
   const [step,     setStep]     = useState(1); // 1=cart, 2=details, 3=payment
-  const [details,  setDetails]  = useState({ name: user?.fullName||"", phone: user?.phone||"", address:"", city, notes:"" });
+  const [details,  setDetails]  = useState({ name: user?.fullName||"", phone: user?.phone||"", address:"", city:user?.city||"", notes:"" });
   const [busy,     setBusy]     = useState(false);
   const [qrModal,  setQrModal]  = useState(null); // { orderId, amount }
 
@@ -257,7 +255,7 @@ export default function Cart() {
   const orderPayload = () => ({
     items:          items.map(i => ({ productId:i._id, quantity:i.quantity, price:i.price })),
     deliveryAddress: details.address,
-    city:            details.city || city,
+    city:            details.city,
     guestName:       isAuthenticated ? undefined : details.name,
     guestPhone:      isAuthenticated ? undefined : details.phone,
     orderSource:     "website",
@@ -282,7 +280,7 @@ export default function Cart() {
   };
 
   const handleWhatsApp = () => {
-    orderViaWhatsApp({ items, totalPrice: grandTotal, city: details.city||city, address: details.address });
+    orderViaWhatsApp({ items, totalPrice: grandTotal, city: details.city, address: details.address });
   };
 
   return (
@@ -357,10 +355,8 @@ export default function Cart() {
                     <textarea required className="input" rows={3} style={{ resize:"vertical" }} placeholder="House no., street, area…" value={details.address} onChange={e=>setDetails(d=>({...d,address:e.target.value}))}/>
                   </div>
                   <div>
-                    <label className="label">City</label>
-                    <select className="input" value={details.city||city} onChange={e=>setDetails(d=>({...d,city:e.target.value}))}>
-                      {["Buxar","Varanasi","Kolkata"].map(c=><option key={c} value={c}>{c}</option>)}
-                    </select>
+                    <label className="label">City *</label>
+                    <input required className="input" value={details.city} onChange={e=>setDetails(d=>({...d,city:e.target.value}))} placeholder="Your city"/>
                   </div>
                   <div>
                     <label className="label">Order Notes (optional)</label>
@@ -418,7 +414,7 @@ export default function Cart() {
               {step===2 && (
                 <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                   <button onClick={() => {
-                    if (!details.address) { toast.error("Please enter delivery address"); return; }
+                    if (!details.address || !details.city) { toast.error("Please enter your complete delivery address and city"); return; }
                     if (!isAuthenticated && (!details.name || !details.phone)) { toast.error("Please enter name and phone"); return; }
                     setStep(3);
                   }} className="btn-primary" style={{ width:"100%", justifyContent:"center" }}>

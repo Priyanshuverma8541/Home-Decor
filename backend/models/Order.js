@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema({
   deliveryFee:       { type: Number, default: 0 },
   grandTotal:        { type: Number, required: true },
 
-  city:              { type: String, enum: ["Buxar","Varanasi","Kolkata"], required: true },
+  city:              { type: String, required: true, trim: true },
   deliveryAddress:   { type: String, required: true },
   landmark:          { type: String },
   pincode:           { type: String },

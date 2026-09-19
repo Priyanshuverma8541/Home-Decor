@@ -41,8 +41,8 @@ router.post("/auth/register", async (req, res, next) => {
     if (!(name || fullName) || !password || (!email && !phone)) return failure(res, 400, "Name, password and email or phone are required", "MISSING_FIELDS");
     const clauses = [{ email }, { phone }].filter((entry) => Object.values(entry)[0]);
     if (await User.findOne({ $or: clauses })) return failure(res, 409, "An account with this email or phone already exists", "ACCOUNT_EXISTS");
-    const user = await User.create({ fullName: fullName || name, email, phone, password, city: "Kolkata", source: "website" });
-    await Lead.create({ name: user.fullName, email, phone, city: "Kolkata", source: "website", userId: user._id, status: "converted" });
+    const user = await User.create({ fullName: fullName || name, email, phone, password, city: "", source: "website" });
+    await Lead.create({ name: user.fullName, email, phone, city: "", source: "website", userId: user._id, status: "converted" });
     return success(res, { token: tokenFor(user._id), user: sellerView(user) }, 201);
   } catch (error) { next(error); }
 });
@@ -106,7 +106,7 @@ router.post("/listings", protect, async (req, res, next) => {
     if (!['vendor', 'admin'].includes(req.user.role)) return failure(res, 403, "Create a seller profile before posting", "SELLER_REQUIRED");
     const { category, subcategory, title, description, price, images, attributes, location } = req.body;
     if (!category || !subcategory || !title) return failure(res, 400, "Category, subcategory and title are required", "MISSING_FIELDS");
-    const listing = await Listing.create({ sellerId: req.user._id, category, subcategory, title, description, price, images: images || [], attributes: attributes || {}, location: { ...location, city: location?.city || "Kolkata" }, status: req.user.role === "admin" ? "active" : "pending" });
+    const listing = await Listing.create({ sellerId: req.user._id, category, subcategory, title, description, price, images: images || [], attributes: attributes || {}, location: { ...location, city: location?.city || "" }, status: req.user.role === "admin" ? "active" : "pending" });
     success(res, { listing }, 201);
   } catch (error) { next(error); }
 });

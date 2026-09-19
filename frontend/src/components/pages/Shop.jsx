@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, X, ShoppingCart } from "lucide-react";
 import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
-import { useCity } from "../../context/CityContext.jsx";
 import { SkeletonCard, EmptyState } from "../ui/Shared.jsx";
 
 const CATS = ["All","rings","necklaces","earrings","bangles","bridal","silver","decor","gift"];
@@ -43,19 +42,18 @@ export default function Shop() {
   const [search,   setSearch]   = useState("");
   const [sp, setSp] = useSearchParams();
   const cat  = sp.get("category") || "All";
-  const { city } = useCity();
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const params = { city };
+      const params = {};
       if (cat !== "All") params.category = cat;
       if (search.trim()) params.search   = search.trim();
       const { data } = await productAPI.getAll(params);
       setProducts(data.products || []);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
-  }, [cat, search, city]);
+  }, [cat, search]);
 
   useEffect(() => { const t = setTimeout(load, 350); return () => clearTimeout(t); }, [load]);
 
@@ -70,7 +68,7 @@ export default function Shop() {
       {/* Header */}
       <div style={{ background:"linear-gradient(135deg,#765027,#4d3219)", padding:"2.5rem 1rem 3rem" }}>
         <div style={{ maxWidth:1280, margin:"0 auto" }}>
-          <p className="section-tag" style={{ color:"#f4ce7c", marginBottom:4 }}>Delivering in {city}</p>
+          <p className="section-tag" style={{ color:"#f4ce7c", marginBottom:4 }}>Pan-India delivery</p>
           <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(1.75rem,5vw,3rem)", color:"white", marginBottom:"1.25rem" }}>Savitri Livings Collection</h1>
           <div style={{ position:"relative", maxWidth:500 }}>
             <Search style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:15, height:15, color:"rgba(255,255,255,.4)", pointerEvents:"none" }}/>
@@ -97,7 +95,7 @@ export default function Shop() {
         </div>
 
         <p style={{ fontSize:"0.75rem", color:"#8c7258", marginBottom:"0.875rem" }}>
-          {loading ? "Loading…" : `${products.length} product${products.length!==1?"s":""} in ${city}`}
+          {loading ? "Loading…" : `${products.length} product${products.length!==1?"s":""} available across India`}
         </p>
 
         {loading ? (
@@ -105,7 +103,7 @@ export default function Shop() {
             {Array(8).fill(0).map((_,i) => <SkeletonCard key={i}/>)}
           </div>
         ) : products.length===0 ? (
-          <EmptyState title="No products found" message={`Nothing in ${city} for this filter yet. Try a different category.`}
+          <EmptyState title="No products found" message="Try a different category or search term."
             action={<button onClick={() => { setSearch(""); setCat("All"); }} className="btn-primary" style={{ fontSize:"0.875rem" }}>Clear filters</button>}/>
         ) : (
           <motion.div layout style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:"0.875rem", paddingBottom:"5rem" }} className="shop-grid">

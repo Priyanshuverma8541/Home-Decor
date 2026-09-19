@@ -11,6 +11,7 @@ import { Partners, Campaigns } from "./components/pages/OtherPages.jsx";
 import Analytics from "./components/pages/Analytics.jsx";
 import Marketplace from "./components/pages/Marketplace.jsx";
 import Marketing from "./components/pages/Marketing.jsx";
+import BusinessOpportunities from "./components/pages/BusinessOpportunities.jsx";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="analytics"element={<Analytics />}  />
             <Route path="marketplace" element={<Marketplace />} />
             <Route path="marketing" element={<Marketing />} />
+            <Route path="business-opportunities" element={<BusinessOpportunities />} />
             <Route path="settings" element={<Settings />}   />
           </Route>
         </Routes>

@@ -8,7 +8,8 @@ exports.getAll = async (req, res) => {
     const filter = { isActive: true };
 
     if (category)               filter.category       = category;
-    if (city)                   filter.availableCities = city;
+    // Product availability is Pan-India. The city query is intentionally ignored
+    // so older storefronts do not hide catalogue items by location.
     if (featured === "true")    filter.isFeatured      = true;
     if (seasonal === "true")    filter.isSeasonal      = true;
     if (search)                 filter.$text           = { $search: search };

@@ -3,14 +3,10 @@ import { createContext, useContext, useState } from "react";
 const Ctx = createContext(null);
 export const useCity = () => useContext(Ctx);
 
-const CITIES = [
-  { name: "Buxar",    active: true  },
-  { name: "Varanasi", active: false },
-  { name: "Kolkata",  active: false },
-];
+const CITIES = [{ name: "Pan India", active: true }];
 
 export function CityProvider({ children }) {
-  const [city, setCity] = useState(() => localStorage.getItem("sl_city") || "Buxar");
+  const [city, setCity] = useState("Pan India");
 
   const selectCity = (c) => {
     setCity(c);
