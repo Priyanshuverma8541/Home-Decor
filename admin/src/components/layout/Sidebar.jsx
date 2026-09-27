@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
@@ -13,6 +13,7 @@ const LINKS = [
   { to:"/marketplace", Icon:Store,         label:"Marketplace"         },
   { to:"/marketing", Icon:Megaphone,       label:"Marketing Cloud"     },
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
+  { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 

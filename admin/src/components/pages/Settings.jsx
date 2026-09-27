@@ -7,6 +7,39 @@ import toast from "react-hot-toast";
 
 const CITIES = ["Buxar","Varanasi","Kolkata"];
 
+const DEFAULT_PERMISSION_CAPABILITIES = [
+  { key: "location", label: "Location / Geolocation", purpose: "Delivery / nearby services", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "camera", label: "Camera", purpose: "Capture and upload product photos", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "microphone", label: "Microphone", purpose: "Voice search / voice input", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "notifications", label: "Browser / Web Push Notifications", purpose: "Order and account alerts", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "contacts", label: "Contacts, where supported", purpose: "Import customer contact details", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "files", label: "Photos / File Upload", purpose: "Upload invoices and business documents", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "clipboard", label: "Clipboard", purpose: "Copy referral links and codes", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "speech", label: "Speech Recognition", purpose: "Voice-to-text and accessibility support", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "vibration", label: "Vibration", purpose: "Feedback and haptic confirmation", category: "capability", enabled: true, status: "not-granted", available: true },
+  { key: "motion", label: "Device Orientation / Motion Sensors", purpose: "Interactive product experiences and accessibility", category: "capability", enabled: false, status: "not-granted", available: false },
+  { key: "bluetooth", label: "Bluetooth", purpose: "Nearby-device pairing for equipment or smart accessories", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "nfc", label: "NFC", purpose: "Tap-to-connect, quick access or mobile interactions", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "usb", label: "USB devices", purpose: "Hardware-based file or device transfer", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "screenShare", label: "Screen sharing / capture", purpose: "Remote-assisted product demos or support", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "wakeLock", label: "Wake Lock / Keep Screen Awake", purpose: "Keep the checkout or walkthrough screen active", category: "capability", enabled: true, status: "not-granted", available: true },
+  { key: "storage", label: "Local Storage", purpose: "Save preferences and session state", category: "capability", enabled: true, status: "granted", available: true },
+  { key: "cookies", label: "Cookies", purpose: "Essential site experience and tracking consent", category: "capability", enabled: true, status: "granted", available: true },
+  { key: "credentials", label: "Credentials / Passkeys", purpose: "Modern secure sign-in options", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "webauthn", label: "WebAuthn / device authentication / biometric authentication", purpose: "Secure sign-in and identity verification", category: "permission", enabled: true, status: "not-granted", available: true },
+  { key: "calendar", label: "Calendar-related functionality where supported", purpose: "Planning appointments or service scheduling", category: "permission", enabled: false, status: "not-granted", available: false },
+  { key: "phone", label: "Phone / tel actions", purpose: "Quick call actions for support and sales", category: "feature", enabled: true, status: "not-granted", available: true },
+  { key: "sms", label: "SMS / sms actions", purpose: "One-tap messaging for support and sales", category: "feature", enabled: true, status: "not-granted", available: true },
+  { key: "email", label: "Email actions", purpose: "Quick email-based support and outreach", category: "feature", enabled: true, status: "not-granted", available: true },
+  { key: "share", label: "Native Web Share", purpose: "Sharing product and referral links", category: "feature", enabled: true, status: "not-granted", available: true },
+  { key: "futureCapability", label: "Additional standard browser capability", purpose: "Future-ready support for new browser APIs relevant to Savitri Livings", category: "feature", enabled: false, status: "not-granted", available: false },
+];
+
+const normalizePermissions = (caps = []) => DEFAULT_PERMISSION_CAPABILITIES.map((base) => {
+  const existing = caps.find((cap) => cap.key === base.key);
+  return { ...base, ...(existing || {}) };
+});
+
 export default function Settings() {
   const [settings, setSettings] = useState(null);
   const [saving,   setSaving]   = useState(false);
@@ -15,7 +48,15 @@ export default function Settings() {
   const qrRef = useRef();
 
   useEffect(() => {
-    settingsAPI.get().then(({ data }) => setSettings(data.settings)).catch(() => toast.error("Failed to load settings"));
+    settingsAPI.get()
+      .then(({ data }) => {
+        const merged = {
+          ...data.settings,
+          permissionCapabilities: normalizePermissions(data.settings?.permissionCapabilities || [])
+        };
+        setSettings(merged);
+      })
+      .catch(() => toast.error("Failed to load settings"));
   }, []);
 
   const set = (k) => (e) => setSettings(p => ({ ...p, [k]: e.target.value }));
@@ -43,7 +84,7 @@ export default function Settings() {
         freeDeliveryAbove: settings.freeDeliveryAbove, announcementText: settings.announcementText,
         showAnnouncement: settings.showAnnouncement, maintenanceMode: settings.maintenanceMode,
         waOrderTemplate: settings.waOrderTemplate, facebookUrl: settings.facebookUrl,
-        razorpayKeyId: settings.razorpayKeyId,
+        razorpayKeyId: settings.razorpayKeyId, permissionCapabilities: settings.permissionCapabilities,
       });
       // Upload QR if changed
       if (qrFile) {
@@ -173,6 +214,36 @@ export default function Settings() {
             <input type="checkbox" checked={settings.maintenanceMode||false} onChange={e=>setSettings(p=>({...p,maintenanceMode:e.target.checked}))} style={{ width:16, height:16, accentColor:"#ef4444" }}/>
             <span style={{ fontSize:"0.875rem", color:"#2c1f14" }}>Take site offline (maintenance)</span>
           </label>
+        </Field>
+      </Section>
+
+      <Section icon={Smartphone} title="Permission & device capabilities">
+        <Field label="Capability catalog" full>
+          <div style={{ display:"grid", gap:10 }}>
+            {settings.permissionCapabilities?.map((cap) => (
+              <div key={cap.key} style={{ display:"grid", gridTemplateColumns:"1.2fr 1fr auto", gap:10, alignItems:"center", padding:"0.75rem 0.9rem", border:"1px solid #f0e6d6", borderRadius:12, background:"#fff" }}>
+                <div>
+                  <div style={{ fontWeight:600, color:"#2c1f14" }}>{cap.label}</div>
+                  <div style={{ fontSize:"0.75rem", color:"#8c7060" }}>{cap.purpose || "General browser capability"}</div>
+                </div>
+                <div style={{ fontSize:"0.74rem", color:"#5c4a32", textTransform:"capitalize" }}>
+                  {cap.category || "browser"}
+                </div>
+                <label style={{ display:"inline-flex", alignItems:"center", gap:8, cursor:"pointer" }}>
+                  <input
+                    type="checkbox"
+                    checked={!!cap.enabled}
+                    onChange={(e) => setSettings((p) => ({
+                      ...p,
+                      permissionCapabilities: p.permissionCapabilities.map((item) => item.key === cap.key ? { ...item, enabled: e.target.checked } : item)
+                    }))}
+                    style={{ width:16, height:16, accentColor:"#c96030" }}
+                  />
+                  <span style={{ fontSize:"0.8rem" }}>Enabled</span>
+                </label>
+              </div>
+            ))}
+          </div>
         </Field>
       </Section>
 

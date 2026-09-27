@@ -83,6 +83,16 @@ export const marketingAPI = {
   integrations: () => api.get("/api/marketing/integrations"),
 };
 
+export const overviewAPI = {
+  get: () => api.get("/api/overview/admin"),
+};
+
+export const privacyAPI = {
+  summary: () => api.get("/api/privacy/admin/summary"),
+  consents: (params) => api.get("/api/privacy/admin/consents", { params }),
+  removeConsent: (id) => api.delete(`/api/privacy/admin/consents/${id}`),
+};
+
 export const partnerBusinessAPI = {
   getAll: (params) => api.get("/api/partner-businesses/admin", { params }),
   create: (data) => api.post("/api/partner-businesses/admin", data),

@@ -63,11 +63,13 @@ app.use("/api/leads",     require("./routes/leads"));
 app.use("/api/users",     require("./routes/users"));
 app.use("/api/campaigns", require("./routes/campaigns"));
 app.use("/api/settings",  require("./routes/settings"));
+app.use("/api/privacy",   require("./routes/privacy"));
 app.use("/api/marketplace", require("./routes/marketplace"));
 app.use("/api/thikana", require("./routes/thikana"));
 app.use("/api/marketing", require("./routes/marketing"));
 app.use("/api/ecosystem", require("./routes/ecosystem"));
 app.use("/api/partner-businesses", require("./routes/partnerBusinesses"));
+app.use("/api/overview", require("./routes/overview"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

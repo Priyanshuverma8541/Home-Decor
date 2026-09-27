@@ -9,7 +9,27 @@ const CATS    = ["rings","necklaces","earrings","bangles","bridal","silver","dec
 const CITIES  = ["Buxar","Varanasi","Kolkata"];
 
 function ProductForm({ initial, onSave, onClose }) {
-  const [form, setForm] = useState(initial || { name:"", description:"", category:"earrings", price:"", comparePrice:"", stock:"", availableCities:["Buxar"], tags:"", material:"", isFeatured:false, isSeasonal:false, isActive:true });
+  const [form, setForm] = useState(initial || {
+    name:"",
+    description:"",
+    category:"earrings",
+    price:"",
+    comparePrice:"",
+    stock:"",
+    availableCities:["Buxar"],
+    tags:"",
+    material:"",
+    isFeatured:false,
+    isSeasonal:false,
+    isActive:true,
+    purchaseMode:"direct",
+    meeshoEnabled:false,
+    meeshoUrl:"",
+    meeshoButtonText:"Buy on Meesho",
+    shareEnabled:true,
+    referralEnabled:false,
+    referralUrl:"",
+  });
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState(initial?.images || []);
   const [saving, setSaving] = useState(false);
@@ -97,6 +117,38 @@ function ProductForm({ initial, onSave, onClose }) {
       {/* Toggles */}
       <div style={{ display:"flex", gap:16, flexWrap:"wrap" }}>
         {[["isFeatured","Featured"],["isSeasonal","Seasonal"],["isActive","Active"]].map(([k,l])=>(
+          <button type="button" key={k} onClick={()=>toggle(k)}
+            style={{ display:"flex", alignItems:"center", gap:6, padding:"0.4rem 0.875rem", borderRadius:20, fontSize:"0.8rem", fontWeight:500, cursor:"pointer", border:"1px solid", borderColor: form[k]?"#c96030":"#d4c4b0", background: form[k]?"#fae8d8":"white", color: form[k]?"#a84a22":"#6b5040" }}>
+            {form[k] ? <ToggleRight style={{ width:15, height:15 }}/> : <ToggleLeft style={{ width:15, height:15 }}/>}{l}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
+        <div>
+          <label className="label">Purchase mode</label>
+          <select className="input" value={form.purchaseMode || "direct"} onChange={e=>setForm(f=>({...f, purchaseMode: e.target.value, meeshoEnabled: e.target.value !== "direct"}))}>
+            <option value="direct">Direct purchase only</option>
+            <option value="meesho">Meesho only</option>
+            <option value="both">Direct + Meesho</option>
+          </select>
+        </div>
+        <div>
+          <label className="label">Meesho button text</label>
+          <input className="input" value={form.meeshoButtonText || ""} onChange={e=>setForm(f=>({...f, meeshoButtonText: e.target.value}))} placeholder="Buy on Meesho" />
+        </div>
+        <div style={{ gridColumn:"span 2" }}>
+          <label className="label">Meesho product URL</label>
+          <input className="input" type="url" required={form.purchaseMode === "meesho" || form.purchaseMode === "both"} value={form.meeshoUrl || ""} onChange={e=>setForm(f=>({...f, meeshoUrl: e.target.value}))} placeholder="https://www.meesho.com/..." />
+        </div>
+        <div style={{ gridColumn:"span 2" }}>
+          <label className="label">Affiliate / referral link</label>
+          <input className="input" value={form.referralUrl || ""} onChange={e=>setForm(f=>({...f, referralUrl: e.target.value}))} placeholder="https://..." />
+        </div>
+      </div>
+
+      <div style={{ display:"flex", gap:16, flexWrap:"wrap" }}>
+        {[ ["shareEnabled","Enable Share"],["referralEnabled","Enable Refer & Earn"] ].map(([k,l])=>(
           <button type="button" key={k} onClick={()=>toggle(k)}
             style={{ display:"flex", alignItems:"center", gap:6, padding:"0.4rem 0.875rem", borderRadius:20, fontSize:"0.8rem", fontWeight:500, cursor:"pointer", border:"1px solid", borderColor: form[k]?"#c96030":"#d4c4b0", background: form[k]?"#fae8d8":"white", color: form[k]?"#a84a22":"#6b5040" }}>
             {form[k] ? <ToggleRight style={{ width:15, height:15 }}/> : <ToggleLeft style={{ width:15, height:15 }}/>}{l}

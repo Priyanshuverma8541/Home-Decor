@@ -1,0 +1,221 @@
+{
+  "site": {
+    "name": "SaviNexa",
+    "descriptor": "Talent & Hiring Solutions",
+    "formEndpoint": "",
+    "countryCode": "91"
+  },
+
+  "nav": [
+    { "id": "about", "label": "About" },
+    { "id": "approach", "label": "Approach" },
+    { "id": "services", "label": "Services" },
+    { "id": "process", "label": "Process" },
+    { "id": "why-us", "label": "Why Us" },
+    { "id": "industries", "label": "Industries" },
+    { "id": "contact", "label": "Contact" }
+  ],
+
+  "hero": {
+    "eyebrow": "Recruitment & Talent Acquisition Consultancy",
+    "title": "SaviNexa",
+    "lead": "Precision hiring, not volume hiring. We help organisations find, hire and retain the people who drive business outcomes.",
+    "chain": ["Talent", "Strategy", "Right People", "Business Growth"],
+    "primaryCta": "Start a hiring conversation",
+    "secondaryCta": "Explore our services",
+    "audience": "Prepared for clients, hiring partners & strategic collaborators"
+  },
+
+  "about": {
+    "eyebrow": "Who we are",
+    "title": "A Talent Partner Built Around Strategy and People",
+    "paragraphs": [
+      "SaviNexa is a talent acquisition and recruitment consultancy built to help organisations find, hire, and retain the people who drive business outcomes. We work as an extension of our clients' teams — combining structured search methodology, market insight, and a consultative approach to close critical roles with the right talent, not just available talent.",
+      "We support startups and established companies alike — across IT, non-IT, manufacturing, sales, marketing, finance, operations and more — with one dedicated team managing hiring end-to-end."
+    ],
+    "highlights": [
+      { "icon": "bullseye", "text": "Precision hiring, not volume hiring" },
+      { "icon": "handshake", "text": "A consultative, partnership-led approach" },
+      { "icon": "chartline", "text": "Talent decisions tied to business growth" }
+    ]
+  },
+
+  "challenge": {
+    "eyebrow": "The challenge",
+    "title": "Hiring the Right Person, Fast, is Getting Harder",
+    "items": [
+      { "icon": "search", "title": "Slow time-to-hire", "text": "Open positions stay vacant while internal teams juggle sourcing with day-to-day priorities." },
+      { "icon": "users", "title": "Talent-role mismatch", "text": "High volumes of applicants rarely translate into candidates who truly fit the role and culture." },
+      { "icon": "contract", "title": "Compliance & documentation load", "text": "Offer letters, onboarding, statutory formalities and exits add administrative overhead." },
+      { "icon": "chartbar", "title": "Scaling pressure", "text": "Growth plans, new markets and project ramps demand talent faster than internal HR can deliver." }
+    ]
+  },
+
+  "approach": {
+    "eyebrow": "Our approach",
+    "title": "From Talent to Business Growth",
+    "intro": "SaviNexa connects four stages into one continuous value chain — turning a hiring need into a lasting business outcome.",
+    "steps": [
+      { "icon": "network", "title": "Talent", "text": "Mapping the market and identifying where the right people are" },
+      { "icon": "bullseye", "title": "Strategy", "text": "Designing a sourcing and hiring plan tailored to the role and business" },
+      { "icon": "usertie", "title": "Right People", "text": "Rigorous screening to deliver candidates who truly fit" },
+      { "icon": "rocket", "title": "Business Growth", "text": "Right hires, onboarded well, that move the business forward" }
+    ]
+  },
+
+  "services": {
+    "eyebrow": "What we offer",
+    "title": "Core Services",
+    "items": [
+      { "icon": "usertie", "title": "Permanent Recruitment", "text": "End-to-end hiring for full-time roles across levels and functions." },
+      { "icon": "friends", "title": "Contract & Temporary Staffing", "text": "Flexible, on-demand talent deployment for short-term and project needs." },
+      { "icon": "search", "title": "Executive Search", "text": "Confidential, targeted search for senior and leadership positions." },
+      { "icon": "network", "title": "Recruitment Process Outsourcing", "text": "Managing all or part of a client's hiring pipeline as an extended team." },
+      { "icon": "shield", "title": "HR Consulting & Compliance", "text": "Guidance on onboarding, documentation and workforce compliance." },
+      { "icon": "grad", "title": "Training & Development", "text": "Building capability so new and existing talent perform from day one." }
+    ]
+  },
+
+  "process": {
+    "eyebrow": "How we work",
+    "title": "Our Recruitment Process",
+    "intro": "A structured, five-step methodology applied to every mandate.",
+    "steps": [
+      { "icon": "clipboard", "title": "Understand", "text": "Deep-dive into the role, team, culture and success metrics with the client." },
+      { "icon": "search", "title": "Source", "text": "Proactively map and engage the right talent pool, active and passive." },
+      { "icon": "check", "title": "Screen & Evaluate", "text": "Structured assessment of skills, experience and cultural fit." },
+      { "icon": "friends", "title": "Present & Interview", "text": "Curated shortlist presented with coordinated interview support." },
+      { "icon": "handshake", "title": "Offer & Onboard", "text": "Offer management, documentation and smooth onboarding to Day 1." }
+    ]
+  },
+
+  "different": {
+    "id": "why-us",
+    "eyebrow": "What sets us apart",
+    "title": "Why Our Approach is Different",
+    "items": [
+      { "icon": "bullseye", "title": "Fit-first search", "text": "We prioritise role and culture fit over speed-only, volume-based sourcing." },
+      { "icon": "handshake", "title": "Consultative partnership", "text": "We act as an extension of the client's HR and hiring teams, not a transactional vendor." },
+      { "icon": "cogs", "title": "Structured methodology", "text": "A repeatable process applied consistently across every mandate and function." },
+      { "icon": "shield", "title": "Compliance-aware execution", "text": "Documentation, onboarding and workforce formalities handled with care." },
+      { "icon": "network", "title": "Flexible engagement models", "text": "Permanent, contract, RPO or project-based — shaped around client needs." },
+      { "icon": "chartline", "title": "Outcome orientation", "text": "Every hire is evaluated against the business result it is meant to deliver." }
+    ]
+  },
+
+  "value": {
+    "eyebrow": "Value we create",
+    "title": "The Value We Bring to Clients",
+    "items": [
+      { "icon": "chartline", "title": "Faster time-to-hire", "text": "Pre-mapped talent pipelines shorten the path from vacancy to offer." },
+      { "icon": "coins", "title": "Cost efficiency", "text": "Reduced dependency on ad-hoc job-board spend and internal recruiter overhead." },
+      { "icon": "usertie", "title": "Higher-quality shortlists", "text": "Fewer, better-fit candidates instead of high-volume, low-relevance resumes." },
+      { "icon": "shield", "title": "Reduced compliance risk", "text": "Documentation and onboarding formalities handled with rigour." },
+      { "icon": "network", "title": "Scalable hiring capacity", "text": "Ramp hiring up or down with business cycles, without adding fixed headcount." },
+      { "icon": "handshake", "title": "A single point of accountability", "text": "One dedicated partner managing the hiring outcome end-to-end." }
+    ]
+  },
+
+  "industries": {
+    "eyebrow": "Where we operate",
+    "title": "Industries & Functions We Can Support",
+    "industriesLabel": "Industries",
+    "industries": [
+      { "icon": "laptop", "label": "IT & Technology" },
+      { "icon": "coins", "label": "BFSI" },
+      { "icon": "industry", "label": "Manufacturing" },
+      { "icon": "hospital", "label": "Healthcare" },
+      { "icon": "building", "label": "Retail & E-commerce" },
+      { "icon": "rocket", "label": "Startups" }
+    ],
+    "functionsLabel": "Functions",
+    "functions": [
+      { "icon": "cogs", "label": "Engineering & Tech" },
+      { "icon": "dollar", "label": "Sales & Revenue" },
+      { "icon": "chartbar", "label": "Finance & Accounts" },
+      { "icon": "network", "label": "Operations" },
+      { "icon": "friends", "label": "Human Resources" },
+      { "icon": "usertie", "label": "Leadership & CXO" }
+    ],
+    "note": "We also support Marketing, Supply Chain & Procurement, Customer Support & Success, Quality & Production, and Project & Program Management.",
+    "cta": "View all hiring categories"
+  },
+
+  "audience": {
+    "eyebrow": "Where we add value",
+    "title": "Who We Work With & What We Support",
+    "items": [
+      "Startups & growing businesses hiring their first few employees",
+      "Manufacturing companies scaling production and engineering teams",
+      "IT & technology companies hiring across engineering, product and support",
+      "Established organisations with multiple, ongoing hiring needs",
+      "New & expanding businesses entering new markets or verticals"
+    ],
+    "categoriesTitle": "Hiring Categories We Support",
+    "categories": [
+      "IT & Software",
+      "Non-IT",
+      "Manufacturing & Engineering",
+      "Sales & Business Development",
+      "Marketing & Digital Marketing",
+      "HR & Talent Acquisition",
+      "Finance & Accounts",
+      "Operations & Administration",
+      "Supply Chain & Procurement",
+      "Customer Support & Success",
+      "Quality & Production",
+      "Project & Program Management",
+      "Management & Leadership Roles"
+    ],
+    "categoriesNote": "…and other industry-specific requirements."
+  },
+
+  "partner": {
+    "eyebrow": "The case for SaviNexa",
+    "title": "Why Companies Choose to Partner With Us",
+    "items": [
+      "A dedicated, consultative approach instead of a transactional vendor relationship",
+      "Structured process that brings predictability to hiring timelines",
+      "Flexible engagement — permanent, contract, RPO or advisory",
+      "Attention to compliance, documentation and candidate experience",
+      "A partner invested in the long-term success of every placement"
+    ],
+    "commitmentTitle": "Our Commitment",
+    "commitment": "To treat every mandate as a business problem to solve, not a requisition to fill — delivering talent decisions that hold up well beyond the offer letter."
+  },
+
+  "vision": {
+    "eyebrow": "Looking ahead",
+    "title": "Our Vision for Growth",
+    "intro": "SaviNexa aims to grow from a trusted recruitment partner into a full-spectrum talent strategy consultancy.",
+    "items": [
+      { "icon": "globe", "title": "Wider Geographic Reach", "text": "Extending mandate coverage across more cities and, over time, international markets." },
+      { "icon": "network", "title": "Deeper Industry Specialisation", "text": "Building focused expertise and talent pools within key sectors and functions." },
+      { "icon": "cogs", "title": "Technology-Led Hiring", "text": "Adopting data and AI-assisted tools to sharpen sourcing, screening and matching." },
+      { "icon": "handshake", "title": "Strategic HR Partnerships", "text": "Evolving from project-based hiring into long-term, retained talent advisory roles." }
+    ]
+  },
+
+  "contact": {
+    "eyebrow": "Let's build your team together",
+    "title": "Talent, Strategically Delivered.",
+    "subtitle": "SaviNexa — Talent & Hiring Solutions | Recruitment & Talent Acquisition Consultancy",
+    "phones": [
+      { "name": "Ankit", "number": "7491096101" },
+      { "name": "Prachi", "number": "7903983502" }
+    ],
+    "email": "",
+    "office": "",
+    "cta": "Send an enquiry"
+  },
+
+  "enquiryNeeds": [
+    "Permanent Recruitment",
+    "Contract & Temporary Staffing",
+    "Executive Search",
+    "Recruitment Process Outsourcing",
+    "HR Consulting & Compliance",
+    "Training & Development",
+    "Not sure yet"
+  ]
+}

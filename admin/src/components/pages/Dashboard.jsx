@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ShoppingBag, Users, TrendingUp, Clock, ArrowRight, Package } from "lucide-react";
+import { ShoppingBag, Users, TrendingUp, Clock, ArrowRight, Package, ShieldCheck } from "lucide-react";
 import { io } from "socket.io-client";
-import { orderAPI, leadAPI } from "../../services/api.js";
+import { orderAPI, leadAPI, overviewAPI, privacyAPI } from "../../services/api.js";
 import { StatCard, StatusBadge, PageLoader } from "../ui/index.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
@@ -15,18 +15,23 @@ export default function Dashboard() {
   const [stats,   setStats]   = useState(null);
   const [orders,  setOrders]  = useState([]);
   const [leads,   setLeads]   = useState(null);
+  const [privacyCount, setPrivacyCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     try {
-      const [aRes, oRes, lRes] = await Promise.all([
+      const [aRes, oRes, lRes, overviewRes] = await Promise.all([
         orderAPI.analytics(),
         orderAPI.getAll({ limit:8, page:1 }),
         leadAPI.getStats(),
+        overviewAPI.get(),
+        privacyAPI.summary().catch(() => ({ data: { summary: { subjects: 0 } } })),
       ]);
-      setStats(aRes.data.stats);
-      setOrders(oRes.data.orders);
-      setLeads(lRes.data);
+      const overview = overviewRes?.data?.overview || {};
+      setStats(aRes.data.stats || overview.orders || {});
+      setOrders(oRes.data.orders || overview.orders || []);
+      setLeads(lRes.data || { total: (overview.leads || []).length, byStatus: [] });
+      setPrivacyCount(overviewRes.data.summary?.subjects || 0);
     } catch(e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -64,6 +69,7 @@ export default function Dashboard() {
         <motion.div {...fd(.1)}> <StatCard label="Pending"        value={stats?.pendingOrders || 0} sub="Need action"                      color="#e38345" icon={Clock}/></motion.div>
         <motion.div {...fd(.15)}><StatCard label="Revenue (paid)" value={`Rs.${(stats?.totalRevenue||0).toLocaleString("en-IN")}`} sub="All time" color="#1a8e72" icon={TrendingUp}/></motion.div>
         <motion.div {...fd(.2)}> <StatCard label="Leads Total"    value={leads?.total||0}           sub={`${leads?.todayNew||0} new today`} color="#b89248" icon={Users}/></motion.div>
+        <motion.div {...fd(.25)}><Link to="/privacy" style={{ textDecoration:"none" }}><StatCard label="Privacy records" value={privacyCount} sub="Consent data center" color="#1a3c34" icon={ShieldCheck}/></Link></motion.div>
       </div>
 
       <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:"1.25rem" }} className="dash-grid">
@@ -124,7 +130,7 @@ export default function Dashboard() {
         </motion.div>
       </div>
 
-      <style>{`@media(min-width:768px){.stats-grid{grid-template-columns:repeat(4,1fr)!important}.dash-grid{grid-template-columns:2fr 1fr!important}}`}</style>
+      <style>{`@media(min-width:768px){.stats-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))!important}.dash-grid{grid-template-columns:2fr 1fr!important}}`}</style>
     </div>
   );
 }

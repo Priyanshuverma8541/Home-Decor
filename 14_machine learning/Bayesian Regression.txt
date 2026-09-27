@@ -1,0 +1,5 @@
+Bayesian Regression
+P(A | B) = \frac{P(B | A) \cdot P(A)} {P(B)}   . 
+Maximum Likelihood Estimation (MLE)
+Maximum A Posteriori (MAP) Estimation
+Likelihood Function

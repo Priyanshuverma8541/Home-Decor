@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingCart, MessageCircle, Minus, Plus, Share2, Truck, Leaf, RotateCcw } from "lucide-react";
+import { ArrowLeft, ShoppingCart, MessageCircle, Minus, Plus, Share2, Truck, Leaf, RotateCcw, ExternalLink } from "lucide-react";
 import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
 import { PageLoader } from "../ui/Shared.jsx";
+import { shareProduct } from "../../utils/productShare.js";
 import toast from "react-hot-toast";
 
 const WA = import.meta.env.VITE_WHATSAPP || "6207855397";
@@ -36,9 +37,8 @@ export default function ProductDetail() {
   const waMsg  = product.whatsappOrderMsg?.replace("{productName}", product.name).replace("{qty}", qty)
     || `Hi! I want to order: ${product.name} x${qty}. Please confirm Pan-India delivery availability.`;
 
-  const handleAddToCart = () => { for (let i=0; i<qty; i++) addToCart(product, i===0 ? qty : 0); };
-  // above is wrong — fix:
-  const handleAdd = () => { addToCart({ ...product, quantity: qty }, qty); };
+  const purchaseMode = product?.purchaseMode || (product?.meeshoEnabled ? "meesho" : "direct");
+  const hasMeesho = !!product?.meeshoEnabled && !!product?.meeshoUrl && ["meesho", "both"].includes(purchaseMode);
 
   return (
     <div style={{ minHeight:"100vh", background:"#fdf6ee", padding:"1.5rem 1rem" }}>
@@ -116,15 +116,38 @@ export default function ProductDetail() {
 
             {/* CTAs */}
             <div style={{ display:"flex", gap:10, flexWrap:"wrap", marginBottom:"1.25rem" }}>
-              <button onClick={() => addToCart(product, qty)} disabled={product.stock===0}
-                className="btn-outline" style={{ flex:1, minWidth:140, justifyContent:"center" }}>
-                <ShoppingCart style={{ width:15, height:15 }}/>Add to Cart
-              </button>
-              <a href={`https://wa.me/91${WA}?text=${encodeURIComponent(waMsg)}`}
-                target="_blank" rel="noopener noreferrer"
-                className="btn-wa" style={{ flex:1, minWidth:140, justifyContent:"center" }}>
-                <MessageCircle style={{ width:15, height:15 }}/>Order on WhatsApp
-              </a>
+              {(purchaseMode === "direct" || purchaseMode === "both") && (
+                <button onClick={() => addToCart(product, qty)} disabled={product.stock===0}
+                  className="btn-outline" style={{ flex:1, minWidth:140, justifyContent:"center" }}>
+                  <ShoppingCart style={{ width:15, height:15 }}/>Add to Cart
+                </button>
+              )}
+              {hasMeesho && (
+                <a href={product.meeshoUrl} target="_blank" rel="noopener noreferrer"
+                  className="btn-wa" style={{ flex:1, minWidth:140, justifyContent:"center" }}>
+                  <ExternalLink style={{ width:15, height:15 }}/> {product.meeshoButtonText || "Buy on Meesho"}
+                </a>
+              )}
+              {(purchaseMode === "direct" || purchaseMode === "both") && (
+                <a href={`https://wa.me/91${WA}?text=${encodeURIComponent(waMsg)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="btn-wa" style={{ flex:1, minWidth:140, justifyContent:"center" }}>
+                  <MessageCircle style={{ width:15, height:15 }}/>Order on WhatsApp
+                </a>
+              )}
+            </div>
+
+            <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:"1.25rem" }}>
+              {product.shareEnabled !== false && (
+                <button type="button" onClick={() => shareProduct(product)} className="btn-ghost" style={{ justifyContent:"center" }}>
+                  <Share2 style={{ width:15, height:15 }}/>Share product
+                </button>
+              )}
+              {product.referralEnabled && product.referralUrl && (
+                <a href={product.referralUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost" style={{ justifyContent:"center" }}>
+                  Refer & Earn
+                </a>
+              )}
             </div>
 
             {/* Trust badges */}

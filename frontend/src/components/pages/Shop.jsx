@@ -1,15 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, X, ShoppingCart } from "lucide-react";
+import { Search, X, ShoppingCart, ExternalLink, Share2 } from "lucide-react";
 import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
 import { SkeletonCard, EmptyState } from "../ui/Shared.jsx";
+import { shareProduct } from "../../utils/productShare.js";
 
 const CATS = ["All","rings","necklaces","earrings","bangles","bridal","silver","decor","gift"];
 
 function ProductCard({ p }) {
   const { addToCart } = useCart();
+  const purchaseMode = p.purchaseMode || (p.meeshoEnabled ? "meesho" : "direct");
+  const hasMeesho = !!p.meeshoEnabled && !!p.meeshoUrl && ["meesho", "both"].includes(purchaseMode);
+
   return (
     <motion.div layout initial={{ opacity:0, scale:.97 }} animate={{ opacity:1, scale:1 }} exit={{ opacity:0 }} className="card" style={{ overflow:"hidden", display:"flex", flexDirection:"column" }}>
       <Link to={`/product/${p._id}`} className="img-zoom" style={{ display:"block", aspectRatio:"1", textDecoration:"none", position:"relative" }}>
@@ -26,11 +30,24 @@ function ProductCard({ p }) {
             <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.1rem", color:"#76522c", fontWeight:600 }}>Rs.{p.price?.toLocaleString("en-IN")}</span>
             {p.comparePrice && <span style={{ fontSize:"0.7rem", color:"white", textDecoration:"line-through", marginLeft:5 }}>Rs.{p.comparePrice?.toLocaleString("en-IN")}</span>}
           </div>
-          <button onClick={() => addToCart(p)} disabled={p.stock===0}
-            style={{ display:"flex", alignItems:"center", gap:5, padding:"0.3rem 0.875rem", height:34, borderRadius:"9999px", fontSize:"0.75rem", fontWeight:500, background: p.stock===0?"#e8dfd0":"#1a3c34", color: p.stock===0?"#b8a08a":"white", border:"none", cursor: p.stock===0?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif" }}>
-            <ShoppingCart style={{ width:12, height:12 }}/>{p.stock===0?"Sold Out":"Add"}
-          </button>
+          {purchaseMode !== "meesho" && (
+            <button onClick={() => addToCart(p)} disabled={p.stock===0}
+              style={{ display:"flex", alignItems:"center", gap:5, padding:"0.3rem 0.875rem", height:34, borderRadius:"9999px", fontSize:"0.75rem", fontWeight:500, background: p.stock===0?"#e8dfd0":"#1a3c34", color: p.stock===0?"#b8a08a":"white", border:"none", cursor: p.stock===0?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif" }}>
+              <ShoppingCart style={{ width:12, height:12 }}/>{p.stock===0?"Sold Out":"Add"}
+            </button>
+          )}
         </div>
+        {hasMeesho && (
+          <a href={p.meeshoUrl} target="_blank" rel="noopener noreferrer"
+            style={{ marginTop:10, display:"inline-flex", alignItems:"center", justifyContent:"center", gap:6, padding:"0.42rem 0.75rem", borderRadius:999, background:"#fbe9d2", color:"#8a4f1d", fontWeight:600, textDecoration:"none", fontSize:"0.72rem" }}>
+            <ExternalLink style={{ width:12, height:12 }}/> {p.meeshoButtonText || "Buy on Meesho"}
+          </a>
+        )}
+        {p.shareEnabled && (
+          <button type="button" onClick={() => shareProduct(p)} style={{ marginTop:8, display:"inline-flex", alignItems:"center", justifyContent:"center", gap:6, padding:"0.4rem 0.7rem", borderRadius:999, border:"1px solid #e0d0b7", background:"white", color:"#5c4a32", fontWeight:500, fontSize:"0.72rem", cursor:"pointer" }}>
+            <Share2 style={{ width:12, height:12 }}/>Share
+          </button>
+        )}
       </div>
     </motion.div>
   );

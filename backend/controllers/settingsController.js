@@ -6,8 +6,8 @@ exports.getPublic = async (req, res) => {
   try {
     let settings = await Settings.findOne();
     if (!settings) settings = await Settings.create({});
-    const { upiId, qrImageUrl, brandName, tagline, contactPhone, whatsappNumber, instagramHandle, activeCities, deliveryFee, freeDeliveryAbove, deliverySlots, maintenanceMode, maintenanceMsg, announcementText, showAnnouncement, facebookUrl, youtubeUrl } = settings;
-    res.json({ success: true, settings: { upiId, qrImageUrl, brandName, tagline, contactPhone, whatsappNumber, instagramHandle, activeCities, deliveryFee, freeDeliveryAbove, deliverySlots, maintenanceMode, maintenanceMsg, announcementText, showAnnouncement, facebookUrl, youtubeUrl } });
+    const { upiId, qrImageUrl, brandName, tagline, contactPhone, whatsappNumber, instagramHandle, activeCities, deliveryFee, freeDeliveryAbove, deliverySlots, maintenanceMode, maintenanceMsg, announcementText, showAnnouncement, facebookUrl, youtubeUrl, permissionCapabilities } = settings;
+    res.json({ success: true, settings: { upiId, qrImageUrl, brandName, tagline, contactPhone, whatsappNumber, instagramHandle, activeCities, deliveryFee, freeDeliveryAbove, deliverySlots, maintenanceMode, maintenanceMsg, announcementText, showAnnouncement, facebookUrl, youtubeUrl, permissionCapabilities } });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

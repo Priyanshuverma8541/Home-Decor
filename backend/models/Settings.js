@@ -40,6 +40,48 @@ const settingsSchema = new mongoose.Schema({
   // Announcement banner
   announcementText:  { type: String, default: "" },
   showAnnouncement:  { type: Boolean, default: false },
+
+  // Permission / capability catalog exposed to the frontend permission center
+  permissionCapabilities: {
+    type: [
+      {
+        key: { type: String, required: true },
+        label: { type: String, required: true },
+        purpose: { type: String, default: "" },
+        category: { type: String, default: "browser" },
+        enabled: { type: Boolean, default: false },
+        status: { type: String, default: "not-granted" },
+        available: { type: Boolean, default: true },
+      }
+    ],
+    default: [
+      { key: "location", label: "Location / Geolocation", purpose: "Delivery / nearby services", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "camera", label: "Camera", purpose: "Capture and upload product photos", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "microphone", label: "Microphone", purpose: "Voice search / voice input", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "notifications", label: "Browser / Web Push Notifications", purpose: "Order and account alerts", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "contacts", label: "Contacts, where supported", purpose: "Import customer contact details", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "files", label: "Photos / File Upload", purpose: "Upload invoices and business documents", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "clipboard", label: "Clipboard", purpose: "Copy referral links and codes", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "speech", label: "Speech Recognition", purpose: "Voice-to-text and accessibility support", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "vibration", label: "Vibration", purpose: "Feedback and haptic confirmation", category: "capability", enabled: true, status: "not-granted", available: true },
+      { key: "motion", label: "Device Orientation / Motion Sensors", purpose: "Interactive product experiences and accessibility", category: "capability", enabled: false, status: "not-granted", available: false },
+      { key: "bluetooth", label: "Bluetooth", purpose: "Nearby-device pairing for equipment or smart accessories", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "nfc", label: "NFC", purpose: "Tap-to-connect, quick access or mobile interactions", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "usb", label: "USB devices", purpose: "Hardware-based file or device transfer", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "screenShare", label: "Screen sharing / capture", purpose: "Remote-assisted product demos or support", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "wakeLock", label: "Wake Lock / Keep Screen Awake", purpose: "Keep the checkout or walkthrough screen active", category: "capability", enabled: true, status: "not-granted", available: true },
+      { key: "storage", label: "Local Storage", purpose: "Save preferences and session state", category: "capability", enabled: true, status: "granted", available: true },
+      { key: "cookies", label: "Cookies", purpose: "Essential site experience and tracking consent", category: "capability", enabled: true, status: "granted", available: true },
+      { key: "credentials", label: "Credentials / Passkeys", purpose: "Modern secure sign-in options", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "webauthn", label: "WebAuthn / device authentication / biometric authentication", purpose: "Secure sign-in and identity verification", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "calendar", label: "Calendar-related functionality where supported", purpose: "Planning appointments or service scheduling", category: "permission", enabled: false, status: "not-granted", available: false },
+      { key: "phone", label: "Phone / tel actions", purpose: "Quick call actions for support and sales", category: "feature", enabled: true, status: "not-granted", available: true },
+      { key: "sms", label: "SMS / sms actions", purpose: "One-tap messaging for support and sales", category: "feature", enabled: true, status: "not-granted", available: true },
+      { key: "email", label: "Email actions", purpose: "Quick email-based support and outreach", category: "feature", enabled: true, status: "not-granted", available: true },
+      { key: "share", label: "Native Web Share", purpose: "Sharing product and referral links", category: "feature", enabled: true, status: "not-granted", available: true },
+      { key: "futureCapability", label: "Additional standard browser capability", purpose: "Future-ready support for new browser APIs relevant to Savitri Livings", category: "feature", enabled: false, status: "not-granted", available: false },
+    ]
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Settings", settingsSchema);

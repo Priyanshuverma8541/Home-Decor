@@ -46,6 +46,15 @@ export const settingsAPI = {
   get: () => api.get("/api/settings"),
 };
 
+export const privacyAPI = {
+  getMine: (subjectId) => api.get("/api/privacy/mine", { headers: { "X-Privacy-Subject-Id": subjectId } }),
+  saveConsent: (data) => api.post("/api/privacy/consents", data),
+};
+
+export const overviewAPI = {
+  get: () => api.get("/api/overview"),
+};
+
 export const leadAPI = {
   create: (d) => api.post("/api/leads", d),
 };

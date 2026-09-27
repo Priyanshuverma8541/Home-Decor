@@ -16,6 +16,15 @@ const productSchema = new mongoose.Schema({
   isFeatured:       { type: Boolean, default: false },
   isSeasonal:       { type: Boolean, default: false },
   isActive:         { type: Boolean, default: true },
+  purchaseMode:     { type: String, enum: ["direct","meesho","both"], default: "direct" },
+  meeshoEnabled:    { type: Boolean, default: false },
+  meeshoUrl:        { type: String, default: "" },
+  meeshoButtonText: { type: String, default: "Buy on Meesho" },
+  meeshoImageUrl:   { type: String, default: "" },
+  meeshoDescription:{ type: String, default: "" },
+  shareEnabled:     { type: Boolean, default: true },
+  referralEnabled:  { type: Boolean, default: false },
+  referralUrl:      { type: String, default: "" },
   weight:           { type: Number },   // grams
   dimensions:       { type: String },   // e.g. "20x15x5 cm"
   material:         { type: String },   // e.g. "22K gold-plated brass"

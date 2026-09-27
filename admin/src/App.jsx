@@ -12,6 +12,7 @@ import Analytics from "./components/pages/Analytics.jsx";
 import Marketplace from "./components/pages/Marketplace.jsx";
 import Marketing from "./components/pages/Marketing.jsx";
 import BusinessOpportunities from "./components/pages/BusinessOpportunities.jsx";
+import PrivacyDataCenter from "./components/pages/PrivacyDataCenter.jsx";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="marketplace" element={<Marketplace />} />
             <Route path="marketing" element={<Marketing />} />
             <Route path="business-opportunities" element={<BusinessOpportunities />} />
+            <Route path="privacy" element={<PrivacyDataCenter />} />
             <Route path="settings" element={<Settings />}   />
           </Route>
         </Routes>
