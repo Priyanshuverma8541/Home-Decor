@@ -5,6 +5,7 @@ import { useState } from "react";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { CityProvider } from "./context/CityContext.jsx";
+import { EntertainmentProvider } from "./context/EntertainmentContext.jsx";
 
 // ── Layout ────────────────────────────────────────────────────────
 import Layout from "./components/layout/Layout.jsx";
@@ -14,6 +15,7 @@ import Home from "./components/pages/Home.jsx";
 import Shop from "./components/pages/Shop.jsx";
 import ProductDetail from "./components/pages/ProductDetail.jsx";
 import Cart from "./components/pages/Cart.jsx";
+import { EntertainmentHome, EntertainmentSearch, PlaylistPage } from "./modules/entertainment/index.js";
 import { Login, Register } from "./components/pages/AuthPages.jsx";
 import { MyAccount, MyOrders } from "./components/pages/AccountPages.jsx";
 import { About, Contact, FAQs, Legal } from "./components/pages/StaticPages.jsx";
@@ -45,6 +47,10 @@ function AppShell() {
           <Route path="marketplace/sell" element={<SellerHub />} />
           <Route path="ecosystem" element={<Ecosystem />} />
           <Route path="partner-with-us" element={<PartnerWithUs />} />
+          <Route path="entertainment" element={<EntertainmentHome />} />
+          <Route path="entertainment/search" element={<EntertainmentSearch />} />
+          <Route path="entertainment/category/:slug" element={<EntertainmentHome />} />
+          <Route path="entertainment/playlists" element={<PlaylistPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 
@@ -85,7 +91,9 @@ export default function App() {
       <AuthProvider>
         <CityProvider>
           <CartProvider>
-            <AppShell />
+            <EntertainmentProvider>
+              <AppShell />
+            </EntertainmentProvider>
           </CartProvider>
         </CityProvider>
       </AuthProvider>

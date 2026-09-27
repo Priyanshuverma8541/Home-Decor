@@ -9,6 +9,7 @@ import { useCity } from "../../context/CityContext.jsx";
 const NAV = [
   { to:"/",         label:"Home",     end:true },
   { to:"/shop",     label:"Shop"             },
+  { to:"/entertainment", label:"Entertainment" },
   { to:"/marketplace", label:"Marketplace"   },
   { to:"/ecosystem",   label:"Ecosystem"     },
   { to:"/partner-with-us", label:"Partner with us" },

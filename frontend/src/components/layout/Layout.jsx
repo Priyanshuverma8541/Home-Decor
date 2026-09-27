@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Navbar from "./Navbar.jsx";
 import Footer from "./Footer.jsx";
+import MiniPlayer from "../../modules/entertainment/components/MiniPlayer.jsx";
 
 export default function Layout() {
   const { pathname, hash } = useLocation();
@@ -10,6 +11,7 @@ export default function Layout() {
     <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column" }}>
       <Navbar />
       <main style={{ flex:1, paddingTop:64 }}><Outlet /></main>
+      <MiniPlayer />
       <Footer />
     </div>
   );
