@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart, X } from "lucide-react";
 import { useEntertainment } from "../../../context/EntertainmentContext.jsx";
 import YouTubePlayer from "./YouTubePlayer.jsx";
 
@@ -19,6 +19,7 @@ export default function MiniPlayer() {
     favorites,
     setPlaybackMeta,
   } = useEntertainment();
+  const [hiddenTrackId, setHiddenTrackId] = useState(null);
 
   useEffect(() => {
     if (!currentTrack) return;
@@ -28,7 +29,7 @@ export default function MiniPlayer() {
     }
   }, [currentTrack, isPlaying]);
 
-  if (!currentTrack) return null;
+  if (!currentTrack || hiddenTrackId === currentTrack.youtubeVideoId) return null;
 
   const progress = duration ? (currentTime / duration) * 100 : 0;
   const isFavorite = favorites.some((item) => item.youtubeVideoId === currentTrack.youtubeVideoId);
@@ -50,7 +51,16 @@ export default function MiniPlayer() {
 
   return (
     <div style={{ position: "fixed", left: 12, right: 12, bottom: 12, zIndex: 120, background: "rgba(30, 20, 12, 0.96)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 22, boxShadow: "0 25px 60px rgba(0,0,0,0.35)", backdropFilter: "blur(12px)", overflow: "hidden" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1.3fr)", gap: 12, padding: 12, alignItems: "center" }}>
+      <button
+        type="button"
+        onClick={() => setHiddenTrackId(currentTrack.youtubeVideoId)}
+        aria-label="Hide music player"
+        title="Hide music player"
+        style={{ ...buttonStyle, position: "absolute", top: 8, right: 8, zIndex: 1, width: 28, height: 28, background: "rgba(255,255,255,0.12)" }}
+      >
+        <X size={15} />
+      </button>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1.3fr)", gap: 12, padding: "40px 12px 12px", alignItems: "center" }}>
         <div style={{ minWidth: 0 }}>
           <YouTubePlayer
             ref={playerRef}

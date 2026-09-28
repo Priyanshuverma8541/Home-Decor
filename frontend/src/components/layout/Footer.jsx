@@ -18,7 +18,7 @@ const COLS = {
               { to:"/legal#terms",    label:"Terms"         }],
 };
 
-export default function Footer() {
+export default function Footer({ onOpenPermissions }) {
   return (
     <footer style={{ background:"#4d3219" }}>
       {/* CTA strip */}
@@ -73,6 +73,13 @@ export default function Footer() {
                 {links.map(({ to, label }) => (
                   <li key={to}><Link to={to} style={{ fontSize:"0.85rem", color:"rgba(255,255,255,.4)", textDecoration:"none" }}>{label}</Link></li>
                 ))}
+                {heading === "Help" && (
+                  <li>
+                    <button type="button" onClick={onOpenPermissions} style={{ padding:0, border:0, background:"none", color:"rgba(255,255,255,.4)", fontSize:"0.85rem", cursor:"pointer", textAlign:"left" }}>
+                      Privacy & Permissions
+                    </button>
+                  </li>
+                )}
               </ul>
             </div>
           ))}

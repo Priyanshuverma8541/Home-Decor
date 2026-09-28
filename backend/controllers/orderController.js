@@ -2,11 +2,29 @@ const Order    = require("../models/Order");
 const Product  = require("../models/Product");
 const Lead     = require("../models/Lead");
 const Settings = require("../models/Settings");
+const Page = require("../models/Page");
+const PageEvent = require("../models/PageEvent");
+
+const recordLandingPurchase = async (order) => {
+  if (!order.landingPageSlug || order.paymentStatus !== "paid") return;
+  try {
+    const page = await Page.findOne({ slug: order.landingPageSlug }).select("_id");
+    if (!page) return;
+    await PageEvent.create({
+      pageId: page._id,
+      type: "purchase",
+      sessionId: order.landingPageSessionId || "",
+      metadata: { revenue: order.grandTotal, orderId: String(order._id) },
+    });
+  } catch (error) {
+    console.warn("Page purchase attribution could not be recorded:", error.message);
+  }
+};
 
 // POST /api/orders — customer places order
 exports.create = async (req, res) => {
   try {
-    const { items, deliveryAddress, landmark, pincode, city, orderSource, guestName, guestPhone, paymentMethod, deliveryType } = req.body;
+    const { items, deliveryAddress, landmark, pincode, city, orderSource, guestName, guestPhone, paymentMethod, deliveryType, landingPageSlug, landingPageSessionId } = req.body;
     if (!items?.length || !deliveryAddress || !city)
       return res.status(400).json({ success: false, message: "Items, address and city required" });
 
@@ -44,6 +62,8 @@ exports.create = async (req, res) => {
       landmark,
       pincode,
       orderSource: orderSource || "website",
+      landingPageSlug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(landingPageSlug || "")) ? String(landingPageSlug).slice(0, 80) : undefined,
+      landingPageSessionId: String(landingPageSessionId || "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80),
       paymentMethod: paymentMethod || "upi",
       deliveryType: deliveryType || "standard",
       statusTimeline: [{ status: "pending", message: "Order placed successfully" }],
@@ -123,6 +143,7 @@ exports.updateStatus = async (req, res) => {
     const { status, deliveryPartnerId, adminNotes, paymentStatus, paymentRef } = req.body;
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    const wasPaid = order.paymentStatus === "paid";
 
     if (status)              order.status              = status;
     if (deliveryPartnerId)   order.deliveryPartnerId   = deliveryPartnerId;
@@ -133,6 +154,7 @@ exports.updateStatus = async (req, res) => {
 
     order.statusTimeline.push({ status: status || order.status, message: adminNotes || `Status updated to ${status}` });
     await order.save();
+    if (!wasPaid && order.paymentStatus === "paid") await recordLandingPurchase(order);
 
     const io = req.app.get("io");
     const populated = await Order.findById(order._id).populate("customerId","fullName phone").populate("deliveryPartnerId","fullName phone");
@@ -151,6 +173,7 @@ exports.deliveryUpdate = async (req, res) => {
     const { status } = req.body;
     const order = await Order.findOne({ _id: req.params.id, deliveryPartnerId: req.user._id });
     if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    const wasPaid = order.paymentStatus === "paid";
 
     const allowed = { out_for_delivery: "out_for_delivery", delivered: "delivered" };
     if (!allowed[status]) return res.status(400).json({ success: false, message: "Invalid status for delivery update" });
@@ -159,6 +182,7 @@ exports.deliveryUpdate = async (req, res) => {
     if (status === "delivered") { order.deliveredAt = new Date(); order.paymentStatus = "paid"; }
     order.statusTimeline.push({ status, message: status === "delivered" ? "Delivered by partner" : "Out for delivery" });
     await order.save();
+    if (!wasPaid && order.paymentStatus === "paid") await recordLandingPurchase(order);
 
     const io = req.app.get("io");
     io?.to(String(order.customerId)).emit("orderUpdated", order);

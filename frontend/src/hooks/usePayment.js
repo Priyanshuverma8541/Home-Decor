@@ -75,6 +75,11 @@ const BRAND    = import.meta.env.VITE_BRAND          || "Savitri Livings";
 const RZP_KEY  = import.meta.env.VITE_RAZORPAY_KEY   || "";
 const WA_NUM   = import.meta.env.VITE_WHATSAPP       || "6207855397";
 
+const landingAttribution = () => ({
+  landingPageSlug: sessionStorage.getItem("sl_landing_page_slug") || "",
+  landingPageSessionId: sessionStorage.getItem("sl_landing_page_session") || "",
+});
+
 export function usePayment() {
   const { clearCart } = useCart();
 
@@ -85,7 +90,7 @@ export function usePayment() {
       return;
     }
     try {
-      const { data } = await orderAPI.create({ ...orderPayload, paymentMethod: "razorpay" });
+      const { data } = await orderAPI.create({ ...orderPayload, ...landingAttribution(), paymentMethod: "razorpay" });
       if (!data.order) throw new Error("Order creation failed");
 
       const options = {
@@ -115,7 +120,7 @@ export function usePayment() {
   /* ── UPI / QR ───────────────────────────────────────── */
   const placeWithUPI = useCallback(async ({ orderPayload, onSuccess }) => {
     try {
-      const { data } = await orderAPI.create({ ...orderPayload, paymentMethod: "upi" });
+      const { data } = await orderAPI.create({ ...orderPayload, ...landingAttribution(), paymentMethod: "upi" });
       if (!data.order) throw new Error("Order creation failed");
       onSuccess?.(data.order, { upiId: UPI_ID, brand: BRAND });
       clearCart();

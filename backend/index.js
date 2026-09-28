@@ -14,6 +14,9 @@ const PORT       = process.env.PORT || 8081;
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const ALLOWED = [
+  "https://savitri-livings.com",
+  "https://www.savitri-livings.com",
+  "https://admin.savitri-livings.com",
   "https://home-decor-n2z6.vercel.app/",
   "https://home-decor-inky.vercel.app/",
   "https://online-delivery-wxjr.vercel.app/",
@@ -40,7 +43,7 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
-  allowedHeaders: ["Content-Type","Authorization"],
+  allowedHeaders: ["Content-Type","Authorization","X-Page-Preview","X-Privacy-Subject-Id"],
   optionsSuccessStatus: 200,
 };
 
@@ -71,6 +74,7 @@ app.use("/api/ecosystem", require("./routes/ecosystem"));
 app.use("/api/partner-businesses", require("./routes/partnerBusinesses"));
 app.use("/api/overview", require("./routes/overview"));
 app.use("/api/entertainment", require("./routes/entertainment"));
+app.use("/api/pages",      require("./routes/pages"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

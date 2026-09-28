@@ -60,6 +60,12 @@ export const leadAPI = {
 };
 
 export const ecosystemAPI = { getAll: () => api.get("/api/ecosystem") };
+export const pagesAPI = {
+  published: (slug) => api.get(`/api/pages/${encodeURIComponent(slug)}`),
+  preview: (slug, token) => api.get(`/api/pages/preview/${encodeURIComponent(slug)}`, { headers: { "X-Page-Preview": token } }),
+  track: (slug, event) => api.post(`/api/pages/${encodeURIComponent(slug)}/events`, event),
+  submit: (slug, formId, data) => api.post(`/api/pages/${encodeURIComponent(slug)}/forms/${encodeURIComponent(formId)}`, data),
+};
 export const partnerBusinessAPI = {
   getAll: (params) => api.get("/api/partner-businesses", { params }),
   apply: (data) => api.post("/api/partner-businesses/apply", data),

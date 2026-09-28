@@ -93,6 +93,26 @@ export const privacyAPI = {
   removeConsent: (id) => api.delete(`/api/privacy/admin/consents/${id}`),
 };
 
+export const pagesAPI = {
+  getAll: () => api.get("/api/pages/admin"),
+  templates: () => api.get("/api/pages/admin/templates"),
+  createTemplate: (data) => api.post("/api/pages/admin/templates", data),
+  updateTemplate: (id, data) => api.patch(`/api/pages/admin/templates/${id}`, data),
+  deleteTemplate: (id) => api.delete(`/api/pages/admin/templates/${id}`),
+  getOne: (id) => api.get(`/api/pages/admin/${id}`),
+  create: (data) => api.post("/api/pages/admin", data),
+  update: (id, data) => api.patch(`/api/pages/admin/${id}`, data),
+  publish: (id) => api.post(`/api/pages/admin/${id}/publish`),
+  unpublish: (id) => api.post(`/api/pages/admin/${id}/unpublish`),
+  archive: (id) => api.post(`/api/pages/admin/${id}/archive`),
+  duplicate: (id) => api.post(`/api/pages/admin/${id}/duplicate`),
+  uploadHtml: (data) => api.post("/api/pages/admin/upload-html", data, { headers: { "Content-Type": "multipart/form-data" } }),
+  analytics: (id) => api.get(`/api/pages/admin/${id}/analytics`),
+  versions: (id) => api.get(`/api/pages/admin/${id}/versions`),
+  restore: (id, version) => api.post(`/api/pages/admin/${id}/versions/${version}/restore`),
+  previewToken: (id) => api.post(`/api/pages/admin/${id}/preview-token`),
+};
+
 export const partnerBusinessAPI = {
   getAll: (params) => api.get("/api/partner-businesses/admin", { params }),
   create: (data) => api.post("/api/partner-businesses/admin", data),

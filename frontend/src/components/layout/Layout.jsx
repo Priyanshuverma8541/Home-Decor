@@ -4,7 +4,7 @@ import Navbar from "./Navbar.jsx";
 import Footer from "./Footer.jsx";
 import MiniPlayer from "../../modules/entertainment/components/MiniPlayer.jsx";
 
-export default function Layout() {
+export default function Layout({ onOpenPermissions }) {
   const { pathname, hash } = useLocation();
   useEffect(() => { if (!hash) window.scrollTo({ top:0, behavior:"instant" }); }, [pathname, hash]);
   return (
@@ -12,7 +12,7 @@ export default function Layout() {
       <Navbar />
       <main style={{ flex:1, paddingTop:64 }}><Outlet /></main>
       <MiniPlayer />
-      <Footer />
+      <Footer onOpenPermissions={onOpenPermissions} />
     </div>
   );
 }

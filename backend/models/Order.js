@@ -34,6 +34,8 @@ const orderSchema = new mongoose.Schema({
   pincode:           { type: String },
 
   orderSource:       { type: String, enum: ["website","whatsapp","instagram","admin"], default: "website" },
+  landingPageSlug:   { type: String, trim: true, maxlength: 80 },
+  landingPageSessionId: { type: String, trim: true, maxlength: 80 },
 
   status:            { type: String, enum: ["pending","confirmed","packed","assigned","out_for_delivery","delivered","cancelled"], default: "pending" },
   deliveryPartnerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

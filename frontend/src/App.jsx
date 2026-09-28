@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import { X } from "lucide-react";
 
 // ── Contexts ──────────────────────────────────────────────────────
 import { AuthProvider } from "./context/AuthContext.jsx";
@@ -24,14 +25,25 @@ import { MarketplaceHome, ListingDetail, SellerHub } from "./components/pages/Ma
 import Ecosystem from "./components/pages/Ecosystem.jsx";
 import PartnerWithUs from "./components/pages/PartnerWithUs.jsx";
 import PermissionCenter from "./components/ui/PermissionCenter.jsx";
+import Navbar from "./components/layout/Navbar.jsx";
+import Footer from "./components/layout/Footer.jsx";
+import PageRenderer from "./components/pages/PageRenderer.jsx";
 
 function AppShell() {
   const [permissionOpen, setPermissionOpen] = useState(false);
+  const [privacyLauncherVisible, setPrivacyLauncherVisible] = useState(
+    () => localStorage.getItem("savitri-hide-privacy-launcher") !== "true"
+  );
+
+  const hidePrivacyLauncher = () => {
+    localStorage.setItem("savitri-hide-privacy-launcher", "true");
+    setPrivacyLauncherVisible(false);
+  };
 
   return (
     <>
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<Layout onOpenPermissions={() => setPermissionOpen(true)} />}>
           <Route index element={<Home />} />
           <Route path="shop" element={<Shop />} />
           <Route path="product/:id" element={<ProductDetail />} />
@@ -56,29 +68,54 @@ function AppShell() {
 
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
+        <Route path="p/:slug" element={<PageRenderer Navbar={Navbar} Footer={Footer} />} />
       </Routes>
 
-      <button
-        type="button"
-        onClick={() => setPermissionOpen(true)}
-        style={{
-          position: "fixed",
-          right: 18,
-          bottom: 22,
-          zIndex: 1000,
-          background: "#1a3c34",
-          color: "white",
-          border: "none",
-          borderRadius: 999,
-          padding: "0.72rem 1rem",
-          fontSize: "0.75rem",
-          fontWeight: 600,
-          boxShadow: "0 18px 40px rgba(26,60,52,0.2)",
-          cursor: "pointer",
-        }}
-      >
-        Privacy & Permissions
-      </button>
+      {privacyLauncherVisible && (
+        <div style={{ position: "fixed", right: 18, bottom: 22, zIndex: 1000 }}>
+          <button
+            type="button"
+            onClick={() => setPermissionOpen(true)}
+            style={{
+              background: "#1a3c34",
+              color: "white",
+              border: "none",
+              borderRadius: 999,
+              padding: "0.72rem 1rem",
+              fontSize: "0.75rem",
+              fontWeight: 600,
+              boxShadow: "0 18px 40px rgba(26,60,52,0.2)",
+              cursor: "pointer",
+            }}
+          >
+            Privacy & Permissions
+          </button>
+          <button
+            type="button"
+            onClick={hidePrivacyLauncher}
+            aria-label="Hide Privacy & Permissions button"
+            title="Hide Privacy & Permissions button"
+            style={{
+              position: "absolute",
+              top: -8,
+              right: -8,
+              width: 24,
+              height: 24,
+              border: "1px solid rgba(255,255,255,0.85)",
+              borderRadius: "50%",
+              background: "#fffaf3",
+              color: "#1a3c34",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+              cursor: "pointer",
+            }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
 
       <PermissionCenter open={permissionOpen} onClose={() => setPermissionOpen(false)} />
     </>

@@ -21,6 +21,7 @@ export default function Navbar() {
   const [open,     setOpen]     = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const [cityMenu, setCityMenu] = useState(false);
+  const [ecosystemMenu, setEcosystemMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const { totalItems } = useCart();
@@ -29,8 +30,9 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const userRef = useRef(null);
   const cityRef = useRef(null);
+  const ecosystemRef = useRef(null);
 
-  useEffect(() => { setOpen(false); setUserMenu(false); setCityMenu(false); }, [pathname]);
+  useEffect(() => { setOpen(false); setUserMenu(false); setCityMenu(false); setEcosystemMenu(false); }, [pathname]);
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", fn, { passive:true });
@@ -40,6 +42,7 @@ export default function Navbar() {
     const fn = (e) => {
       if (userRef.current && !userRef.current.contains(e.target)) setUserMenu(false);
       if (cityRef.current && !cityRef.current.contains(e.target)) setCityMenu(false);
+      if (ecosystemRef.current && !ecosystemRef.current.contains(e.target)) setEcosystemMenu(false);
     };
     document.addEventListener("mousedown", fn);
     return () => document.removeEventListener("mousedown", fn);
@@ -74,14 +77,38 @@ export default function Navbar() {
           {/* Desktop nav */}
           <nav style={{ display:"none", alignItems:"stretch", height:"100%", gap:4 }} className="desk-nav">
             {NAV.map(({ to, label, end }) => (
-              <NavLink key={to} to={to} end={end}
-                style={({ isActive }) => ({
-                  display:"flex", alignItems:"center", padding:"0 0.875rem",
-                  fontSize:"0.875rem", fontWeight:500, textDecoration:"none",
-                  color: isActive ? "#f4ce7c" : "rgba(255,255,255,.76)",
-                  borderBottom: isActive ? "2px solid #f4ce7c" : "2px solid transparent",
-                  transition:"color .2s",
-                })}>{label}</NavLink>
+              label === "Ecosystem" ? (
+                <div key={to} ref={ecosystemRef} style={{ position:"relative", display:"flex", alignItems:"stretch" }}>
+                  <button type="button" onClick={() => setEcosystemMenu((value) => !value)} aria-haspopup="menu" aria-expanded={ecosystemMenu}
+                    style={{ display:"flex", alignItems:"center", gap:5, padding:"0 0.875rem", fontSize:"0.875rem", fontWeight:500, fontFamily:"'DM Sans',sans-serif", color: pathname === to ? "#f4ce7c" : "rgba(255,255,255,.76)", border:0, borderBottom: pathname === to ? "2px solid #f4ce7c" : "2px solid transparent", background:"transparent", cursor:"pointer", transition:"color .2s" }}>
+                    {label}<ChevronDown style={{ width:13, height:13, transform:ecosystemMenu ? "rotate(180deg)" : "none", transition:"transform .2s" }}/>
+                  </button>
+                  <AnimatePresence>
+                    {ecosystemMenu && (
+                      <motion.div role="menu" initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:6 }} transition={{ duration:.15 }}
+                        style={{ position:"absolute", left:0, top:"calc(100% + 1px)", width:220, padding:"0.35rem", background:"#5b3c1d", borderRadius:12, border:"1px solid rgba(255,255,255,.12)", boxShadow:"0 12px 40px rgba(0,0,0,.3)", zIndex:200 }}>
+                        <NavLink to="/ecosystem" role="menuitem" onClick={() => setEcosystemMenu(false)} style={{ display:"block", padding:"0.65rem 0.75rem", borderRadius:8, color:"rgba(255,255,255,.76)", fontSize:"0.85rem", textDecoration:"none" }}>Ecosystem overview</NavLink>
+                        <a href="https://build-hub-lake.vercel.app/" target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setEcosystemMenu(false)}
+                          style={{ display:"block", padding:"0.65rem 0.75rem", borderRadius:8, color:"#f4ce7c", fontSize:"0.85rem", fontWeight:600, textDecoration:"none" }}>BuildHub</a>
+                        {["Marketing", "Business", "Other Ecosystem Apps"].map((item) => (
+                          <button key={item} type="button" role="menuitem" disabled style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"0.65rem 0.75rem", border:0, borderRadius:8, background:"transparent", color:"rgba(255,255,255,.42)", fontSize:"0.85rem", fontFamily:"'DM Sans',sans-serif", textAlign:"left", cursor:"default" }}>
+                            {item}<span style={{ fontSize:"0.65rem", color:"rgba(255,255,255,.34)" }}>Coming soon</span>
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <NavLink key={to} to={to} end={end}
+                  style={({ isActive }) => ({
+                    display:"flex", alignItems:"center", padding:"0 0.875rem",
+                    fontSize:"0.875rem", fontWeight:500, textDecoration:"none",
+                    color: isActive ? "#f4ce7c" : "rgba(255,255,255,.76)",
+                    borderBottom: isActive ? "2px solid #f4ce7c" : "2px solid transparent",
+                    transition:"color .2s",
+                  })}>{label}</NavLink>
+              )
             ))}
           </nav>
 
@@ -206,14 +233,34 @@ export default function Navbar() {
 
               <nav style={{ flex:1, overflowY:"auto", padding:"1rem 0.875rem" }}>
                 {NAV.map(({ to, label, end }) => (
-                  <NavLink key={to} to={to} end={end}
-                    style={({ isActive }) => ({
-                      display:"flex", alignItems:"center", padding:"0.875rem 1rem",
-                      borderRadius:"0.75rem", fontSize:"0.9rem", fontWeight:500,
-                      color: isActive ? "#30ac90" : "rgba(255,255,255,.7)",
-                      background: isActive ? "rgba(48,172,144,.12)" : "transparent",
-                      textDecoration:"none", marginBottom:2,
-                    })}>{label}</NavLink>
+                  label === "Ecosystem" ? (
+                    <div key={to}>
+                      <button type="button" onClick={() => setEcosystemMenu((value) => !value)} aria-haspopup="menu" aria-expanded={ecosystemMenu}
+                        style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"0.875rem 1rem", border:0, borderRadius:"0.75rem", fontSize:"0.9rem", fontWeight:500, fontFamily:"'DM Sans',sans-serif", color:pathname === to ? "#30ac90" : "rgba(255,255,255,.7)", background:ecosystemMenu || pathname === to ? "rgba(48,172,144,.12)" : "transparent", textAlign:"left", cursor:"pointer", marginBottom:2 }}>
+                        {label}<ChevronDown style={{ width:15, height:15, transform:ecosystemMenu ? "rotate(180deg)" : "none", transition:"transform .2s" }}/>
+                      </button>
+                      {ecosystemMenu && (
+                        <div role="menu" style={{ margin:"0.15rem 0 0.5rem 0.75rem", paddingLeft:"0.5rem", borderLeft:"1px solid rgba(255,255,255,.18)" }}>
+                          <NavLink to="/ecosystem" role="menuitem" onClick={() => setEcosystemMenu(false)} style={{ display:"block", padding:"0.65rem 0.75rem", color:"rgba(255,255,255,.65)", fontSize:"0.85rem", textDecoration:"none" }}>Ecosystem overview</NavLink>
+                          <a href="https://build-hub-lake.vercel.app/" target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => { setEcosystemMenu(false); setOpen(false); }} style={{ display:"block", padding:"0.65rem 0.75rem", color:"#f4ce7c", fontSize:"0.85rem", fontWeight:600, textDecoration:"none" }}>BuildHub</a>
+                          {["Marketing", "Business", "Other Ecosystem Apps"].map((item) => (
+                            <div key={item} aria-disabled="true" style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, padding:"0.65rem 0.75rem", color:"rgba(255,255,255,.38)", fontSize:"0.85rem" }}>
+                              {item}<span style={{ fontSize:"0.65rem", color:"rgba(255,255,255,.3)", flexShrink:0 }}>Coming soon</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <NavLink key={to} to={to} end={end}
+                      style={({ isActive }) => ({
+                        display:"flex", alignItems:"center", padding:"0.875rem 1rem",
+                        borderRadius:"0.75rem", fontSize:"0.9rem", fontWeight:500,
+                        color: isActive ? "#30ac90" : "rgba(255,255,255,.7)",
+                        background: isActive ? "rgba(48,172,144,.12)" : "transparent",
+                        textDecoration:"none", marginBottom:2,
+                      })}>{label}</NavLink>
+                  )
                 ))}
                 <div style={{ height:1, background:"rgba(255,255,255,.1)", margin:"0.75rem 0.25rem" }}/>
                 {isAuthenticated ? (
