@@ -15,6 +15,7 @@ import BusinessOpportunities from "./components/pages/BusinessOpportunities.jsx"
 import PushNotifications from "./components/pages/PushNotifications.jsx";
 import PrivacyDataCenter from "./components/pages/PrivacyDataCenter.jsx";
 import Pages from "./components/pages/Pages.jsx";
+import Savinexa from "./components/pages/Savinexa.jsx";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="push-notifications" element={<PushNotifications />} />
             <Route path="privacy" element={<PrivacyDataCenter />} />
             <Route path="pages" element={<Pages />} />
+            <Route path="savinexa" element={<Savinexa />} />
             <Route path="settings" element={<Settings />}   />
           </Route>
         </Routes>

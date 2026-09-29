@@ -126,4 +126,19 @@ export const pushAPI = {
   sendCampaign: (id) => api.post(`/api/push/admin/campaigns/${id}/send`),
 };
 
+export const savinexaAPI = {
+  dashboard: () => api.get("/api/savinexa/admin/dashboard"),
+  products: (params = {}) => api.get("/api/savinexa/admin/products", { params }),
+  createProduct: (data) => api.post("/api/savinexa/admin/products", data),
+  updateProduct: (id, data) => api.put(`/api/savinexa/admin/products/${id}`, data),
+  deleteProduct: (id) => api.delete(`/api/savinexa/admin/products/${id}`),
+  categories: () => api.get("/api/savinexa/admin/categories"),
+  createCategory: (data) => api.post("/api/savinexa/admin/categories", data),
+  collections: () => api.get("/api/savinexa/admin/collections"),
+  createCollection: (data) => api.post("/api/savinexa/admin/collections", data),
+  settings: () => api.get("/api/savinexa/settings"),
+  saveSettings: (data) => api.put("/api/savinexa/settings", data),
+  analytics: () => api.get("/api/savinexa/analytics"),
+};
+
 export default api;

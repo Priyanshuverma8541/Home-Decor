@@ -76,6 +76,7 @@ app.use("/api/push", require("./routes/pushNotifications"));
 app.use("/api/overview", require("./routes/overview"));
 app.use("/api/entertainment", require("./routes/entertainment"));
 app.use("/api/pages",      require("./routes/pages"));
+app.use("/api/savinexa",   require("./modules/savinexa/routes"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

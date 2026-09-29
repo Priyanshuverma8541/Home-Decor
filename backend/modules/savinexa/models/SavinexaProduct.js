@@ -1,0 +1,73 @@
+const mongoose = require("mongoose");
+
+const savinexaProductSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  slug: { type: String, required: true, unique: true, trim: true, index: true },
+  description: { type: String },
+  shortDescription: { type: String },
+  sku: { type: String, trim: true },
+  images: [{ type: String }],
+  videos: [{ type: String }],
+  thumbnail: { type: String },
+  price: { type: Number, default: 0 },
+  salePrice: { type: Number },
+  discount: { type: Number, default: 0 },
+  currency: { type: String, default: "INR" },
+  category: { type: String, default: "general" },
+  subcategory: { type: String },
+  tags: [{ type: String }],
+  attributes: { type: Map, of: String, default: {} },
+  variants: [{
+    name: String,
+    sku: String,
+    price: Number,
+    salePrice: Number,
+    stock: Number,
+    active: { type: Boolean, default: true },
+  }],
+  inventory: {
+    stock: { type: Number, default: 0 },
+    status: { type: String, enum: ["in_stock", "low_stock", "out_of_stock"], default: "in_stock" },
+  },
+  featured: { type: Boolean, default: false },
+  bestseller: { type: Boolean, default: false },
+  newArrival: { type: Boolean, default: false },
+  active: { type: Boolean, default: true },
+  visibility: { type: String, enum: ["public", "draft", "hidden"], default: "public" },
+  sortOrder: { type: Number, default: 0 },
+  seo: {
+    metaTitle: String,
+    metaDescription: String,
+    keywords: [{ type: String }],
+    canonicalUrl: String,
+    ogImage: String,
+  },
+  externalLinks: {
+    website: String,
+    meesho: String,
+  },
+  purchaseConfig: {
+    purchaseMode: { type: String, enum: ["direct", "meesho", "both"], default: "direct" },
+    directUrl: String,
+    meeshoUrl: String,
+  },
+  ctaConfig: {
+    primaryLabel: { type: String, default: "Buy now" },
+    primaryAction: { type: String, default: "checkout" },
+    secondaryLabel: String,
+    secondaryAction: String,
+  },
+  display: {
+    showPrice: { type: Boolean, default: true },
+    showDiscount: { type: Boolean, default: true },
+    showBuyButton: { type: Boolean, default: true },
+    showMeeshoButton: { type: Boolean, default: false },
+    showShareButton: { type: Boolean, default: true },
+    showWishlist: { type: Boolean, default: true },
+    showQuickView: { type: Boolean, default: true },
+  },
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+}, { timestamps: true });
+
+module.exports = mongoose.model("SavinexaProduct", savinexaProductSchema);

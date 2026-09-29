@@ -16,6 +16,7 @@ const LINKS = [
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },
   { to:"/pages",     Icon:FileText,          label:"Savitri Pages"       },
+  { to:"/savinexa",  Icon:Store,            label:"Savinexa"            },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 
