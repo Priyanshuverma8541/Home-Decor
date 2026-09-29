@@ -9,8 +9,10 @@ const webPushSubscriptionSchema = new mongoose.Schema({
   auth: { type: String, required: true, select: false },
   status: { type: String, enum: ["active", "unsubscribed", "expired"], default: "active", index: true },
   device: { browser: String, platform: String, language: String },
+  clickCount: { type: Number, default: 0 },
   lastSuccessAt: Date,
   lastFailureAt: Date,
+  lastClickedAt: Date,
 }, { timestamps: true });
 
 webPushSubscriptionSchema.set("toJSON", { transform: (_doc, value) => { delete value.endpoint; delete value.endpointHash; delete value.p256dh; delete value.auth; return value; } });

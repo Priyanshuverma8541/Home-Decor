@@ -10,7 +10,8 @@ const pushCampaignSchema = new mongoose.Schema({
   subscriptionIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "WebPushSubscription" }],
   status: { type: String, enum: ["draft", "sending", "sent", "partial", "failed"], default: "draft", index: true },
   sentAt: Date,
-  stats: { targeted: { type: Number, default: 0 }, accepted: { type: Number, default: 0 }, failed: { type: Number, default: 0 }, stale: { type: Number, default: 0 } },
+  stats: { targeted: { type: Number, default: 0 }, accepted: { type: Number, default: 0 }, failed: { type: Number, default: 0 }, stale: { type: Number, default: 0 }, clicked: { type: Number, default: 0 } },
+  lastClickedAt: Date,
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 }, { timestamps: true });
 module.exports = mongoose.model("PushCampaign", pushCampaignSchema);
