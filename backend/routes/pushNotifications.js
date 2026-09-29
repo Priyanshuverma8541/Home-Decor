@@ -9,9 +9,12 @@ const configured = () => Boolean(process.env.VAPID_PUBLIC_KEY && process.env.VAP
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex");
 const fail = (res, status, message) => res.status(status).json({ success: false, message });
 const setup = () => { if (!configured()) throw new Error("Web Push is not configured. Add VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY and VAPID_SUBJECT to the backend environment."); webpush.setVapidDetails(process.env.VAPID_SUBJECT, process.env.VAPID_PUBLIC_KEY, process.env.VAPID_PRIVATE_KEY); };
-const getTrackApiUrl = () => {
-  const candidates = [process.env.API_BASE_URL, process.env.BACKEND_URL, process.env.PUBLIC_API_URL, process.env.SERVER_URL, process.env.API_URL, process.env.CLIENT_URL, process.env.ADMIN_URL, process.env.FRONTEND_URL].filter(Boolean);
-  return candidates[0] ? candidates[0].replace(/\/$/, "") + "/api/push/track-click" : "";
+const getTrackApiUrl = (req) => {
+  const configuredBase = [process.env.API_BASE_URL, process.env.BACKEND_URL, process.env.PUBLIC_API_URL, process.env.SERVER_URL, process.env.API_URL].find(Boolean);
+  const forwardedHost = req.get("x-forwarded-host")?.split(",")[0].trim();
+  const forwardedProtocol = req.get("x-forwarded-proto")?.split(",")[0].trim();
+  const base = configuredBase || `${forwardedProtocol || req.protocol}://${forwardedHost || req.get("host")}`;
+  return `${base.replace(/\/$/, "")}/api/push/track-click`;
 };
 
 router.get("/config", (_req, res) => res.json({ success: true, configured: configured(), publicKey: process.env.VAPID_PUBLIC_KEY || "" }));
@@ -41,7 +44,7 @@ router.post("/admin/campaigns/:id/send", protect, adminOnly, async (req, res, ne
     const query = { status: "active" }; if (campaign.audience === "selected") query._id = { $in: campaign.subscriptionIds };
     const subscriptions = await Subscription.find(query).select("+endpoint +p256dh +auth"); const stats = { targeted: subscriptions.length, accepted: 0, failed: 0, stale: 0, clicked: Number(campaign.stats?.clicked || 0) };
     campaign.status = "sending"; campaign.stats = stats; await campaign.save();
-    const trackUrl = getTrackApiUrl();
+    const trackUrl = getTrackApiUrl(req);
     for (const subscription of subscriptions) {
       const payload = JSON.stringify({ title: campaign.title, body: campaign.body, icon: campaign.iconUrl || undefined, tag: `sl-${campaign._id}`, url: campaign.targetUrl || "/", campaignId: String(campaign._id), trackUrl: trackUrl || undefined, endpoint: subscription.endpoint });
       try { await webpush.sendNotification({ endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } }, payload, { TTL: 86400, urgency: "normal" }); stats.accepted += 1; subscription.lastSuccessAt = new Date(); await subscription.save(); } catch (error) { const stale = [404, 410].includes(error.statusCode); stats[stale ? "stale" : "failed"] += 1; subscription.status = stale ? "expired" : subscription.status; subscription.lastFailureAt = new Date(); await subscription.save(); } }

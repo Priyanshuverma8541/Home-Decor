@@ -10,6 +10,17 @@ const request = async (path, options = {}) => {
 };
 export const pushClient = {
   async status() { const config = await request("/config", { method:"GET" }); const registration = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : null; const subscription = registration ? await registration.pushManager.getSubscription() : null; return { ...config, supported: "serviceWorker" in navigator && "PushManager" in window && "Notification" in window, permission: "Notification" in window ? Notification.permission : "unsupported", subscribed: Boolean(subscription) }; },
-  async enable() { const config = await request("/config", { method:"GET" }); if (!config.configured || !config.publicKey) throw new Error("Notifications are not configured yet. Please try again later."); if (!("serviceWorker" in navigator && "PushManager" in window)) throw new Error("This browser does not support push notifications"); const permission = await Notification.requestPermission(); if (permission !== "granted") throw new Error(permission === "denied" ? "Notifications are blocked in your browser settings" : "Notification permission was not granted"); const registration = await navigator.serviceWorker.register("/sw.js"); const existing = await registration.pushManager.getSubscription(); const subscription = existing || await registration.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:base64(config.publicKey) }); await request("/subscribe", { method:"POST", body:JSON.stringify({ endpoint:subscription.endpoint, keys:subscription.toJSON().keys, platform:navigator.platform, language:navigator.language }) }); return true; },
+  async enable() {
+    if (!("serviceWorker" in navigator && "PushManager" in window && "Notification" in window)) throw new Error("This browser does not support push notifications");
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") throw new Error(permission === "denied" ? "Notifications are blocked in your browser settings" : "Notification permission was not granted");
+    const config = await request("/config", { method:"GET" });
+    if (!config.configured || !config.publicKey) throw new Error("Notifications are not configured yet. Please try again later.");
+    const registration = await navigator.serviceWorker.register("/sw.js");
+    const existing = await registration.pushManager.getSubscription();
+    const subscription = existing || await registration.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey:base64(config.publicKey) });
+    await request("/subscribe", { method:"POST", body:JSON.stringify({ endpoint:subscription.endpoint, keys:subscription.toJSON().keys, platform:navigator.platform, language:navigator.language }) });
+    return true;
+  },
   async disable() { const registration = await navigator.serviceWorker.getRegistration(); const subscription = registration ? await registration.pushManager.getSubscription() : null; if (subscription) { await request("/unsubscribe", { method:"POST", body:JSON.stringify({ endpoint:subscription.endpoint }) }).catch(() => {}); await subscription.unsubscribe(); } },
 };
