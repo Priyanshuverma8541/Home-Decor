@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Project · SavitriBridge</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/forms.css"><link rel="stylesheet" href="css/dashboard.css"><link rel="stylesheet" href="css/responsive.css"></head><body><a class="skip-link" href="#main">Skip to content</a>
+<div class="app"><aside class="sidebar" id="sidebar" aria-label="Sidebar"></aside>
+<div class="main"><header class="topbar" id="topbar"></header><main class="content" id="main" tabindex="-1">
+<div id="detail"></div><dialog id="project-dialog" aria-labelledby="project-dialog-title"><form id="project-form"><div class="dlg-head"><h3 id="project-dialog-title">New project</h3></div><div class="dlg-body form-grid">
+<div class="field full"><label for="p-name">Project name</label><input id="p-name" name="name" required maxlength="80"></div>
+<div class="field full"><label for="p-desc">Description</label><input id="p-desc" name="description" maxlength="500"></div>
+<div class="field full"><label for="p-web">Website URL</label><input id="p-web" name="websiteUrl" type="url" placeholder="https://example.com"></div>
+<div class="field full"><label for="p-origins">Allowed origins</label><textarea id="p-origins" name="allowedOrigins" placeholder="https://example.com&#10;https://www.example.com"></textarea><span class="help">One per line. Origin only (scheme + host), no path. Used for browser registration and to restrict campaign target URLs. http:// is accepted only for localhost.</span></div>
+<div class="field"><label for="p-icon">Default icon URL</label><input id="p-icon" name="defaultIconUrl" type="url"></div><div class="field"><label for="p-badge">Default badge URL</label><input id="p-badge" name="defaultBadgeUrl" type="url"></div>
+<div class="notice err full" id="project-error" role="alert" hidden></div></div>
+<div class="dlg-foot"><button class="btn" type="button" id="project-cancel">Cancel</button><button class="btn btn-primary" type="submit">Save project</button></div></form></dialog>
+</main></div></div><script type="module">import { initDetail } from './js/projects.js'; initDetail();</script></body></html>

@@ -12,7 +12,7 @@ import { EntertainmentProvider } from "./context/EntertainmentContext.jsx";
 import Layout from "./components/layout/Layout.jsx";
 
 // ── Pages ─────────────────────────────────────────────────────────
-import Home from "./components/pages/Home.jsx";
+import Home from "./components/pages/HomeExperience.jsx";
 import Shop from "./components/pages/Shop.jsx";
 import ProductDetail from "./components/pages/ProductDetail.jsx";
 import Cart from "./components/pages/Cart.jsx";

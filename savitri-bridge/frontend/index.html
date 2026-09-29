@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Dashboard · SavitriBridge</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/forms.css"><link rel="stylesheet" href="css/dashboard.css"><link rel="stylesheet" href="css/responsive.css"></head><body><a class="skip-link" href="#main">Skip to content</a>
+<div class="app"><aside class="sidebar" id="sidebar" aria-label="Sidebar"></aside>
+<div class="main"><header class="topbar" id="topbar"></header><main class="content" id="main" tabindex="-1">
+<div class="page-head"><div><h2>Overview</h2><p>Push performance across all projects. “Accepted” means accepted by the browser vendor's push service, not confirmed device delivery.</p></div>
+<div class="actions"><a class="btn btn-primary" href="campaign-create.html">New campaign</a></div></div>
+<div class="stat-grid" id="stats"><div class="loading">Loading…</div></div>
+<div class="grid cols-2" style="margin-top:16px"><div class="card"><h3>Subscriber growth (30 days)</h3><div id="growth"></div></div><div class="card"><h3>Push activity (30 days)</h3><div id="activityChart"></div></div></div>
+<div class="split" style="margin-top:16px"><div class="card"><h3>Recent campaigns</h3><div id="recent-campaigns"></div></div><div class="card"><h3>Recent activity</h3><div id="activity"></div></div></div>
+</main></div></div><script type="module">import './js/dashboard.js';</script></body></html>

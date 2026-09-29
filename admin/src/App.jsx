@@ -12,6 +12,7 @@ import Analytics from "./components/pages/Analytics.jsx";
 import Marketplace from "./components/pages/Marketplace.jsx";
 import Marketing from "./components/pages/Marketing.jsx";
 import BusinessOpportunities from "./components/pages/BusinessOpportunities.jsx";
+import PushNotifications from "./components/pages/PushNotifications.jsx";
 import PrivacyDataCenter from "./components/pages/PrivacyDataCenter.jsx";
 import Pages from "./components/pages/Pages.jsx";
 
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="marketplace" element={<Marketplace />} />
             <Route path="marketing" element={<Marketing />} />
             <Route path="business-opportunities" element={<BusinessOpportunities />} />
+            <Route path="push-notifications" element={<PushNotifications />} />
             <Route path="privacy" element={<PrivacyDataCenter />} />
             <Route path="pages" element={<Pages />} />
             <Route path="settings" element={<Settings />}   />

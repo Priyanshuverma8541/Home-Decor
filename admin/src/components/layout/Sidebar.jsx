@@ -12,6 +12,7 @@ const LINKS = [
   { to:"/analytics", Icon:BarChart2,       label:"Analytics"           },
   { to:"/marketplace", Icon:Store,         label:"Marketplace"         },
   { to:"/marketing", Icon:Megaphone,       label:"Marketing Cloud"     },
+  { to:"/push-notifications", Icon:Megaphone, label:"Push Notifications" },
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },
   { to:"/pages",     Icon:FileText,          label:"Savitri Pages"       },

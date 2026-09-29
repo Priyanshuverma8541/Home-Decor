@@ -5,16 +5,11 @@ import { ShoppingCart, Menu, X, MapPin, ChevronDown, User, LogOut, Package } fro
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useCart } from "../../context/CartContext.jsx";
 import { useCity } from "../../context/CityContext.jsx";
+import NotificationButton from "../ui/NotificationButton.jsx";
 
 const NAV = [
   { to:"/",         label:"Home",     end:true },
   { to:"/shop",     label:"Shop"             },
-  { to:"/entertainment", label:"Entertainment" },
-  { to:"/marketplace", label:"Marketplace"   },
-  { to:"/ecosystem",   label:"Ecosystem"     },
-  { to:"/partner-with-us", label:"Partner with us" },
-  { to:"/about",    label:"About"            },
-  { to:"/contact",  label:"Contact"          },
 ];
 
 export default function Navbar() {
@@ -114,6 +109,7 @@ export default function Navbar() {
 
           {/* Right side */}
           <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+            <NotificationButton />
             {/* City selector */}
             <div ref={cityRef} style={{ position:"relative" }} className="desk-nav">
               <button onClick={() => setCityMenu(!cityMenu)}
@@ -262,6 +258,9 @@ export default function Navbar() {
                       })}>{label}</NavLink>
                   )
                 ))}
+                <Link to="/cart" style={{ display:"flex", alignItems:"center", gap:10, padding:"0.875rem 1rem", borderRadius:"0.75rem", fontSize:"0.9rem", fontWeight:500, color:"rgba(255,255,255,.7)", textDecoration:"none", marginBottom:2 }}>
+                  <ShoppingCart style={{ width:15, height:15, color:"#f4ce7c", flexShrink:0 }}/>Cart ({totalItems})
+                </Link>
                 <div style={{ height:1, background:"rgba(255,255,255,.1)", margin:"0.75rem 0.25rem" }}/>
                 {isAuthenticated ? (
                   <>
@@ -275,7 +274,6 @@ export default function Navbar() {
                     {[
                       { to:"/account",        Icon:User,    label:"My Account" },
                       { to:"/account/orders", Icon:Package, label:"My Orders"  },
-                      { to:"/cart",           Icon:ShoppingCart, label:`Cart (${totalItems})` },
                     ].map(({ to, Icon, label }) => (
                       <Link key={to} to={to} style={{ display:"flex", alignItems:"center", gap:10, padding:"0.875rem 1rem", borderRadius:"0.75rem", fontSize:"0.875rem", color:"rgba(255,255,255,.7)", textDecoration:"none", marginBottom:2 }}>
                         <Icon style={{ width:15, height:15, color:"#30ac90", flexShrink:0 }}/>{label}

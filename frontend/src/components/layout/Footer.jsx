@@ -9,7 +9,12 @@ const COLS = {
               { to:"/shop?category=rings",    label:"Rings" },
               { to:"/shop?category=necklaces",label:"Necklaces" },
               { to:"/shop?category=earrings", label:"Earrings" },
-              { to:"/shop?category=bridal",   label:"Bridal" }],
+              { to:"/shop?category=bridal",   label:"Bridal" },
+              { to:"/shop?category=gift",     label:"Gifts" }],
+  "Discover": [{ to:"/marketplace", label:"Thikana Marketplace" },
+               { to:"/entertainment", label:"Entertainment" },
+               { to:"/ecosystem", label:"Our ecosystem" },
+               { to:"/partner-with-us", label:"Partner with us" }],
   "Company": [{ to:"/about",   label:"About Us"   },
               { to:"/contact", label:"Contact"     },
               { to:"/faqs",    label:"FAQs"        }],
@@ -92,7 +97,7 @@ export default function Footer({ onOpenPermissions }) {
       </div>
       <style>{`
         @media(min-width:768px){
-          .footer-grid{grid-template-columns:2fr 1fr 1fr 1fr!important}
+          .footer-grid{grid-template-columns:2fr repeat(4,1fr)!important}
           .footer-brand{grid-column:span 1!important}
         }
       `}</style>

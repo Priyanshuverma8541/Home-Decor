@@ -119,4 +119,11 @@ export const partnerBusinessAPI = {
   update: (id, data) => api.patch(`/api/partner-businesses/admin/${id}`, data),
 };
 
+export const pushAPI = {
+  summary: () => api.get("/api/push/admin/summary"),
+  subscribers: () => api.get("/api/push/admin/subscribers"),
+  createCampaign: (data) => api.post("/api/push/admin/campaigns", data),
+  sendCampaign: (id) => api.post(`/api/push/admin/campaigns/${id}/send`),
+};
+
 export default api;

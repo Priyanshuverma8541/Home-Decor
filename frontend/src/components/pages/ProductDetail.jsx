@@ -6,6 +6,7 @@ import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
 import { PageLoader } from "../ui/Shared.jsx";
 import { shareProduct } from "../../utils/productShare.js";
+import { getProductImages } from "../../utils/productImage.js";
 import toast from "react-hot-toast";
 
 const WA = import.meta.env.VITE_WHATSAPP || "6207855397";
@@ -33,7 +34,7 @@ export default function ProductDetail() {
     </div>
   );
 
-  const images = product.images?.length ? product.images : ["https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=800&q=80"];
+  const images = getProductImages(product);
   const waMsg  = product.whatsappOrderMsg?.replace("{productName}", product.name).replace("{qty}", qty)
     || `Hi! I want to order: ${product.name} x${qty}. Please confirm Pan-India delivery availability.`;
 

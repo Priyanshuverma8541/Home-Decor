@@ -43,7 +43,7 @@ export function About() {
             </div>
             <div>
               <div style={{ borderRadius:"1.25rem", overflow:"hidden", aspectRatio:"4/3", background:"#f0e6d0" }}>
-                <img src="/brand/savitri-jewellers-heart-earrings.png" alt="Savitri Livings gold earrings" style={{ width:"100%", height:"100%", objectFit:"contain", background:"#f7eddf" }} loading="lazy"/>
+                <img src="/brand/savitri-jewellers-earrings.png" alt="Savitri Livings jewellery collection" style={{ width:"100%", height:"100%", objectFit:"contain", background:"#f7eddf" }} loading="lazy"/>
               </div>
             </div>
           </motion.div>

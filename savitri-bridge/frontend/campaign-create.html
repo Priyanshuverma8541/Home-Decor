@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Campaign · SavitriBridge</title><link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/forms.css"><link rel="stylesheet" href="css/dashboard.css"><link rel="stylesheet" href="css/responsive.css"></head><body><a class="skip-link" href="#main">Skip to content</a>
+<div class="app"><aside class="sidebar" id="sidebar" aria-label="Sidebar"></aside>
+<div class="main"><header class="topbar" id="topbar"></header><main class="content" id="main" tabindex="-1">
+<div class="page-head"><div><h2 id="page-h">New campaign</h2><p>Compose, preview, then send now or schedule. Sending always asks for confirmation.</p></div></div>
+<div class="notice err" id="form-error" role="alert" hidden></div>
+<form id="campaign-form" class="split" novalidate><div class="card"><div class="form-grid">
+<div class="field full"><label for="campaignName">Campaign name</label><input id="campaignName" name="campaignName" required maxlength="120"></div>
+<div class="field full"><label for="templateId">Start from template</label><select id="templateId" name="templateId"></select><span class="help">Content is copied and can be customised before sending.</span></div>
+<fieldset class="field full" style="border:0;padding:0;margin:0"><legend class="lbl">Audience</legend><div class="radio-cards">
+<label><input type="radio" name="audienceType" value="ALL_ACTIVE" checked> <span>All active subscribers<br><span class="muted small">Every active subscription across all projects</span></span></label>
+<label><input type="radio" name="audienceType" value="PROJECT"> <span>Project subscribers<br><span class="muted small">Active subscribers of one project</span></span></label>
+<label><input type="radio" name="audienceType" value="SUBSCRIBER"> <span>Individual subscriber<br><span class="muted small">One subscriber ID, useful for testing</span></span></label></div></fieldset>
+<div class="field full" id="aud-project" hidden><label for="projectId">Project</label><select id="projectId" name="projectId"></select></div>
+<div class="field full" id="aud-sub" hidden><label for="selectedSubscriberId">Subscriber ID</label><input id="selectedSubscriberId" name="selectedSubscriberId" placeholder="SUB_xxxxxxxxx"></div>
+<div class="field"><label for="type">Type</label><select id="type" name="type"><option value="MARKETING">Marketing</option><option value="TRANSACTIONAL">Transactional</option></select></div>
+<div class="field full"><label for="title">Title</label><input id="title" name="title" required maxlength="100"><div class="counter" data-counter="title"></div></div>
+<div class="field full"><label for="body">Message</label><textarea id="body" name="body" required maxlength="300"></textarea><div class="counter" data-counter="body"></div></div>
+<div class="field full"><label for="targetUrl">Target URL</label><input id="targetUrl" name="targetUrl" type="url" required placeholder="https://your-site.example/offers"><span class="help">Must be on one of the project's allowed origins. javascript:, data: and other schemes are rejected.</span></div>
+<div class="field full"><label for="iconUrl">Icon</label><div class="media-row"><input id="iconUrl" name="iconUrl" type="url" placeholder="https://… (HTTPS image URL)"><button class="btn" type="button" data-upload="iconUrl">Upload</button></div></div>
+<div class="field full"><label for="badgeUrl">Badge <span class="muted">(small monochrome icon, Android)</span></label><div class="media-row"><input id="badgeUrl" name="badgeUrl" type="url"><button class="btn" type="button" data-upload="badgeUrl">Upload</button></div></div>
+<div class="field full"><label for="imageUrl">Large image <span class="muted">(where supported)</span></label><div class="media-row"><input id="imageUrl" name="imageUrl" type="url"><button class="btn" type="button" data-upload="imageUrl">Upload</button></div></div>
+<div class="field"><label for="notificationTag">Notification tag</label><input id="notificationTag" name="notificationTag" maxlength="60"><span class="help">Same tag replaces an earlier notification.</span></div>
+<div class="field"><span class="lbl">Options</span><label class="check"><input type="checkbox" name="requireInteraction"> Require interaction (where supported)</label></div>
+<div class="field"><label for="timezone">Schedule timezone</label><select id="timezone" name="timezone"></select></div>
+<div class="field"><label for="schedDate">Date</label><input id="schedDate" name="schedDate" type="date"></div><div class="field"><label for="schedTime">Time</label><input id="schedTime" name="schedTime" type="time"></div>
+<p class="muted small full" id="sched-note">To schedule, choose a date and time, then click Schedule. The backend sends it even if nobody is online.</p></div>
+<div class="actions" style="margin-top:18px"><button class="btn" type="button" id="save-draft">Save draft</button><button class="btn" type="button" id="schedule">Schedule…</button><button class="btn btn-primary" type="button" id="send-now">Send now…</button></div></div>
+<aside class="stack"><div class="card"><h3>Preview</h3><div id="preview"></div></div></aside></form>
+</main></div></div><script type="module">import { initCreate } from './js/campaigns.js'; initCreate();</script></body></html>

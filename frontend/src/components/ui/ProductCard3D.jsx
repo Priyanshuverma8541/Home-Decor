@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext.jsx';
+import { getProductImage } from '../../utils/productImage.js';
 
 export default function ProductCard3D({ product, index }) {
   const { addToCart } = useCart();
@@ -33,19 +34,6 @@ export default function ProductCard3D({ product, index }) {
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
-  };
-
-  // Prefer the product photo uploaded in Admin; branded jewelry art is a safe fallback.
-  const getImage = (product) => {
-    const images = {
-      'rings': '/brand/savitri-jewellers-heart-earrings.png',
-      'necklaces': '/brand/savitri-jewellers-earrings.png',
-      'earrings': '/brand/savitri-jewellers-earrings.png',
-      'bangles': '/brand/savitri-jewellers-heart-earrings.png',
-      'bridal': '/brand/savitri-jewellers-earrings.png',
-      'silver': '/brand/savitri-jewellers-heart-earrings.png'
-    };
-    return product.images?.[0] || images[product.category] || '/brand/savitri-jewellers-earrings.png';
   };
 
   return (
@@ -98,7 +86,7 @@ export default function ProductCard3D({ product, index }) {
             transform: 'translateZ(20px)'
           }}>
             <img
-              src={getImage(product)}
+              src={getProductImage(product)}
               alt={product.name}
               style={{
                 width: '100%',

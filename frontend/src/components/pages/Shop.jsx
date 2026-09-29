@@ -6,6 +6,7 @@ import { productAPI } from "../../services/api.js";
 import { useCart } from "../../context/CartContext.jsx";
 import { SkeletonCard, EmptyState } from "../ui/Shared.jsx";
 import { shareProduct } from "../../utils/productShare.js";
+import { getProductImage } from "../../utils/productImage.js";
 
 const CATS = ["All","rings","necklaces","earrings","bangles","bridal","silver","decor","gift"];
 
@@ -17,7 +18,7 @@ function ProductCard({ p }) {
   return (
     <motion.div layout initial={{ opacity:0, scale:.97 }} animate={{ opacity:1, scale:1 }} exit={{ opacity:0 }} className="card" style={{ overflow:"hidden", display:"flex", flexDirection:"column" }}>
       <Link to={`/product/${p._id}`} className="img-zoom" style={{ display:"block", aspectRatio:"1", textDecoration:"none", position:"relative" }}>
-        <img src={p.images?.[0]||"/brand/savitri-jewellers-earrings.png"} alt={p.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} loading="lazy"/>
+        <img src={getProductImage(p)} alt={p.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} loading="lazy"/>
         {p.isSeasonal && <span style={{ position:"absolute", top:8, left:8, background:"white", color:"white", fontSize:"0.65rem", fontWeight:600, padding:"2px 8px", borderRadius:20 }}>Seasonal</span>}
       </Link>
       <div style={{ padding:"0.875rem", flex:1, display:"flex", flexDirection:"column" }}>
