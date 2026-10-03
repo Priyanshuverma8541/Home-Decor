@@ -294,7 +294,21 @@ const sections = {
   contact(d) {
     const c = d.contact;
     const cc = d.site.countryCode;
+    const messageMarkup = c.message
+      ? `<p class="contact__message">${esc(c.message).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noreferrer noopener">$1</a>').replace(/\n/g, '<br>')}</p>`
+      : '';
+
     const cards = [
+      ...c.socials.map(
+        (s) => `
+        <div class="contact-card" ${reveal()}>
+          <span class="badge">${icon(s.icon || 'globe', { size: 22 })}</span>
+          <div>
+            <span class="contact-card__label">${esc(s.label)}</span>
+            <a class="contact-card__value" href="${esc(s.url)}" target="_blank" rel="noreferrer noopener">${esc(s.label)}</a>
+          </div>
+        </div>`
+      ),
       ...c.phones.map(
         (p) => `
         <div class="contact-card" ${reveal()}>
@@ -334,6 +348,7 @@ const sections = {
             <p class="eyebrow">${esc(c.eyebrow)}</p>
             <h2 class="section__title" id="contact-title">${esc(c.title)}</h2>
             <p class="contact__sub">${esc(c.subtitle)}</p>
+            ${messageMarkup}
           </div>
           <button type="button" class="btn btn--gold" data-open-enquiry ${reveal(1)}>
             ${esc(c.cta)} ${icon('arrow', { size: 18 })}

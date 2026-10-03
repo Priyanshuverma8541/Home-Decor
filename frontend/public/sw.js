@@ -1,6 +1,7 @@
-/* Savitri Livings Web Push service worker. It displays notifications even when the site is closed. */
+/* Savitri Livings Web Push service worker. It displays real browser/system notifications even when the site is closed. */
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
+
 const safeTarget = (raw) => {
   try {
     const target = new URL(raw || "/", self.location.origin);
@@ -20,31 +21,63 @@ async function trackNotificationClick(data) {
       keepalive: true,
       credentials: "omit",
     });
-  } catch (error) {
-    // tracking failure must never block the user from opening the page
+  } catch (_error) {
+    // Tracking failures should never block opening the target page.
   }
 }
+
 self.addEventListener("push", (event) => {
-  let data = {}; try { data = event.data?.json() || {}; } catch { data = { body: event.data?.text() || "" }; }
-  event.waitUntil(self.registration.showNotification(data.title || "Savitri Livings", {
-    body: data.body || "",
-    icon: data.icon || "/brand/savitri-jewellers-mark.png",
+  let data = {};
+  try {
+    data = event.data?.json() || {};
+  } catch {
+    data = { body: event.data?.text() || "" };
+  }
+
+  const title = data.title || "Savitri Livings";
+  const body = data.body || "";
+  const icon = data.icon || "/brand/savitri-jewellers-mark.png";
+  const image = data.image || "";
+  const notificationData = {
+    url: data.url || "/",
+    campaignId: data.campaignId || null,
+    endpoint: data.endpoint || null,
+    trackUrl: data.trackUrl || null,
+  };
+
+  const options = {
+    body,
+    icon,
     badge: "/brand/savitri-jewellers-mark.png",
-    tag: data.tag,
-    data: { url: data.url || "/", campaignId: data.campaignId || null, endpoint: data.endpoint || null, trackUrl: data.trackUrl || null },
-  }));
+    image: image || undefined,
+    tag: data.tag || `sl-${Date.now()}`,
+    renotify: true,
+    requireInteraction: true,
+    data: notificationData,
+    actions: [
+      { action: "open", title: "Open" },
+      { action: "dismiss", title: "Dismiss" },
+    ],
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });
+
 self.addEventListener("notificationclick", (event) => {
-  event.notification.close();
   const clickData = event.notification.data || {};
-  const url = safeTarget(clickData.url);
+  const targetUrl = safeTarget(clickData.url || "/");
+  event.notification.close();
+
+  if (event.action === "dismiss") {
+    return;
+  }
 
   event.waitUntil(Promise.allSettled([
     trackNotificationClick(clickData),
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
       const match = clients.find((client) => new URL(client.url).origin === self.location.origin);
-      if (match) return match.focus().then(() => match.navigate(url));
-      return self.clients.openWindow(url);
-    })
+      if (match) return match.focus().then(() => match.navigate(targetUrl));
+      return self.clients.openWindow(targetUrl);
+    }),
   ]));
 });

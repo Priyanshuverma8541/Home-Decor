@@ -883,9 +883,22 @@ a.contact-card__value:hover {
   color: var(--muted);
 }
 .contact__sub {
-  margin: 1rem 0 2rem;
+  margin: 1rem 0 1rem;
   max-width: 32rem;
   color: var(--fg-muted);
+}
+.contact__message {
+  margin: 0 0 2rem;
+  max-width: 34rem;
+  white-space: pre-line;
+  color: rgb(231 240 255 / 0.95);
+  line-height: 1.7;
+  font-size: 0.98rem;
+}
+.contact__message a {
+  color: #f8d98d;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* App states */

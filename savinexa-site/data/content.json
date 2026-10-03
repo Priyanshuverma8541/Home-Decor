@@ -202,11 +202,16 @@
     "eyebrow": "Let's build your team together",
     "title": "Talent, Strategically Delivered.",
     "subtitle": "SaviNexa — Talent & Hiring Solutions | Recruitment & Talent Acquisition Consultancy",
+    "message": "Hello everyone! 👋\n\nWarm greetings from SaviNexa Talent Solution! 🤝\n\nWe are a Sourcing & Talent Acquisition Partner, helping businesses find the right talent for the right opportunities.\n\nPlease take a moment to follow our LinkedIn page and support us on our journey. Your support means a lot! 🙏\n\n🔗 https://www.linkedin.com/company/savinexa-talent-solution",
     "phones": [
       { "name": "", "number": "7491096101" },
       { "name":"", "number": "7903983502" }
     ],
-    "email": "",
+    "socials": [
+      { "label": "Instagram", "url": "https://www.instagram.com/savinexa.talent?utm_source=qr&stkn=cjEyNWNxZWZreW5v", "icon": "globe" },
+      { "label": "LinkedIn", "url": "https://www.linkedin.com/company/savinexa-talent-solution", "icon": "network" }
+    ],
+    "email": "savinexatalent@gmail.com",
     "office": "",
     "cta": "Send an enquiry"
   },

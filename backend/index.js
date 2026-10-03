@@ -8,6 +8,7 @@ const path       = require("path");
 dotenv.config();
 
 const connectDB  = require("./config/db");
+const pushNotificationsRouter = require("./routes/pushNotifications");
 const app        = express();
 const server     = http.createServer(app);
 const PORT       = process.env.PORT || 8081;
@@ -72,7 +73,7 @@ app.use("/api/thikana", require("./routes/thikana"));
 app.use("/api/marketing", require("./routes/marketing"));
 app.use("/api/ecosystem", require("./routes/ecosystem"));
 app.use("/api/partner-businesses", require("./routes/partnerBusinesses"));
-app.use("/api/push", require("./routes/pushNotifications"));
+app.use("/api/push", pushNotificationsRouter);
 app.use("/api/overview", require("./routes/overview"));
 app.use("/api/entertainment", require("./routes/entertainment"));
 app.use("/api/pages",      require("./routes/pages"));
@@ -101,6 +102,7 @@ app.set("io", io);
 // ── START ─────────────────────────────────────────────────────────────────────
 (async () => {
   await connectDB();
+  pushNotificationsRouter.startScheduledCampaigns();
   server.listen(PORT, () => console.log(`🚀 Savitri Livings backend on port ${PORT}`));
 })();
 
