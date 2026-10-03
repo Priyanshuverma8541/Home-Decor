@@ -26,7 +26,7 @@ const normalizeTargetUrl = (value, requestOrigin = "") => {
   const trimmed = value.trim();
   if (!trimmed) return "/";
 
-  if (trimmed.startsWith("/")) return trimmed;
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//") && !trimmed.includes("\\")) return trimmed;
 
   if (/^https?:\/\//i.test(trimmed)) {
     try {
@@ -34,18 +34,10 @@ const normalizeTargetUrl = (value, requestOrigin = "") => {
       const hostnames = new Set([
         "localhost",
         "127.0.0.1",
-        "savitri-livings.com",
-        "www.savitri-livings.com",
-        "admin.savitri-livings.com",
-        "home-decor-n2z6.vercel.app",
         "home-decor-inky.vercel.app",
-        "online-delivery-wxjr.vercel.app",
-        "thikana-marketplace.vercel.app",
       ]);
-
-      const requestHost = requestOrigin ? new URL(requestOrigin).hostname.toLowerCase() : "";
       const host = url.hostname.toLowerCase();
-      if (host === requestHost || hostnames.has(host) || hostnames.has(host.replace(/^www\./, "")) || host.endsWith(".vercel.app") || host.endsWith(".netlify.app")) {
+      if (url.protocol === "https:" && hostnames.has(host)) {
         return url.toString();
       }
     } catch (_error) {
@@ -61,15 +53,14 @@ const normalizeImageUrl = (value) => {
   if (typeof value !== "string") return "";
   const trimmed = value.trim();
   if (!trimmed) return "";
-  if (trimmed.startsWith("/")) return trimmed;
-  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//") && !trimmed.includes("\\")) return trimmed;
+  if (/^https:\/\//i.test(trimmed)) return trimmed;
   return "";
 };
 
 const getRequestOrigin = (req = {}) => {
-  const configuredBase = [process.env.API_BASE_URL, process.env.BACKEND_URL, process.env.PUBLIC_API_URL, process.env.SERVER_URL, process.env.API_URL, process.env.CLIENT_URL, process.env.ADMIN_URL].find(Boolean);
+  const configuredBase = [process.env.API_BASE_URL, process.env.BACKEND_URL, process.env.PUBLIC_API_URL, process.env.SERVER_URL, process.env.API_URL, process.env.RENDER_EXTERNAL_URL].find(Boolean);
   if (configuredBase) return configuredBase.replace(/\/$/, "");
-  if (req.headers?.origin) return req.headers.origin;
   const forwardedProto = req.get ? req.get("x-forwarded-proto")?.split(",")[0].trim() : "http";
   const forwardedHost = req.get ? req.get("x-forwarded-host")?.split(",")[0].trim() : "localhost:8081";
   return `${forwardedProto || "http"}://${forwardedHost || "localhost:8081"}`;
@@ -132,14 +123,14 @@ const dispatchCampaign = async (campaign, req = {}) => {
       subscription.lastSuccessAt = new Date();
       subscription.status = "active";
       await subscription.save();
-      console.log("[Push] Accepted:", subscription.endpoint.slice(0, 80));
+      console.log("[Push] Accepted by push service:", subscription._id.toString());
     } catch (error) {
       const isExpired = [404, 410].includes(error.statusCode);
       trackedStats[isExpired ? "stale" : "failed"] += 1;
       subscription.status = isExpired ? "expired" : subscription.status;
       subscription.lastFailureAt = new Date();
       await subscription.save();
-      console.error("[Push] Failed:", error.message || "Push delivery failed", { endpoint: subscription.endpoint.slice(0, 80), statusCode: error.statusCode });
+      console.error("[Push] Failed:", error.statusCode || "unknown status");
     }
   }
 
@@ -186,6 +177,7 @@ router.post("/subscribe", optionalProtect, async (req, res, next) => {
         platform: req.body.platform || "",
         language: req.body.language || "",
       },
+      expirationTime: req.body.expirationTime ? new Date(req.body.expirationTime) : null,
     };
 
     const subscription = await Subscription.findOneAndUpdate(
@@ -207,7 +199,7 @@ router.post("/unsubscribe", optionalProtect, async (req, res, next) => {
     if (!endpoint) return fail(res, 400, "Subscription endpoint is required");
 
     await Subscription.updateOne({ endpointHash: hash(endpoint) }, { $set: { status: "unsubscribed" } });
-    console.log("[Push] Subscription removed:", endpoint.slice(0, 80));
+    console.log("[Push] Subscription removed");
     res.json({ success: true });
   } catch (error) {
     next(error);
@@ -252,7 +244,7 @@ router.get("/admin/summary", protect, adminOnly, async (_req, res, next) => {
       totalSubscribers: subscribers,
       activeSubscribers: active,
       inactiveSubscribers: expired,
-      campaigns,
+      campaignCount: campaigns,
       campaignsSent: summary.campaignsSent,
       scheduledCampaigns: summary.scheduled,
       pushAttempts: summary.attempts,
@@ -451,7 +443,7 @@ router.post("/track-click", async (req, res, next) => {
       }
     }
 
-    console.log("[Push] Notification clicked:", { endpoint: endpoint ? endpoint.slice(0, 80) : "n/a", campaignId: campaignId || "n/a" });
+    console.log("[Push] Notification click recorded:", campaignId || "n/a");
     res.json({ success: true, tracked: true });
   } catch (error) {
     next(error);

@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const productionApi = "https://home-decor-0rfj.onrender.com";
+const configuredApi = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? productionApi : "http://localhost:8081");
+export const API_BASE_URL = (import.meta.env.PROD && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(configuredApi) ? productionApi : configuredApi).replace(/\/api\/?$/, "").replace(/\/+$/, "");
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
@@ -123,7 +126,11 @@ export const pushAPI = {
   summary: () => api.get("/api/push/admin/summary"),
   subscribers: () => api.get("/api/push/admin/subscribers"),
   createCampaign: (data) => api.post("/api/push/admin/campaigns", data),
+  updateCampaign: (id, data) => api.patch(`/api/push/admin/campaigns/${id}`, data),
+  deleteCampaign: (id) => api.delete(`/api/push/admin/campaigns/${id}`),
   sendCampaign: (id) => api.post(`/api/push/admin/campaigns/${id}/send`),
+  cancelCampaign: (id) => api.post(`/api/push/admin/campaigns/${id}/cancel`),
+  test: (data) => api.post("/api/push/admin/test", data),
 };
 
 export const savinexaAPI = {

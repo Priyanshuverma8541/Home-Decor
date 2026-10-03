@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const BASE = import.meta.env.VITE_API_URL;
+const productionApi = "https://home-decor-0rfj.onrender.com";
+const configuredApi = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? productionApi : "http://localhost:8081");
+export const API_BASE_URL = (import.meta.env.PROD && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(configuredApi) ? productionApi : configuredApi).replace(/\/api\/?$/, "").replace(/\/+$/, "");
 
 const api = axios.create({
-  baseURL: BASE,
+  baseURL: API_BASE_URL,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });

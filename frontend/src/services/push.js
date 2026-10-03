@@ -1,4 +1,6 @@
-const API = import.meta.env.VITE_API_URL;
+import { API_BASE_URL } from "./api.js";
+const API = API_BASE_URL;
+
 
 const base64 = (value) => {
   const padded = value + "=".repeat((4 - value.length % 4) % 4);
@@ -54,6 +56,7 @@ export const pushClient = {
 
     const registration = await navigator.serviceWorker.register("/sw.js");
     await navigator.serviceWorker.ready;
+    registration.active?.postMessage({ type: "CONFIG_PUSH_API", apiBase: API });
 
     const existing = await registration.pushManager.getSubscription();
     const subscription = existing || await registration.pushManager.subscribe({
@@ -69,6 +72,7 @@ export const pushClient = {
         browser: navigator.userAgent,
         platform: navigator.platform,
         language: navigator.language,
+        expirationTime: subscription.expirationTime,
       }),
     });
 

@@ -7,6 +7,7 @@ const webPushSubscriptionSchema = new mongoose.Schema({
   endpointHash: { type: String, required: true, unique: true, index: true },
   p256dh: { type: String, required: true, select: false },
   auth: { type: String, required: true, select: false },
+  expirationTime: { type: Date, default: null },
   status: { type: String, enum: ["active", "unsubscribed", "expired"], default: "active", index: true },
   device: { browser: String, platform: String, language: String },
   clickCount: { type: Number, default: 0 },

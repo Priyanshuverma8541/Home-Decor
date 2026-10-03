@@ -15,9 +15,6 @@ const PORT       = process.env.PORT || 8081;
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 const ALLOWED = [
-  "https://savitri-livings.com",
-  "https://www.savitri-livings.com",
-  "https://admin.savitri-livings.com",
   "https://home-decor-n2z6.vercel.app/",
   "https://home-decor-inky.vercel.app/",
   "https://online-delivery-wxjr.vercel.app/",

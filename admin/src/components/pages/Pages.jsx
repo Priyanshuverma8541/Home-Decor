@@ -60,7 +60,7 @@ const toLocalDate = (value) => {
 };
 const toIsoDate = (value) => value ? new Date(value).toISOString() : null;
 const pageUrl = (slug) => {
-  const base = import.meta.env.VITE_PUBLIC_SITE_URL || (window.location.hostname === "localhost" ? `${window.location.protocol}//${window.location.hostname}:5176` : "https://savitri-livings.com");
+  const base = import.meta.env.VITE_PUBLIC_SITE_URL || (window.location.hostname === "localhost" ? `${window.location.protocol}//${window.location.hostname}:5176` : "https://home-decor-inky.vercel.app");
   return `${base.replace(/\/$/, "")}/p/${slug}`;
 };
 

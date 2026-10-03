@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import { io } from "socket.io-client";
 import { Package, User, ArrowRight, MapPin, Phone } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { orderAPI } from "../../services/api.js";
+import { orderAPI, API_BASE_URL } from "../../services/api.js";
 import { PageLoader, EmptyState, StatusBadge } from "../ui/Shared.jsx";
 import toast from "react-hot-toast";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
+const API_URL = API_BASE_URL;
 const STEPS   = ["pending","confirmed","packed","assigned","out_for_delivery","delivered"];
 
 function ProtectedAccount({ children }) {

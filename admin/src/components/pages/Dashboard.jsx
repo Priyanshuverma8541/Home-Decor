@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingBag, Users, TrendingUp, Clock, ArrowRight, Package, ShieldCheck } from "lucide-react";
 import { io } from "socket.io-client";
-import { orderAPI, leadAPI, overviewAPI, privacyAPI } from "../../services/api.js";
+import { orderAPI, leadAPI, overviewAPI, privacyAPI, API_BASE_URL } from "../../services/api.js";
 import { StatCard, StatusBadge, PageLoader } from "../ui/index.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8081";
+const API_URL = API_BASE_URL;
 const fd = (d=0) => ({ initial:{opacity:0,y:16}, animate:{opacity:1,y:0}, transition:{duration:.45,delay:d} });
 
 export default function Dashboard() {
