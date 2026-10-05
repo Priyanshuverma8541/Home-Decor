@@ -44,14 +44,16 @@ export const pushClient = {
       throw new Error("This browser does not support push notifications");
     }
 
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      throw new Error(permission === "denied" ? "Notifications are blocked in your browser settings" : "Notification permission was not granted");
-    }
-
+    // Resolve configuration before showing a permission prompt. Permission is
+    // requested only from this explicit user action, never on page load.
     const config = await request("/config", { method: "GET" });
     if (!config.configured || !config.publicKey) {
       throw new Error("Notifications are not configured yet. Please try again later.");
+    }
+
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      throw new Error(permission === "denied" ? "Notifications are blocked in your browser settings" : "Notification permission was not granted");
     }
 
     const registration = await navigator.serviceWorker.register("/sw.js");
@@ -69,8 +71,8 @@ export const pushClient = {
       body: JSON.stringify({
         endpoint: subscription.endpoint,
         keys: subscription.toJSON().keys,
-        browser: navigator.userAgent,
-        platform: navigator.platform,
+        browser: getBrowserFamily(),
+        platform: getPlatformFamily(),
         language: navigator.language,
         expirationTime: subscription.expirationTime,
       }),
@@ -88,3 +90,22 @@ export const pushClient = {
     }
   },
 };
+
+function getBrowserFamily() {
+  const ua = navigator.userAgent || "";
+  if (/Edg\//.test(ua)) return "Edge";
+  if (/Firefox\//.test(ua)) return "Firefox";
+  if (/CriOS|Chrome\//.test(ua)) return "Chrome";
+  if (/Safari\//.test(ua)) return "Safari";
+  return "Other";
+}
+
+function getPlatformFamily() {
+  const ua = navigator.userAgent || "";
+  if (/Android/i.test(ua)) return "Android";
+  if (/iPhone|iPad|iPod/i.test(ua)) return "iOS";
+  if (/Windows/i.test(ua)) return "Windows";
+  if (/Mac OS/i.test(ua)) return "macOS";
+  if (/Linux/i.test(ua)) return "Linux";
+  return "Other";
+}

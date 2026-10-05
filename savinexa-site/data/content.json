@@ -2,7 +2,8 @@
   "site": {
     "name": "SaviNexa",
     "descriptor": "Talent & Hiring Solutions",
-    "formEndpoint": "",
+    "formEndpoint": "https://home-decor-0rfj.onrender.com/api/savinexa/enquiries",
+    "jobsEndpoint": "https://home-decor-0rfj.onrender.com/api/savinexa/jobs",
     "contentEndpoint": "",
     "eventEndpoint": "",
     "countryCode": "91"
@@ -138,6 +139,8 @@
       { "icon": "rocket", "label": "Startups" }
     ],
     "functionsLabel": "Functions",
+    "image": "assets/3.jpeg",
+    "imageAlt": "Colleagues discussing work around a laptop",
     "functions": [
       { "icon": "cogs", "label": "Engineering & Tech" },
       { "icon": "dollar", "label": "Sales & Revenue" },
@@ -214,6 +217,8 @@
     "emptyLabel": "No current roles are listed.",
     "cta": "Share your profile",
     "emailSubject": "Candidate profile — SaviNexa",
+    "image": "assets/2.jpeg",
+    "imageAlt": "Candidate speaking with a recruiter during an interview",
     "jobs": []
   },
 

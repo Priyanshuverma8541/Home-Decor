@@ -133,7 +133,15 @@ export const pushAPI = {
   test: (data) => api.post("/api/push/admin/test", data),
 };
 
+export const audienceAPI = {
+  getAll: () => api.get("/api/audience/admin"),
+};
+
 export const savinexaAPI = {
+  talent: () => api.get("/api/savinexa/admin/talent"),
+  createJob: (data) => api.post("/api/savinexa/admin/jobs", data),
+  updateJob: (id, data) => api.patch(`/api/savinexa/admin/jobs/${id}`, data),
+  updateEnquiry: (id, data) => api.patch(`/api/savinexa/admin/enquiries/${id}`, data),
   dashboard: () => api.get("/api/savinexa/admin/dashboard"),
   products: (params = {}) => api.get("/api/savinexa/admin/products", { params }),
   createProduct: (data) => api.post("/api/savinexa/admin/products", data),

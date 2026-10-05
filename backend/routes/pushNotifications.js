@@ -21,6 +21,10 @@ const normalizeText = (value, maxLength = 300, fallback = "") => {
   return trimmed.slice(0, maxLength);
 };
 
+const allowedBrowser = new Set(["Chrome", "Safari", "Firefox", "Edge", "Other"]);
+const allowedPlatform = new Set(["Android", "iOS", "Windows", "macOS", "Linux", "Other"]);
+const allowedLanguage = (value) => typeof value === "string" && /^[a-z]{2,3}(?:-[A-Z]{2})?$/.test(value) ? value : "";
+
 const normalizeTargetUrl = (value, requestOrigin = "") => {
   if (typeof value !== "string") return "/";
   const trimmed = value.trim();
@@ -172,10 +176,12 @@ router.post("/subscribe", optionalProtect, async (req, res, next) => {
       endpointHash: hash(endpoint),
       userId: req.user?._id || null,
       status: "active",
+      // Keep only coarse, allow-listed device metadata. Never store full UA,
+      // precise location, contacts, or hardware identifiers.
       device: {
-        browser: req.body.browser || req.get("user-agent")?.slice(0, 120) || "unknown",
-        platform: req.body.platform || "",
-        language: req.body.language || "",
+        browser: allowedBrowser.has(req.body.browser) ? req.body.browser : "Other",
+        platform: allowedPlatform.has(req.body.platform) ? req.body.platform : "Other",
+        language: allowedLanguage(req.body.language),
       },
       expirationTime: req.body.expirationTime ? new Date(req.body.expirationTime) : null,
     };

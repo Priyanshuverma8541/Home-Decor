@@ -16,6 +16,7 @@ import PushNotifications from "./components/pages/PushNotifications.jsx";
 import PrivacyDataCenter from "./components/pages/PrivacyDataCenter.jsx";
 import Pages from "./components/pages/Pages.jsx";
 import Savinexa from "./components/pages/Savinexa.jsx";
+import Audience from "./components/pages/Audience.jsx";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             <Route path="orders"   element={<Orders />}     />
             <Route path="products" element={<Products />}   />
             <Route path="crm"      element={<CRM />}        />
+            <Route path="audience" element={<Audience />}   />
             <Route path="partners" element={<Partners />}   />
             <Route path="campaigns"element={<Campaigns />}  />
             <Route path="analytics"element={<Analytics />}  />

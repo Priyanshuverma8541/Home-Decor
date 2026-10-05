@@ -7,6 +7,7 @@ const LINKS = [
   { to:"/orders",    Icon:ShoppingBag,     label:"Orders"              },
   { to:"/products",  Icon:Package,         label:"Products"            },
   { to:"/crm",       Icon:Users,           label:"CRM & Leads"         },
+  { to:"/audience",  Icon:Users,           label:"Unified Audience"    },
   { to:"/partners",  Icon:UserCheck,       label:"Partners"            },
   { to:"/campaigns", Icon:Megaphone,       label:"Campaigns"           },
   { to:"/analytics", Icon:BarChart2,       label:"Analytics"           },
@@ -16,7 +17,7 @@ const LINKS = [
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },
   { to:"/pages",     Icon:FileText,          label:"Savitri Pages"       },
-  { to:"/savinexa",  Icon:Store,            label:"Savinexa"            },
+  { to:"/savinexa",  Icon:UserCheck,        label:"SaviNexa Talent"     },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 

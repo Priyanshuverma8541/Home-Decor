@@ -19,6 +19,13 @@ const CONTENT_URL = 'data/content.json';
 const esc = (value) =>
   String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+const safeHref = (value) => {
+  try {
+    const url = new URL(String(value || ''), document.baseURI);
+    return ['http:', 'https:', 'mailto:', 'tel:'].includes(url.protocol) ? url.href : '#';
+  } catch { return '#'; }
+};
+
 const reveal = (i = 0) => `data-reveal style="--i:${i}"`;
 
 const formatPhone = (n) => (/^\d{10}$/.test(n) ? `${n.slice(0, 5)} ${n.slice(5)}` : n);
@@ -305,7 +312,7 @@ const sections = {
           <span class="badge">${icon(s.icon || 'globe', { size: 22 })}</span>
           <div>
             <span class="contact-card__label">${esc(s.label)}</span>
-            <a class="contact-card__value" href="${esc(s.url)}" target="_blank" rel="noreferrer noopener">${esc(s.label)}</a>
+            <a class="contact-card__value" href="${esc(safeHref(s.url))}" target="_blank" rel="noreferrer noopener">${esc(s.label)}</a>
           </div>
         </div>`
       ),
@@ -540,6 +547,23 @@ function enhancePage(data) {
   heroImage.fetchPriority = 'high';
   heroImage.decoding = 'async';
   hero.appendChild(heroImage);
+  var network = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  network.classList.add('hero__network');
+  network.setAttribute('viewBox', '0 0 600 420');
+  network.setAttribute('aria-hidden', 'true');
+  network.setAttribute('focusable', 'false');
+  network.innerHTML = '<path d="M65 300 170 210 285 270 390 120 530 175M170 210 210 75 390 120 470 340 285 270 110 385"/><circle cx="65" cy="300" r="9"/><circle cx="170" cy="210" r="11"/><circle cx="285" cy="270" r="8"/><circle cx="390" cy="120" r="12"/><circle cx="530" cy="175" r="8"/><circle cx="210" cy="75" r="7"/><circle cx="470" cy="340" r="10"/><circle cx="110" cy="385" r="6"/>';
+  hero.appendChild(network);
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    hero.addEventListener('pointermove', function (event) {
+      var box = hero.getBoundingClientRect();
+      var x = (event.clientX - box.left) / box.width - .5;
+      var y = (event.clientY - box.top) / box.height - .5;
+      network.style.setProperty('--tilt-x', (y * -3).toFixed(2) + 'deg');
+      network.style.setProperty('--tilt-y', (x * 4).toFixed(2) + 'deg');
+    }, { passive: true });
+    hero.addEventListener('pointerleave', function () { network.style.setProperty('--tilt-x', '0deg'); network.style.setProperty('--tilt-y', '0deg'); }, { passive: true });
+  }
 
   var points = document.querySelector('.about-points');
   if (points && data.about.image) {
@@ -563,6 +587,21 @@ function enhancePage(data) {
     button.innerHTML = 'Discuss this service ' + icon('arrow', { size: 16 });
     card.appendChild(button);
   });
+
+  var processList = document.querySelector('#process .steps');
+  if (processList && data.process.image) {
+    var processFigure = document.createElement('figure');
+    processFigure.className = 'process-photo';
+    processFigure.innerHTML = '<img src="' + esc(data.process.image) + '" alt="' + esc(data.process.imageAlt || '') + '" width="720" height="1280" loading="lazy" decoding="async"><figcaption>A clear process from role brief to onboarding.</figcaption>';
+    processList.after(processFigure);
+  }
+  var industryNote = document.querySelector('#industries .industries-note');
+  if (industryNote && data.industries.image) {
+    var industryFigure = document.createElement('img');
+    industryFigure.className = 'industries-photo'; industryFigure.src = data.industries.image; industryFigure.alt = data.industries.imageAlt || '';
+    industryFigure.width = 720; industryFigure.height = 1280; industryFigure.loading = 'lazy'; industryFigure.decoding = 'async';
+    industryNote.prepend(industryFigure);
+  }
 
   var process = data.process.steps || [];
   document.querySelectorAll('#process .step').forEach(function (item, index) {
@@ -613,10 +652,11 @@ function enhancePage(data) {
   careersSection.id = 'careers';
   careersSection.setAttribute('aria-labelledby', 'careers-title');
   var jobMarkup = (careers.jobs || []).filter(function (job) { return job && job.title; }).map(function (job) {
-    var destination = job.applyUrl || ('mailto:' + encodeURIComponent(data.contact.email) + '?subject=' + encodeURIComponent('Application — ' + job.title));
-    return '<article class="job-card"><div><h3>' + esc(job.title) + '</h3><p>' + esc([job.location, job.type].filter(Boolean).join(' · ')) + '</p>' + (job.description ? '<p>' + esc(job.description) + '</p>' : '') + '</div><a class="btn btn--navy" href="' + esc(destination) + '">Apply ' + icon('arrow', { size: 18 }) + '</a></article>';
+    var destination = job.applyUrl || ('mailto:' + encodeURI(data.contact.email) + '?subject=' + encodeURIComponent('Application — ' + job.title));
+    return '<article class="job-card"><div><h3>' + esc(job.title) + '</h3><p>' + esc([job.location, job.type].filter(Boolean).join(' · ')) + '</p>' + (job.description ? '<p>' + esc(job.description) + '</p>' : '') + '</div><a class="btn btn--navy" href="' + esc(safeHref(destination)) + '">Apply ' + icon('arrow', { size: 18 }) + '</a></article>';
   }).join('');
-  careersSection.innerHTML = '<div class="container careers__inner"><div><p class="eyebrow">' + esc(careers.eyebrow || 'For talent') + '</p><h2 class="section__title" id="careers-title">' + esc(careers.title || 'Careers at SaviNexa') + '</h2><p class="section__intro">' + esc(careers.intro || '') + '</p></div><div class="careers__list">' + (jobMarkup || '<p class="careers__empty">' + esc(careers.emptyLabel || 'No current roles are listed.') + '</p>') + '<a class="btn btn--gold" href="mailto:' + encodeURIComponent(data.contact.email) + '?subject=' + encodeURIComponent(careers.emailSubject || 'Candidate profile — SaviNexa') + '">' + esc(careers.cta || 'Share your profile') + ' ' + icon('arrow', { size: 18 }) + '</a></div></div>';
+  careersSection.innerHTML = '<div class="container careers__inner"><div><p class="eyebrow">' + esc(careers.eyebrow || 'For talent') + '</p><h2 class="section__title" id="careers-title">' + esc(careers.title || 'Careers at SaviNexa') + '</h2><p class="section__intro">' + esc(careers.intro || '') + '</p></div><div class="careers__list">' + (jobMarkup || '<p class="careers__empty">' + esc(careers.emptyLabel || 'No current roles are listed.') + '</p>') + '<a class="btn btn--gold" href="mailto:' + encodeURI(data.contact.email) + '?subject=' + encodeURIComponent(careers.emailSubject || 'Candidate profile — SaviNexa') + '">' + esc(careers.cta || 'Share your profile') + ' ' + icon('arrow', { size: 18 }) + '</a></div></div>';
+  if (careers.image) { var careerImage = document.createElement('img'); careerImage.className = 'careers__photo'; careerImage.src = careers.image; careerImage.alt = ''; careerImage.width = 916; careerImage.height = 1280; careerImage.loading = 'lazy'; careerImage.decoding = 'async'; careersSection.appendChild(careerImage); }
   document.getElementById('contact').before(careersSection);
 
   var share = document.createElement('button');
@@ -651,6 +691,12 @@ function enhancePage(data) {
 
 async function loadSiteContent() {
   const local = await fetchJSON(CONTENT_URL);
+  if (local.site && local.site.jobsEndpoint) {
+    try {
+      const response = await fetchJSON(local.site.jobsEndpoint);
+      if (Array.isArray(response.jobs)) local.careers = { ...(local.careers || {}), jobs: response.jobs.map(function (job) { return { title: job.title, location: job.location, type: job.employmentType, description: job.description, applyUrl: job.applicationEmail ? 'mailto:' + job.applicationEmail + '?subject=' + encodeURIComponent('Application — ' + job.title) : '' }; }) };
+    } catch (error) { console.warn('Live SaviNexa roles are unavailable; showing locally saved careers content.', error); }
+  }
   if (!local.site || !local.site.contentEndpoint) return local;
   try { return await fetchJSON(local.site.contentEndpoint); }
   catch (error) { console.warn('Remote content is unavailable; showing the local SaviNexa content.', error); return local; }
