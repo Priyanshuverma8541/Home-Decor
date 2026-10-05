@@ -522,6 +522,140 @@ function initReveal(root = document) {
   targets.forEach((el) => io.observe(el));
 }
 
+
+function trackEvent(name, metadata, data) {
+  var details = { event: name, metadata: metadata || {}, timestamp: Date.now() };
+  window.dispatchEvent(new CustomEvent('savinexa:analytics', { detail: details }));
+  if (data && data.site && data.site.eventEndpoint) postJSON(data.site.eventEndpoint, { eventType: name, metadata: metadata || {} }, { timeout: 4000 }).catch(function () {});
+}
+
+function enhancePage(data) {
+  var hero = document.querySelector('.hero');
+  var heroImage = document.createElement('img');
+  heroImage.className = 'hero__photo';
+  heroImage.src = data.hero.image || 'assets/1.jpeg';
+  heroImage.alt = data.hero.imageAlt || '';
+  heroImage.width = 1280;
+  heroImage.height = 853;
+  heroImage.fetchPriority = 'high';
+  heroImage.decoding = 'async';
+  hero.appendChild(heroImage);
+
+  var points = document.querySelector('.about-points');
+  if (points && data.about.image) {
+    var figure = document.createElement('figure');
+    figure.className = 'about__photo';
+    figure.innerHTML = '<img src="' + esc(data.about.image) + '" alt="' + esc(data.about.imageAlt || '') + '" width="916" height="1280" loading="lazy" decoding="async"><figcaption>People first. Outcomes always.</figcaption>';
+    var aside = document.createElement('div'); aside.className = 'about__aside';
+    points.parentElement.insertBefore(aside, points); aside.appendChild(figure); aside.appendChild(points);
+  }
+
+  document.querySelectorAll('#services .card').forEach(function (card, index) {
+    card.classList.add('service-card');
+    var photo = data.services.items[index] && data.services.items[index].image;
+    if (photo) { var image = document.createElement('img'); image.className = 'service-card__image'; image.src = photo; image.alt = ''; image.width = 720; image.height = 1280; image.loading = 'lazy'; image.decoding = 'async'; card.prepend(image); }
+    var title = card.querySelector('h3');
+    if (!title) return;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'service-card__link';
+    button.dataset.serviceSelect = title.textContent;
+    button.innerHTML = 'Discuss this service ' + icon('arrow', { size: 16 });
+    card.appendChild(button);
+  });
+
+  var process = data.process.steps || [];
+  document.querySelectorAll('#process .step').forEach(function (item, index) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'step__activate';
+    button.textContent = 'Focus this step';
+    button.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+    button.addEventListener('click', function () {
+      document.querySelectorAll('#process .step__activate').forEach(function (other) {
+        other.setAttribute('aria-pressed', String(other === button));
+      });
+      document.querySelectorAll('#process .step').forEach(function (other) {
+        other.classList.toggle('is-active', other === item);
+      });
+      trackEvent('process_step_view', { step: process[index] && process[index].title }, data);
+    });
+    item.appendChild(button);
+    if (index === 0) item.classList.add('is-active');
+  });
+
+  var industrySection = document.getElementById('industries');
+  if (industrySection) {
+    var controls = document.createElement('div');
+    controls.className = 'category-controls';
+    controls.setAttribute('role', 'group');
+    controls.setAttribute('aria-label', 'Filter hiring categories');
+    controls.innerHTML = '<button type="button" class="category-filter is-active" data-category-filter="all" aria-pressed="true">All categories</button><button type="button" class="category-filter" data-category-filter="Industries" aria-pressed="false">Industries</button><button type="button" class="category-filter" data-category-filter="Functions" aria-pressed="false">Functions</button>';
+    industrySection.querySelector('.section__head').after(controls);
+    var groups = Array.from(industrySection.querySelectorAll('.tile-group'));
+    groups.forEach(function (group, index) { group.dataset.tileGroup = index === 0 ? 'Industries' : 'Functions'; });
+    controls.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-category-filter]');
+      if (!button) return;
+      controls.querySelectorAll('button').forEach(function (item) {
+        var selected = item === button;
+        item.classList.toggle('is-active', selected);
+        item.setAttribute('aria-pressed', String(selected));
+      });
+      groups.forEach(function (group) { group.hidden = button.dataset.categoryFilter !== 'all' && group.dataset.tileGroup !== button.dataset.categoryFilter; });
+      trackEvent('category_filter', { category: button.dataset.categoryFilter }, data);
+    });
+  }
+
+  var careers = data.careers || {};
+  var careersSection = document.createElement('section');
+  careersSection.className = 'section careers';
+  careersSection.id = 'careers';
+  careersSection.setAttribute('aria-labelledby', 'careers-title');
+  var jobMarkup = (careers.jobs || []).filter(function (job) { return job && job.title; }).map(function (job) {
+    var destination = job.applyUrl || ('mailto:' + encodeURIComponent(data.contact.email) + '?subject=' + encodeURIComponent('Application — ' + job.title));
+    return '<article class="job-card"><div><h3>' + esc(job.title) + '</h3><p>' + esc([job.location, job.type].filter(Boolean).join(' · ')) + '</p>' + (job.description ? '<p>' + esc(job.description) + '</p>' : '') + '</div><a class="btn btn--navy" href="' + esc(destination) + '">Apply ' + icon('arrow', { size: 18 }) + '</a></article>';
+  }).join('');
+  careersSection.innerHTML = '<div class="container careers__inner"><div><p class="eyebrow">' + esc(careers.eyebrow || 'For talent') + '</p><h2 class="section__title" id="careers-title">' + esc(careers.title || 'Careers at SaviNexa') + '</h2><p class="section__intro">' + esc(careers.intro || '') + '</p></div><div class="careers__list">' + (jobMarkup || '<p class="careers__empty">' + esc(careers.emptyLabel || 'No current roles are listed.') + '</p>') + '<a class="btn btn--gold" href="mailto:' + encodeURIComponent(data.contact.email) + '?subject=' + encodeURIComponent(careers.emailSubject || 'Candidate profile — SaviNexa') + '">' + esc(careers.cta || 'Share your profile') + ' ' + icon('arrow', { size: 18 }) + '</a></div></div>';
+  document.getElementById('contact').before(careersSection);
+
+  var share = document.createElement('button');
+  share.type = 'button';
+  share.className = 'btn btn--ghost contact-share';
+  share.innerHTML = icon('network', { size: 18 }) + ' Share SaviNexa';
+  share.addEventListener('click', function () {
+    var payload = { title: data.site.name, text: data.hero.lead, url: location.href };
+    if (navigator.share) navigator.share(payload).then(function () { trackEvent('share', {}, data); }).catch(function () {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(payload.url).then(function () { trackEvent('share_copied', {}, data); }).catch(function () {});
+  });
+  document.querySelector('#contact [data-open-enquiry]').after(share);
+
+  document.querySelectorAll('#services [data-service-select]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      trackEvent('service_select', { service: button.dataset.serviceSelect }, data);
+      document.querySelector('[data-open-enquiry]').click();
+      var select = document.querySelector('.modal [name="need"]');
+      if (select) select.value = button.dataset.serviceSelect;
+    });
+  });
+
+  document.querySelector('meta[name="description"]')?.setAttribute('content', data.hero.lead);
+  document.querySelector('meta[property="og:title"]')?.setAttribute('content', data.site.name + ' — ' + data.site.descriptor);
+  document.querySelector('meta[property="og:description"]')?.setAttribute('content', data.hero.lead);
+  var schema = document.createElement('script');
+  schema.type = 'application/ld+json';
+  schema.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'EmploymentAgency', name: data.site.name, description: data.hero.lead, email: data.contact.email, telephone: data.contact.phones.map(function (phone) { return '+' + data.site.countryCode + phone.number; }), sameAs: data.contact.socials.map(function (social) { return social.url; }) });
+  document.head.appendChild(schema);
+  trackEvent('page_view', { path: location.pathname + location.hash }, data);
+}
+
+async function loadSiteContent() {
+  const local = await fetchJSON(CONTENT_URL);
+  if (!local.site || !local.site.contentEndpoint) return local;
+  try { return await fetchJSON(local.site.contentEndpoint); }
+  catch (error) { console.warn('Remote content is unavailable; showing the local SaviNexa content.', error); return local; }
+}
+
 /* -------------------------------------------------------------------------
    Boot
    ------------------------------------------------------------------------- */
@@ -548,7 +682,7 @@ async function boot() {
 
   let data;
   try {
-    data = await fetchJSON(CONTENT_URL);
+    data = await loadSiteContent();
   } catch (err) {
     showError(err);
     return;
@@ -559,6 +693,7 @@ async function boot() {
   // Sections
   const order = ['hero', 'about', 'challenge', 'approach', 'services', 'process', 'different', 'value', 'industries', 'audience', 'partner', 'vision', 'contact'];
   app.innerHTML = order.map((key) => sections[key](data)).join('');
+  enhancePage(data);
   document.body.insertAdjacentHTML('beforeend', footer(data));
 
   // Components
