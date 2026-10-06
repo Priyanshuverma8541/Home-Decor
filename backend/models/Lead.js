@@ -16,6 +16,24 @@ const leadSchema = new mongoose.Schema({
 
   interestedIn:      [{ type: String }],  // product names or categories
   budget:            { type: String },     // "under 500", "500-2000" etc.
+  contactConsent: {
+    granted: { type: Boolean, default: false },
+    grantedAt: { type: Date },
+    context: { type: String, trim: true, maxlength: 100 },
+  },
+  marketingConsent: {
+    granted: { type: Boolean, default: false },
+    grantedAt: { type: Date },
+    channels: [{ type: String, enum: ["whatsapp", "email"] }],
+    purpose: { type: String, trim: true, maxlength: 160 },
+    version: { type: String, trim: true, maxlength: 40 },
+  },
+  acquisition: {
+    source: { type: String, trim: true, maxlength: 80 },
+    medium: { type: String, trim: true, maxlength: 80 },
+    campaign: { type: String, trim: true, maxlength: 120 },
+    referralCode: { type: String, trim: true, maxlength: 80 },
+  },
 
   notes:             [noteSchema],
   tags:              [{ type: String }],   // e.g. "bulk-buyer", "wedding", "repeat"

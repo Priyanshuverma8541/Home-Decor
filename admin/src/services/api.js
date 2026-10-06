@@ -123,14 +123,14 @@ export const partnerBusinessAPI = {
 };
 
 export const pushAPI = {
-  summary: () => api.get("/api/push/admin/summary"),
-  subscribers: () => api.get("/api/push/admin/subscribers"),
+  summary: (appId) => api.get("/api/push/admin/summary", { params: appId ? { appId } : {} }),
+  subscribers: (appId) => api.get("/api/push/admin/subscribers", { params: appId ? { appId } : {} }),
   createCampaign: (data) => api.post("/api/push/admin/campaigns", data),
-  updateCampaign: (id, data) => api.patch(`/api/push/admin/campaigns/${id}`, data),
-  deleteCampaign: (id) => api.delete(`/api/push/admin/campaigns/${id}`),
-  sendCampaign: (id) => api.post(`/api/push/admin/campaigns/${id}/send`),
-  cancelCampaign: (id) => api.post(`/api/push/admin/campaigns/${id}/cancel`),
-  test: (data) => api.post("/api/push/admin/test", data),
+  updateCampaign: (id, data, appId) => api.patch(`/api/push/admin/campaigns/${id}`, data, { params: appId ? { appId } : {} }),
+  deleteCampaign: (id, appId) => api.delete(`/api/push/admin/campaigns/${id}`, { params: appId ? { appId } : {} }),
+  sendCampaign: (id, appId) => api.post(`/api/push/admin/campaigns/${id}/send`, appId ? { appId } : {}, { params: appId ? { appId } : {} }),
+  cancelCampaign: (id, appId) => api.post(`/api/push/admin/campaigns/${id}/cancel`, appId ? { appId } : {}, { params: appId ? { appId } : {} }),
+  test: (data) => api.post("/api/push/admin/test", data, { params: data?.appId ? { appId: data.appId } : {} }),
 };
 
 export const audienceAPI = {
@@ -149,11 +149,34 @@ export const savinexaAPI = {
   deleteProduct: (id) => api.delete(`/api/savinexa/admin/products/${id}`),
   categories: () => api.get("/api/savinexa/admin/categories"),
   createCategory: (data) => api.post("/api/savinexa/admin/categories", data),
+  updateCategory: (id, data) => api.put(`/api/savinexa/admin/categories/${id}`, data),
+  deleteCategory: (id) => api.delete(`/api/savinexa/admin/categories/${id}`),
   collections: () => api.get("/api/savinexa/admin/collections"),
   createCollection: (data) => api.post("/api/savinexa/admin/collections", data),
+  updateCollection: (id, data) => api.put(`/api/savinexa/admin/collections/${id}`, data),
+  deleteCollection: (id) => api.delete(`/api/savinexa/admin/collections/${id}`),
   settings: () => api.get("/api/savinexa/settings"),
   saveSettings: (data) => api.put("/api/savinexa/settings", data),
   analytics: () => api.get("/api/savinexa/analytics"),
+  banners: () => api.get("/api/savinexa/admin/banners"),
+  createBanner: (data) => api.post("/api/savinexa/admin/banners", data),
+  updateBanner: (id, data) => api.put(`/api/savinexa/admin/banners/${id}`, data),
+  deleteBanner: (id) => api.delete(`/api/savinexa/admin/banners/${id}`),
+  pages: () => api.get("/api/savinexa/admin/pages"),
+  createPage: (data) => api.post("/api/savinexa/admin/pages", data),
+  updatePage: (id, data) => api.put(`/api/savinexa/admin/pages/${id}`, data),
+  deletePage: (id) => api.delete(`/api/savinexa/admin/pages/${id}`),
+  uploadImage: (data) => api.post("/api/savinexa/admin/media", data, { headers: { "Content-Type": "multipart/form-data" } }),
 };
 
 export default api;
+
+export const platformAPI = {
+  applications: () => api.get("/api/platform/v1/admin/applications"),
+  createApplication: (data) => api.post("/api/platform/v1/admin/applications", data),
+  updateApplication: (appId, data) => api.patch(`/api/platform/v1/admin/applications/${appId}`, data),
+  keys: (appId) => api.get(`/api/platform/v1/admin/applications/${appId}/keys`),
+  createKey: (appId, data) => api.post(`/api/platform/v1/admin/applications/${appId}/keys`, data),
+  rotateKey: (appId, id) => api.post(`/api/platform/v1/admin/applications/${appId}/keys/${id}/rotate`),
+  revokeKey: (appId, id) => api.delete(`/api/platform/v1/admin/applications/${appId}/keys/${id}`),
+};

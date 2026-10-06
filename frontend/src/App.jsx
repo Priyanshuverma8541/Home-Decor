@@ -29,8 +29,11 @@ import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
 import PageRenderer from "./components/pages/PageRenderer.jsx";
 import SavinexaHome from "./components/pages/SavinexaHome.jsx";
+import SavinexaJobs from "./components/pages/SavinexaJobs.jsx";
 import SavinexaProducts from "./components/pages/SavinexaProducts.jsx";
 import SavinexaProductDetail from "./components/pages/SavinexaProductDetail.jsx";
+import SavinexaLayout from "./components/layout/SavinexaLayout.jsx";
+import SavinexaPage from "./components/pages/SavinexaPage.jsx";
 
 function AppShell() {
   const [permissionOpen, setPermissionOpen] = useState(false);
@@ -60,11 +63,15 @@ function AppShell() {
           <Route path="marketplace" element={<MarketplaceHome />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />
-          <Route path="savinexa" element={<SavinexaHome />} />
-          <Route path="savinexa/products" element={<SavinexaProducts />} />
-          <Route path="savinexa/product/:slug" element={<SavinexaProductDetail />} />
-          <Route path="savinexa/category/:slug" element={<SavinexaProducts />} />
-          <Route path="savinexa/collection/:slug" element={<SavinexaProducts />} />
+          <Route path="savinexa" element={<SavinexaLayout />}>
+            <Route index element={<SavinexaHome />} />
+            <Route path="products" element={<SavinexaProducts />} />
+            <Route path="product/:slug" element={<SavinexaProductDetail />} />
+            <Route path="category/:slug" element={<SavinexaProducts />} />
+            <Route path="collection/:slug" element={<SavinexaProducts />} />
+            <Route path="page/:slug" element={<SavinexaPage />} />
+            <Route path="jobs" element={<SavinexaJobs />} />
+          </Route>
           <Route path="ecosystem" element={<Ecosystem />} />
           <Route path="partner-with-us" element={<PartnerWithUs />} />
           <Route path="entertainment" element={<EntertainmentHome />} />

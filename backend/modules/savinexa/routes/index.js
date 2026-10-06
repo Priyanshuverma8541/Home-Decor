@@ -3,6 +3,9 @@ const { protect, adminOnly } = require("../../../middleware/auth");
 const ctrl = require("../controllers/savinexaController");
 const SavinexaJob = require("../models/SavinexaJob");
 const SavinexaEnquiry = require("../models/SavinexaEnquiry");
+const SavinexaBanner = require("../models/SavinexaBanner");
+const SavinexaPage = require("../models/SavinexaPage");
+const { upload, uploadedFileUrl } = require("../../../config/cloudinary");
 
 router.get("/jobs", async (_req, res, next) => {
   try { res.json({ success: true, jobs: await SavinexaJob.find({ status: "published" }).select("title department location employmentType description requirements applicationEmail createdAt").sort({ createdAt: -1 }).lean() }); }
@@ -16,6 +19,7 @@ router.post("/enquiries", async (req, res, next) => {
     res.status(201).json({ success: true, message: "Thank you. Your enquiry has been received." });
   } catch (error) { next(error); }
 });
+router.post("/admin/media", protect, adminOnly, upload.single("image"), (req, res) => { if (!req.file?.path) return res.status(400).json({ success: false, message: "Choose a JPG, PNG or WebP image up to 5 MB" }); res.status(201).json({ success: true, url: uploadedFileUrl(req.file) }); });
 router.get("/admin/talent", protect, adminOnly, async (_req, res, next) => {
   try { const [jobs, enquiries] = await Promise.all([SavinexaJob.find().sort({ updatedAt: -1 }).lean(), SavinexaEnquiry.find().sort({ createdAt: -1 }).limit(300).lean()]); res.json({ success: true, jobs, enquiries }); }
   catch (error) { next(error); }
@@ -39,6 +43,7 @@ router.get("/products/:slug", ctrl.getProductBySlug);
 router.get("/categories", ctrl.listCategories);
 router.get("/collections", ctrl.listCollections);
 router.get("/banners", ctrl.listBanners);
+router.get("/pages/:slug", async (req, res, next) => { try { const page = await SavinexaPage.findOne({ slug: req.params.slug, publishStatus: "published", visibility: "public" }); if (!page) return res.status(404).json({ success: false, message: "Page not found" }); res.json({ success: true, page }); } catch (error) { next(error); } });
 router.get("/settings", ctrl.getSettings);
 router.put("/settings", protect, adminOnly, ctrl.updateSettings);
 router.get("/analytics", ctrl.getAnalytics);
@@ -60,8 +65,10 @@ router.post("/admin/collections", protect, adminOnly, ctrl.createCollection);
 router.put("/admin/collections/:id", protect, adminOnly, ctrl.updateCollection);
 router.delete("/admin/collections/:id", protect, adminOnly, ctrl.deleteCollection);
 
-router.get("/admin/banners", protect, adminOnly, ctrl.listBanners);
+router.get("/admin/banners", protect, adminOnly, async (_req, res, next) => { try { res.json({ success: true, banners: await SavinexaBanner.find({}).sort({ priority: -1, createdAt: -1 }).lean() }); } catch (error) { next(error); } });
 router.post("/admin/banners", protect, adminOnly, ctrl.createBanner);
+router.put("/admin/banners/:id", protect, adminOnly, async (req, res, next) => { try { const banner = await SavinexaBanner.findByIdAndUpdate(req.params.id, { $set: req.body || {} }, { new: true, runValidators: true }); if (!banner) return res.status(404).json({ success: false, message: "Banner not found" }); res.json({ success: true, banner }); } catch (error) { next(error); } });
+router.delete("/admin/banners/:id", protect, adminOnly, async (req, res, next) => { try { const banner = await SavinexaBanner.findByIdAndDelete(req.params.id); if (!banner) return res.status(404).json({ success: false, message: "Banner not found" }); res.json({ success: true }); } catch (error) { next(error); } });
 
 router.get("/admin/pages", protect, adminOnly, async (req, res) => {
   try {
@@ -72,6 +79,8 @@ router.get("/admin/pages", protect, adminOnly, async (req, res) => {
   }
 });
 router.post("/admin/pages", protect, adminOnly, ctrl.createPage);
+router.put("/admin/pages/:id", protect, adminOnly, async (req, res, next) => { try { const page = await SavinexaPage.findById(req.params.id); if (!page) return res.status(404).json({ success: false, message: "Page not found" }); Object.assign(page, req.body || {}); await page.save(); res.json({ success: true, page }); } catch (error) { next(error); } });
+router.delete("/admin/pages/:id", protect, adminOnly, async (req, res, next) => { try { const page = await SavinexaPage.findByIdAndDelete(req.params.id); if (!page) return res.status(404).json({ success: false, message: "Page not found" }); res.json({ success: true }); } catch (error) { next(error); } });
 
 router.get("/admin/campaigns", protect, adminOnly, async (req, res) => {
   try {

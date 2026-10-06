@@ -9,6 +9,7 @@ dotenv.config();
 
 const connectDB  = require("./config/db");
 const pushNotificationsRouter = require("./routes/pushNotifications");
+const PlatformApplication = require("./platform/models/Application");
 const app        = express();
 const server     = http.createServer(app);
 const PORT       = process.env.PORT || 8081;
@@ -25,24 +26,31 @@ const ALLOWED = [
   "http://localhost:5174",
   "http://localhost:5177",
   "http://localhost:5178",
+  "http://localhost:5181",
   process.env.ADMIN_URL,
   process.env.CLIENT_URL,
   process.env.SAVINEXA_URL,
+  process.env.KOLKATA_COMMERCE_URL,
 ].filter(Boolean).map(u => u.trim().replace(/\/$/, ""));
 
 console.log("✅ CORS origins:", ALLOWED);
 
 const corsOptions = {
-  origin: (origin, cb) => {
+  origin: async (origin, cb) => {
     if (!origin) return cb(null, true);
     const clean = origin.trim().replace(/\/$/, "");
     if (ALLOWED.includes(clean)) return cb(null, true);
+    try {
+      const host = new URL(clean).host.toLowerCase();
+      const registered = await PlatformApplication.exists({ status: "active", allowedDomains: host });
+      if (registered) return cb(null, true);
+    } catch (_error) { /* reject malformed or unregistered origins below */ }
     console.warn("🚫 CORS blocked:", origin);
     cb(new Error(`CORS: ${origin} not allowed`));
   },
   credentials: true,
   methods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
-  allowedHeaders: ["Content-Type","Authorization","X-Page-Preview","X-Privacy-Subject-Id"],
+  allowedHeaders: ["Content-Type","Authorization","X-Page-Preview","X-Privacy-Subject-Id","X-Savitri-Public-Key"],
   optionsSuccessStatus: 200,
 };
 
@@ -72,6 +80,8 @@ app.use("/api/marketing", require("./routes/marketing"));
 app.use("/api/ecosystem", require("./routes/ecosystem"));
 app.use("/api/partner-businesses", require("./routes/partnerBusinesses"));
 app.use("/api/push", pushNotificationsRouter);
+app.use("/api/platform/v1/admin/applications", require("./platform/routes/adminApplications"));
+app.use("/api/platform/v1", require("./platform/routes/v1"));
 app.use("/api/audience", require("./routes/audience"));
 app.use("/api/overview", require("./routes/overview"));
 app.use("/api/entertainment", require("./routes/entertainment"));

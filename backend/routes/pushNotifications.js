@@ -4,6 +4,11 @@ const webpush = require("web-push");
 const Subscription = require("../models/WebPushSubscription");
 const PushCampaign = require("../models/PushCampaign");
 const { optionalProtect, protect, adminOnly } = require("../middleware/auth");
+const { createNotificationEngine } = require("../platform/notifications/engine");
+const VALID_PUSH_APP_IDS = new Set(["app_savitri_livings", "app_savinexa"]);
+const requestedAppId = (req) => VALID_PUSH_APP_IDS.has(req.query?.appId) ? req.query.appId : VALID_PUSH_APP_IDS.has(req.body?.appId) ? req.body.appId : "app_savitri_livings";
+const subscriptionAppFilter = (appId) => ({ $or: [{ appIds: appId }, ...(appId === "app_savitri_livings" ? [{ appIds: { $exists: false } }] : [])] });
+const campaignAppFilter = (appId) => ({ $or: [{ appId }, ...(appId === "app_savitri_livings" ? [{ appId: { $exists: false } }] : [])] });
 
 const configured = () => Boolean(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY && process.env.VAPID_SUBJECT);
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex");
@@ -76,10 +81,12 @@ const getTrackApiUrl = (req = {}) => {
 };
 
 const buildPayload = (campaign, subscription, req = {}) => {
-  const title = normalizeText(campaign.title, 100, "Savitri Livings") || "Savitri Livings";
+  const appId = campaign.appId || "app_savitri_livings";
+  const brand = appId === "app_savinexa" ? "Savinexa" : "Savitri Livings";
+  const title = normalizeText(campaign.title, 100, brand) || brand;
   const body = normalizeText(campaign.body, 300, "");
   const targetUrl = normalizeTargetUrl(campaign.targetUrl, getRequestOrigin(req));
-  const icon = normalizeImageUrl(campaign.iconUrl) || "/brand/savitri-jewellers-mark.png";
+  const icon = normalizeImageUrl(campaign.iconUrl) || (appId === "app_savinexa" ? "/brand/savitri-jewellers-mark.png" : "/brand/savitri-jewellers-mark.png");
   const image = normalizeImageUrl(campaign.imageUrl);
 
   return {
@@ -87,7 +94,8 @@ const buildPayload = (campaign, subscription, req = {}) => {
     body,
     icon,
     image: image || undefined,
-    tag: `sl-${String(campaign._id)}`,
+    tag: `${appId}-${String(campaign._id)}`,
+    appId,
     url: targetUrl,
     campaignId: String(campaign._id),
     trackUrl: getTrackApiUrl(req),
@@ -95,55 +103,7 @@ const buildPayload = (campaign, subscription, req = {}) => {
   };
 };
 
-const dispatchCampaign = async (campaign, req = {}) => {
-  if (!campaign) throw new Error("Campaign not found");
-  setup();
-
-  const query = { status: "active" };
-  if (campaign.audience === "selected") {
-    query._id = { $in: campaign.subscriptionIds || [] };
-  }
-
-  const subscriptions = await Subscription.find(query).select("+endpoint +p256dh +auth");
-  const stats = {
-    targeted: subscriptions.length,
-    accepted: Number(campaign.stats?.accepted || 0),
-    failed: Number(campaign.stats?.failed || 0),
-    stale: Number(campaign.stats?.stale || 0),
-    clicked: Number(campaign.stats?.clicked || 0),
-  };
-
-  campaign.status = "sending";
-  campaign.stats = stats;
-  await campaign.save();
-
-  const trackedStats = { targeted: subscriptions.length, accepted: 0, failed: 0, stale: 0, clicked: Number(campaign.stats?.clicked || 0) };
-
-  for (const subscription of subscriptions) {
-    const payload = JSON.stringify(buildPayload(campaign, subscription, req));
-    try {
-      await webpush.sendNotification({ endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } }, payload, { TTL: 86400, urgency: "normal" });
-      trackedStats.accepted += 1;
-      subscription.lastSuccessAt = new Date();
-      subscription.status = "active";
-      await subscription.save();
-      console.log("[Push] Accepted by push service:", subscription._id.toString());
-    } catch (error) {
-      const isExpired = [404, 410].includes(error.statusCode);
-      trackedStats[isExpired ? "stale" : "failed"] += 1;
-      subscription.status = isExpired ? "expired" : subscription.status;
-      subscription.lastFailureAt = new Date();
-      await subscription.save();
-      console.error("[Push] Failed:", error.statusCode || "unknown status");
-    }
-  }
-
-  campaign.stats = trackedStats;
-  campaign.sentAt = new Date();
-  campaign.status = trackedStats.failed || trackedStats.stale ? (trackedStats.accepted ? "partial" : "failed") : "sent";
-  await campaign.save();
-  return { campaign, stats: trackedStats };
-};
+const { dispatchCampaign } = createNotificationEngine({ webpush, Subscription, setup, buildPayload });
 
 let schedulerStarted = false;
 const startScheduledCampaigns = () => {
@@ -163,10 +123,12 @@ const startScheduledCampaigns = () => {
 };
 
 router.get("/config", (_req, res) => res.json({ success: true, configured: configured(), publicKey: process.env.VAPID_PUBLIC_KEY || "" }));
+router.post("/status", optionalProtect, async (req, res, next) => { try { const appId = requestedAppId(req); const endpoint = req.body?.endpoint; const registration = endpoint ? await Subscription.findOne({ endpointHash: hash(endpoint) }) : null; const appIds = registration?.appIds?.length ? registration.appIds : ["app_savitri_livings"]; res.json({ success: true, appId, subscribed: Boolean(registration && appIds.includes(appId) && registration.status === "active") }); } catch (error) { next(error); } });
 
 router.post("/subscribe", optionalProtect, async (req, res, next) => {
   try {
     const { endpoint, keys } = req.body || {};
+    const appId = requestedAppId(req);
     if (!endpoint?.startsWith("https://") || !keys?.p256dh || !keys?.auth) return fail(res, 400, "A valid browser push subscription is required");
 
     const update = {
@@ -186,9 +148,13 @@ router.post("/subscribe", optionalProtect, async (req, res, next) => {
       expirationTime: req.body.expirationTime ? new Date(req.body.expirationTime) : null,
     };
 
+    const existing = await Subscription.findOne({ endpointHash: update.endpointHash }).select("appIds").lean();
+    const existingAppIds = existing?.appIds?.length ? existing.appIds : existing ? ["app_savitri_livings"] : [];
+    const updateFields = { ...update, appIds: [...new Set([...existingAppIds, appId])] };
+    if (!req.user?._id) delete updateFields.userId;
     const subscription = await Subscription.findOneAndUpdate(
       { endpointHash: update.endpointHash },
-      { $set: update },
+      { $set: updateFields },
       { new: true, upsert: true, setDefaultsOnInsert: true }
     );
 
@@ -204,88 +170,68 @@ router.post("/unsubscribe", optionalProtect, async (req, res, next) => {
     const endpoint = req.body?.endpoint;
     if (!endpoint) return fail(res, 400, "Subscription endpoint is required");
 
-    await Subscription.updateOne({ endpointHash: hash(endpoint) }, { $set: { status: "unsubscribed" } });
-    console.log("[Push] Subscription removed");
-    res.json({ success: true });
+    const appId = requestedAppId(req);
+    const subscription = await Subscription.findOne({ endpointHash: hash(endpoint) }).select("+endpoint");
+    if (!subscription) return res.json({ success: true, remainingAppIds: [] });
+    const currentAppIds = subscription.appIds?.length ? subscription.appIds : ["app_savitri_livings"];
+    subscription.appIds = currentAppIds.filter((id) => id !== appId);
+    if (!subscription.appIds.length) subscription.status = "unsubscribed";
+    await subscription.save();
+    console.log("[Push] Subscription removed from application:", appId);
+    res.json({ success: true, remainingAppIds: subscription.appIds });
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/admin/summary", protect, adminOnly, async (_req, res, next) => {
+router.get("/admin/summary", protect, adminOnly, async (req, res, next) => {
   try {
-    const [subscribers, active, expired, campaigns, metrics] = await Promise.all([
-      Subscription.countDocuments(),
-      Subscription.countDocuments({ status: "active" }),
-      Subscription.countDocuments({ status: { $in: ["expired", "unsubscribed"] } }),
-      PushCampaign.countDocuments(),
+    const appId = requestedAppId(req);
+    const subscriberScope = subscriptionAppFilter(appId);
+    const campaignScope = campaignAppFilter(appId);
+    const [subscribers, active, inactive, campaigns, metrics] = await Promise.all([
+      Subscription.countDocuments(subscriberScope),
+      Subscription.countDocuments({ $and: [subscriberScope, { status: "active" }] }),
+      Subscription.countDocuments({ $and: [subscriberScope, { status: { $in: ["expired", "unsubscribed"] } }] }),
+      PushCampaign.countDocuments(campaignScope),
       PushCampaign.aggregate([
+        { $match: campaignScope },
         { $group: {
-            _id: null,
-            campaignsSent: { $sum: { $cond: [{ $in: ["$status", ["sent", "partial"]] }, 1, 0] } },
-            scheduled: { $sum: { $cond: [{ $eq: ["$status", "scheduled"] }, 1, 0] } },
-            attempts: { $sum: { $ifNull: ["$stats.targeted", 0] } },
-            accepted: { $sum: { $ifNull: ["$stats.accepted", 0] } },
-            failed: { $sum: { $ifNull: ["$stats.failed", 0] } },
-            stale: { $sum: { $ifNull: ["$stats.stale", 0] } },
-            clicked: { $sum: { $ifNull: ["$stats.clicked", 0] } },
-          } }
+          _id: null,
+          campaignsSent: { $sum: { $cond: [{ $in: ["$status", ["sent", "partial"]] }, 1, 0] } },
+          scheduled: { $sum: { $cond: [{ $eq: ["$status", "scheduled"] }, 1, 0] } },
+          attempts: { $sum: { $ifNull: ["$stats.targeted", 0] } },
+          accepted: { $sum: { $ifNull: ["$stats.accepted", 0] } },
+          failed: { $sum: { $ifNull: ["$stats.failed", 0] } },
+          stale: { $sum: { $ifNull: ["$stats.stale", 0] } },
+          clicked: { $sum: { $ifNull: ["$stats.clicked", 0] } },
+        } },
       ]),
     ]);
-
-    const summary = (metrics[0] || {
-      campaignsSent: 0,
-      scheduled: 0,
-      attempts: 0,
-      accepted: 0,
-      failed: 0,
-      stale: 0,
-      clicked: 0,
-    });
-
-    const campaignList = await PushCampaign.find().sort({ createdAt: -1 }).limit(12);
-    res.json({
-      success: true,
-      configured: configured(),
-      totalSubscribers: subscribers,
-      activeSubscribers: active,
-      inactiveSubscribers: expired,
-      campaignCount: campaigns,
-      campaignsSent: summary.campaignsSent,
-      scheduledCampaigns: summary.scheduled,
-      pushAttempts: summary.attempts,
-      acceptedPushes: summary.accepted,
-      failedPushes: summary.failed + summary.stale,
-      invalidSubscriptions: summary.stale,
-      clicks: summary.clicked,
-      campaigns: campaignList,
-    });
-  } catch (error) {
-    next(error);
-  }
+    const summary = metrics[0] || { campaignsSent: 0, scheduled: 0, attempts: 0, accepted: 0, failed: 0, stale: 0, clicked: 0 };
+    const campaignList = await PushCampaign.find(campaignScope).sort({ createdAt: -1 }).limit(12);
+    res.json({ success: true, appId, configured: configured(), totalSubscribers: subscribers, activeSubscribers: active, inactiveSubscribers: inactive, campaignCount: campaigns, campaignsSent: summary.campaignsSent, scheduledCampaigns: summary.scheduled, pushAttempts: summary.attempts, acceptedPushes: summary.accepted, failedPushes: summary.failed + summary.stale, invalidSubscriptions: summary.stale, clicks: summary.clicked, campaigns: campaignList });
+  } catch (error) { next(error); }
 });
 
-router.get("/admin/subscribers", protect, adminOnly, async (_req, res, next) => {
+router.get("/admin/subscribers", protect, adminOnly, async (req, res, next) => {
   try {
-    const subscribers = await Subscription.find().populate("userId", "fullName email phone").sort({ createdAt: -1 }).lean();
-    res.json({ success: true, subscribers });
-  } catch (error) {
-    next(error);
-  }
+    const appId = requestedAppId(req);
+    const subscribers = await Subscription.find({ $and: [subscriptionAppFilter(appId), { status: "active" }] }).populate("userId", "fullName email phone").sort({ createdAt: -1 }).lean();
+    res.json({ success: true, appId, subscribers });
+  } catch (error) { next(error); }
 });
 
-router.get("/admin/campaigns", protect, adminOnly, async (_req, res, next) => {
+router.get("/admin/campaigns", protect, adminOnly, async (req, res, next) => {
   try {
-    const campaigns = await PushCampaign.find().sort({ createdAt: -1 }).lean();
-    res.json({ success: true, campaigns });
-  } catch (error) {
-    next(error);
-  }
+    const appId = requestedAppId(req);
+    const campaigns = await PushCampaign.find(campaignAppFilter(appId)).sort({ createdAt: -1 }).lean();
+    res.json({ success: true, appId, campaigns });
+  } catch (error) { next(error); }
 });
-
 router.get("/admin/campaigns/:id", protect, adminOnly, async (req, res, next) => {
   try {
-    const campaign = await PushCampaign.findById(req.params.id);
+    const campaign = await PushCampaign.findOne({ _id: req.params.id, ...campaignAppFilter(requestedAppId(req)) });
     if (!campaign) return fail(res, 404, "Campaign not found");
     res.json({ success: true, campaign });
   } catch (error) {
@@ -303,6 +249,7 @@ router.post("/admin/campaigns", protect, adminOnly, async (req, res, next) => {
 
     const sanitizedTargetUrl = normalizeTargetUrl(targetUrl, getRequestOrigin(req));
     const campaignPayload = {
+      appId: requestedAppId(req),
       name: name.trim(),
       title: normalizeText(title, 100, ""),
       body: normalizeText(body, 300, ""),
@@ -333,10 +280,11 @@ router.post("/admin/campaigns", protect, adminOnly, async (req, res, next) => {
 
 router.patch("/admin/campaigns/:id", protect, adminOnly, async (req, res, next) => {
   try {
-    const campaign = await PushCampaign.findById(req.params.id);
+    const campaign = await PushCampaign.findOne({ _id: req.params.id, ...campaignAppFilter(requestedAppId(req)) });
     if (!campaign) return fail(res, 404, "Campaign not found");
 
     const updates = { ...req.body };
+    delete updates.appId;
     if (updates.title) updates.title = normalizeText(updates.title, 100, "");
     if (updates.body) updates.body = normalizeText(updates.body, 300, "");
     if (updates.description) updates.description = normalizeText(updates.description, 250, "");
@@ -358,7 +306,7 @@ router.patch("/admin/campaigns/:id", protect, adminOnly, async (req, res, next) 
 
 router.delete("/admin/campaigns/:id", protect, adminOnly, async (req, res, next) => {
   try {
-    const campaign = await PushCampaign.findByIdAndDelete(req.params.id);
+    const campaign = await PushCampaign.findOneAndDelete({ _id: req.params.id, ...campaignAppFilter(requestedAppId(req)) });
     if (!campaign) return fail(res, 404, "Campaign not found");
     res.json({ success: true, message: "Campaign deleted" });
   } catch (error) {
@@ -368,7 +316,7 @@ router.delete("/admin/campaigns/:id", protect, adminOnly, async (req, res, next)
 
 router.post("/admin/campaigns/:id/send", protect, adminOnly, async (req, res, next) => {
   try {
-    const campaign = await PushCampaign.findById(req.params.id);
+    const campaign = await PushCampaign.findOne({ _id: req.params.id, ...campaignAppFilter(requestedAppId(req)) });
     if (!campaign) return fail(res, 404, "Push campaign not found");
     const result = await dispatchCampaign(campaign, req);
     res.json({ success: true, campaign: result.campaign, stats: result.stats });
@@ -379,7 +327,7 @@ router.post("/admin/campaigns/:id/send", protect, adminOnly, async (req, res, ne
 
 router.post("/admin/campaigns/:id/cancel", protect, adminOnly, async (req, res, next) => {
   try {
-    const campaign = await PushCampaign.findById(req.params.id);
+    const campaign = await PushCampaign.findOne({ _id: req.params.id, ...campaignAppFilter(requestedAppId(req)) });
     if (!campaign) return fail(res, 404, "Campaign not found");
     campaign.status = "draft";
     campaign.sendMode = "draft";
@@ -396,7 +344,9 @@ router.post("/admin/test", protect, adminOnly, async (req, res, next) => {
     const { subscriptionId, endpoint, title, body, targetUrl = "/", imageUrl = "", iconUrl = "" } = req.body || {};
     if (!title?.trim() || !body?.trim()) return fail(res, 400, "Title and body are required for the test notification");
 
-    const subscription = subscriptionId ? await Subscription.findById(subscriptionId) : endpoint ? await Subscription.findOne({ endpointHash: hash(endpoint) }) : await Subscription.findOne({ userId: req.user._id, status: "active" }).sort({ updatedAt: -1 });
+    const appId = requestedAppId(req);
+    const scope = subscriptionAppFilter(appId);
+    const subscription = subscriptionId ? await Subscription.findOne({ _id: subscriptionId, $and: [scope, { status: "active" }] }) : endpoint ? await Subscription.findOne({ endpointHash: hash(endpoint), $and: [scope, { status: "active" }] }) : await Subscription.findOne({ userId: req.user._id, $and: [scope, { status: "active" }] }).sort({ updatedAt: -1 });
     if (!subscription) return fail(res, 404, "No active subscriber found to test against");
 
     setup();
@@ -408,6 +358,7 @@ router.post("/admin/test", protect, adminOnly, async (req, res, next) => {
       tag: "sl-admin-test",
       url: normalizeTargetUrl(targetUrl, getRequestOrigin(req)),
       campaignId: "test",
+      appId,
       trackUrl: getTrackApiUrl(req),
       endpoint: subscription.endpoint,
     });
@@ -422,6 +373,7 @@ router.post("/admin/test", protect, adminOnly, async (req, res, next) => {
 router.post("/track-click", async (req, res, next) => {
   try {
     const { endpoint, campaignId } = req.body || {};
+    const appId = VALID_PUSH_APP_IDS.has(req.body?.appId) ? req.body.appId : "app_savitri_livings";
     if (!endpoint && !campaignId) return res.json({ success: true, tracked: false });
 
     if (endpoint) {
@@ -434,7 +386,7 @@ router.post("/track-click", async (req, res, next) => {
     }
 
     if (campaignId && campaignId !== "test") {
-      const campaign = await PushCampaign.findById(campaignId);
+      const campaign = await PushCampaign.findOne({ _id: campaignId, ...campaignAppFilter(appId) });
       if (campaign) {
         const nextStats = {
           targeted: Number(campaign.stats?.targeted || 0),

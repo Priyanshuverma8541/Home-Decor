@@ -17,6 +17,8 @@ import PrivacyDataCenter from "./components/pages/PrivacyDataCenter.jsx";
 import Pages from "./components/pages/Pages.jsx";
 import Savinexa from "./components/pages/Savinexa.jsx";
 import Audience from "./components/pages/Audience.jsx";
+import PlatformApps from "./components/pages/PlatformApps.jsx";
+import SavinexaWebsite from "./components/savinexa/SavinexaWebsite.jsx";
 
 export default function App() {
   return (
@@ -37,9 +39,11 @@ export default function App() {
             <Route path="marketing" element={<Marketing />} />
             <Route path="business-opportunities" element={<BusinessOpportunities />} />
             <Route path="push-notifications" element={<PushNotifications />} />
+            <Route path="platform" element={<PlatformApps />} />
             <Route path="privacy" element={<PrivacyDataCenter />} />
             <Route path="pages" element={<Pages />} />
             <Route path="savinexa" element={<Savinexa />} />
+            <Route path="savinexa/website" element={<SavinexaWebsite />} />
             <Route path="settings" element={<Settings />}   />
           </Route>
         </Routes>

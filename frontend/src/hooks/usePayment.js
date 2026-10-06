@@ -75,10 +75,24 @@ const BRAND    = import.meta.env.VITE_BRAND          || "Savitri Livings";
 const RZP_KEY  = import.meta.env.VITE_RAZORPAY_KEY   || "";
 const WA_NUM   = import.meta.env.VITE_WHATSAPP       || "6207855397";
 
-const landingAttribution = () => ({
-  landingPageSlug: sessionStorage.getItem("sl_landing_page_slug") || "",
-  landingPageSessionId: sessionStorage.getItem("sl_landing_page_session") || "",
-});
+const landingAttribution = () => {
+  const query = new URLSearchParams(window.location.search);
+  if (query.get("source") === "kolkata-local") return {
+    landingPageSlug: "kolkata-local-commerce",
+    landingPageSessionId: query.get("lcSession") || "",
+    acquisition: {
+      source: query.get("source") || "",
+      medium: query.get("medium") || "",
+      campaign: query.get("campaign") || "",
+      referralCode: query.get("ref") || "",
+      localArea: query.get("location") || "",
+    },
+  };
+  return {
+    landingPageSlug: sessionStorage.getItem("sl_landing_page_slug") || "",
+    landingPageSessionId: sessionStorage.getItem("sl_landing_page_session") || "",
+  };
+};
 
 export function usePayment() {
   const { clearCart } = useCart();

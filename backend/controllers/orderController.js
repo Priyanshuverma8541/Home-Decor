@@ -4,10 +4,40 @@ const Lead     = require("../models/Lead");
 const Settings = require("../models/Settings");
 const Page = require("../models/Page");
 const PageEvent = require("../models/PageEvent");
+const Application = require("../platform/models/Application");
+const PlatformEvent = require("../platform/models/PlatformEvent");
+
+const recordLocalCommerceEvent = async (order, event) => {
+  try {
+    const application = await Application.findOne({ appId: "app_savitri_livings", status: "active" }).select("_id appId");
+    if (!application) return;
+    await PlatformEvent.create({
+      application: application._id,
+      appId: application.appId,
+      event,
+      userId: order.customerId ? String(order.customerId) : "",
+      properties: {
+        sessionId: order.landingPageSessionId || "",
+        orderId: String(order._id),
+        revenue: order.grandTotal,
+        ...(order.acquisition?.toObject?.() || order.acquisition || {}),
+      },
+      occurredAt: new Date(),
+      source: "internal",
+    });
+  } catch (error) {
+    console.warn("Local commerce attribution could not be recorded:", error.message);
+  }
+};
 
 const recordLandingPurchase = async (order) => {
   if (!order.landingPageSlug || order.paymentStatus !== "paid") return;
   try {
+    if (order.landingPageSlug === "kolkata-local-commerce") {
+      await recordLocalCommerceEvent(order, "purchase");
+      if (order.acquisition?.referralCode) await recordLocalCommerceEvent(order, "referral_conversion");
+      return;
+    }
     const page = await Page.findOne({ slug: order.landingPageSlug }).select("_id");
     if (!page) return;
     await PageEvent.create({
@@ -24,7 +54,7 @@ const recordLandingPurchase = async (order) => {
 // POST /api/orders — customer places order
 exports.create = async (req, res) => {
   try {
-    const { items, deliveryAddress, landmark, pincode, city, orderSource, guestName, guestPhone, paymentMethod, deliveryType, landingPageSlug, landingPageSessionId } = req.body;
+    const { items, deliveryAddress, landmark, pincode, city, orderSource, guestName, guestPhone, paymentMethod, deliveryType, landingPageSlug, landingPageSessionId, acquisition } = req.body;
     if (!items?.length || !deliveryAddress || !city)
       return res.status(400).json({ success: false, message: "Items, address and city required" });
 
@@ -64,10 +94,19 @@ exports.create = async (req, res) => {
       orderSource: orderSource || "website",
       landingPageSlug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(landingPageSlug || "")) ? String(landingPageSlug).slice(0, 80) : undefined,
       landingPageSessionId: String(landingPageSessionId || "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80),
+      acquisition: landingPageSlug === "kolkata-local-commerce" && acquisition && typeof acquisition === "object" ? {
+        source: String(acquisition.source || "").slice(0, 80),
+        campaign: String(acquisition.campaign || "").slice(0, 120),
+        medium: String(acquisition.medium || "").slice(0, 80),
+        referralCode: String(acquisition.referralCode || "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80),
+        localArea: String(acquisition.localArea || "").slice(0, 80),
+      } : undefined,
       paymentMethod: paymentMethod || "upi",
       deliveryType: deliveryType || "standard",
       statusTimeline: [{ status: "pending", message: "Order placed successfully" }],
     });
+
+    if (order.landingPageSlug === "kolkata-local-commerce") await recordLocalCommerceEvent(order, "checkout_started");
 
     // Reduce stock
     for (const item of items) {

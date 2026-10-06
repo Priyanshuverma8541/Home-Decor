@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const PartnerBusiness = require("../models/PartnerBusiness");
 const { protect, adminOnly } = require("../middleware/auth");
+const publicRateLimit = require("../middleware/publicRateLimit");
 const fail = (res, status, message) => res.status(status).json({ success: false, message });
 
 router.get("/", async (req, res, next) => {
@@ -11,7 +12,7 @@ router.get("/", async (req, res, next) => {
   } catch (error) { next(error); }
 });
 
-router.post("/apply", async (req, res, next) => {
+router.post("/apply", publicRateLimit({ max: 8 }), async (req, res, next) => {
   try {
     const { businessName, category, partnershipType, contactPerson, email, phone } = req.body;
     if (!businessName || !category || !partnershipType || !contactPerson || (!email && !phone)) return fail(res, 400, "Business name, category, partnership type, contact person, and email or phone are required");

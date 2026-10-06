@@ -13,6 +13,11 @@ const partnerBusinessSchema = new mongoose.Schema({
   phone: { type: String, trim: true },
   otherProfiles: { type: String, trim: true },
   contactPerson: { type: String, trim: true },
+  contactConsent: {
+    granted: { type: Boolean, default: false },
+    grantedAt: { type: Date },
+    context: { type: String, trim: true, maxlength: 80 },
+  },
   partnershipType: { type: String, required: true, trim: true },
   status: { type: String, enum: ["discovered", "contacted", "interested", "discussion", "negotiation", "partner", "active", "declined"], default: "discovered", index: true },
   collaborationStatus: { type: String, enum: ["application", "pending", "approved", "public", "inactive"], default: "application" },

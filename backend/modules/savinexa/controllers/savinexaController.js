@@ -39,6 +39,9 @@ const defaultSettings = {
   contact: {},
   marketing: { campaignSettings: {}, utmSettings: {}, consentConfiguration: {} },
   announcementBar: { enabled: false, text: "", link: "" },
+  hero: { eyebrow: "Premium lifestyle collection", title: "Savinexa", subtitle: "Curated essentials, elevated living, and product experiences designed for modern homes and premium lifestyles.", image: "", mobileImage: "", overlayColor: "#101828", overlayOpacity: 0.72, primaryCtaLabel: "Explore collection", primaryCtaUrl: "/savinexa/products", secondaryCtaLabel: "Shop Savitri Livings", secondaryCtaUrl: "/shop" },
+  homeSections: { featuredProducts: { enabled: true, title: "Featured products" }, categories: { enabled: true, title: "Shop by category" }, collections: { enabled: true, title: "Collections" } },
+  footer: { tagline: "Thoughtful finds for everyday living.", background: "#1f2937", textColor: "#ffffff" },
 };
 
 const getSettingsRecord = async () => {
@@ -149,17 +152,71 @@ exports.getSettings = async (req, res) => {
   }
 };
 
+const safeColor = (value, fallback) => typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value) ? value : fallback;
+const safeUrl = (value) => {
+  if (typeof value !== "string") return "";
+  const url = value.trim();
+  if (url.startsWith("/") && !url.startsWith("//") && !url.includes("\\")) return url.slice(0, 500);
+  try { const parsed = new URL(url); return parsed.protocol === "https:" ? parsed.toString().slice(0, 2000) : ""; }
+  catch (_error) { return ""; }
+};
+const safeText = (value, max, fallback = "") => typeof value === "string" ? value.trim().slice(0, max) : fallback;
+
 exports.updateSettings = async (req, res) => {
   try {
+    const input = req.body || {};
     const settings = await getSettingsRecord();
-    Object.assign(settings, req.body || {});
+    if (input.siteName !== undefined) settings.siteName = safeText(input.siteName, 100, settings.siteName);
+    if (input.logo !== undefined) settings.logo = safeUrl(input.logo);
+    if (input.favicon !== undefined) settings.favicon = safeUrl(input.favicon);
+    for (const key of ["primaryColor", "secondaryColor", "background"]) if (input[key] !== undefined) settings[key] = safeColor(input[key], settings[key]);
+    if (input.typography !== undefined && ["Inter", "Arial", "Georgia", "Poppins", "DM Sans", "Playfair Display"].includes(input.typography)) settings.typography = input.typography;
+    if (input.borderRadius !== undefined && /^(0|[0-9]{1,2})(px|rem)$/.test(input.borderRadius)) settings.borderRadius = input.borderRadius;
+    if (input.hero && typeof input.hero === "object") {
+      const hero = input.hero;
+      for (const key of ["eyebrow", "title", "subtitle", "primaryCtaLabel", "secondaryCtaLabel"]) if (hero[key] !== undefined) settings.hero[key] = safeText(hero[key], key === "subtitle" ? 600 : 160, settings.hero[key]);
+      for (const key of ["image", "mobileImage"]) if (hero[key] !== undefined) settings.hero[key] = safeUrl(hero[key]);
+      for (const key of ["primaryCtaUrl", "secondaryCtaUrl"]) if (hero[key] !== undefined) settings.hero[key] = safeUrl(hero[key]) || "/";
+      if (hero.overlayColor !== undefined) settings.hero.overlayColor = safeColor(hero.overlayColor, settings.hero.overlayColor);
+      if (hero.overlayOpacity !== undefined && Number.isFinite(Number(hero.overlayOpacity))) settings.hero.overlayOpacity = Math.max(0, Math.min(1, Number(hero.overlayOpacity)));
+    }
+    if (input.homeSections && typeof input.homeSections === "object") {
+      for (const key of ["featuredProducts", "categories", "collections"]) {
+        const section = input.homeSections[key];
+        if (!section || typeof section !== "object") continue;
+        if (section.enabled !== undefined) settings.homeSections[key].enabled = safeBoolean(section.enabled);
+        if (section.title !== undefined) settings.homeSections[key].title = safeText(section.title, 100, settings.homeSections[key].title);
+      }
+    }
+    if (input.footer && typeof input.footer === "object") {
+      if (input.footer.tagline !== undefined) settings.footer.tagline = safeText(input.footer.tagline, 300);
+      if (input.footer.background !== undefined) settings.footer.background = safeColor(input.footer.background, settings.footer.background);
+      if (input.footer.textColor !== undefined) settings.footer.textColor = safeColor(input.footer.textColor, settings.footer.textColor);
+    }
+    if (input.announcementBar && typeof input.announcementBar === "object") {
+      settings.announcementBar.enabled = safeBoolean(input.announcementBar.enabled);
+      settings.announcementBar.text = safeText(input.announcementBar.text, 200);
+      settings.announcementBar.link = safeUrl(input.announcementBar.link) || "/";
+    }
+    if (input.contact && typeof input.contact === "object") {
+      settings.contact.email = safeText(input.contact.email, 254);
+      settings.contact.phone = safeText(input.contact.phone, 40);
+      settings.contact.whatsapp = safeText(input.contact.whatsapp, 40);
+    }
+    if (input.socialLinks && typeof input.socialLinks === "object") {
+      for (const key of ["instagram", "facebook", "whatsapp", "youtube"]) if (input.socialLinks[key] !== undefined) settings.socialLinks[key] = safeUrl(input.socialLinks[key]);
+    }
+    if (input.seo && typeof input.seo === "object") {
+      settings.seo.defaultMetaTitle = safeText(input.seo.defaultMetaTitle, 160, settings.seo.defaultMetaTitle);
+      settings.seo.defaultMetaDescription = safeText(input.seo.defaultMetaDescription, 320, settings.seo.defaultMetaDescription);
+      if (input.seo.canonicalUrl !== undefined) settings.seo.canonicalUrl = safeUrl(input.seo.canonicalUrl);
+    }
     await settings.save();
     res.json({ success: true, settings });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
-
 exports.getDashboard = async (req, res) => {
   try {
     const [productCount, categoryCount, collectionCount, pageCount, campaignCount, salesRevenue] = await Promise.all([

@@ -259,6 +259,9 @@ export default function Cart() {
     guestName:       isAuthenticated ? undefined : details.name,
     guestPhone:      isAuthenticated ? undefined : details.phone,
     orderSource:     "website",
+    landingPageSlug: new URLSearchParams(window.location.search).get("source") === "kolkata-local" ? "kolkata-local-commerce" : undefined,
+    landingPageSessionId: new URLSearchParams(window.location.search).get("lcSession") || undefined,
+    acquisition: (() => { const q = new URLSearchParams(window.location.search); return q.get("source") === "kolkata-local" ? { source: q.get("source"), campaign: q.get("campaign"), medium: q.get("medium"), referralCode: q.get("ref"), localArea: q.get("location") } : undefined; })(),
   });
 
   const handleUPI = async () => {

@@ -1,58 +1,39 @@
-/* Savitri Livings Web Push service worker. It displays real browser/system notifications even when the site is closed. */
+/* Canonical Savitri service worker for PWA lifecycle and app-scoped Web Push. */
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
 
 const safeTarget = (raw) => {
-  try {
-    const target = new URL(raw || "/", self.location.origin);
-    return target.protocol === "https:" && [self.location.hostname, "home-decor-inky.vercel.app"].includes(target.hostname.toLowerCase()) ? target.href : `${self.location.origin}/`;
-  } catch {
-    return `${self.location.origin}/`;
-  }
+  try { const target = new URL(raw || "/", self.location.origin); return target.origin === self.location.origin ? target.href : `${self.location.origin}/`; }
+  catch { return `${self.location.origin}/`; }
 };
-
-async function trackNotificationClick(data) {
-  if (!data?.trackUrl || !data?.endpoint) return;
-  try {
-    await fetch(data.trackUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ endpoint: data.endpoint, campaignId: data.campaignId || null }),
-      keepalive: true,
-      credentials: "omit",
-    });
-  } catch (_error) {
-    // Tracking failures should never block opening the target page.
-  }
-}
 
 const PUSH_CONFIG_CACHE = "sl-push-config-v1";
 const PUSH_CONFIG_KEY = new URL("/__savitri_push_config__", self.location.origin).href;
-
-async function getPushApiBase() {
+async function getPushConfig() {
   const cache = await caches.open(PUSH_CONFIG_CACHE);
   const response = await cache.match(PUSH_CONFIG_KEY);
-  if (!response) return "";
-  const value = await response.json().catch(() => ({}));
-  return typeof value.apiBase === "string" ? value.apiBase : "";
+  return response ? response.json().catch(() => ({})) : {};
 }
 
 async function sendSubscriptionToBackend(subscription, path = "subscribe") {
-  const apiBase = await getPushApiBase();
-  if (!apiBase || !subscription) return;
+  const config = await getPushConfig();
+  if (!config.apiBase || !subscription) return;
   const json = subscription.toJSON();
-  await fetch(`${apiBase}/api/push/${path}`, {
+  const appIds = Array.isArray(config.appIds) && config.appIds.length ? config.appIds : [config.appId || "app_savitri_livings"];
+  await Promise.allSettled(appIds.map((appId) => fetch(`${config.apiBase}/api/push/${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(path === "subscribe" ? {
       endpoint: json.endpoint,
       keys: json.keys,
-      browser: self.navigator.userAgent,
-      platform: "unknown",
+      appId,
+      browser: "Other",
+      platform: "Other",
+      language: self.navigator.language || "",
       expirationTime: subscription.expirationTime,
-    } : { endpoint: json.endpoint }),
+    } : { endpoint: json.endpoint, appId }),
     credentials: "omit",
-  });
+  })));
 }
 
 self.addEventListener("message", (event) => {
@@ -63,77 +44,57 @@ self.addEventListener("message", (event) => {
   if (url.protocol !== "https:" && !["localhost", "127.0.0.1"].includes(url.hostname)) return;
   event.waitUntil((async () => {
     const cache = await caches.open(PUSH_CONFIG_CACHE);
-    await cache.put(PUSH_CONFIG_KEY, new Response(JSON.stringify({ apiBase: url.origin })));
+    const previous = await getPushConfig();
+    const appIds = Array.isArray(value.appIds) ? value.appIds : [...new Set([...(previous.appIds || []), value.appId || "app_savitri_livings"])];
+    await cache.put(PUSH_CONFIG_KEY, new Response(JSON.stringify({ apiBase: url.origin, appId: value.appId || "app_savitri_livings", appIds: [...new Set(appIds)] })));
   })());
 });
 
 self.addEventListener("pushsubscriptionchange", (event) => {
   event.waitUntil((async () => {
+    if (event.oldSubscription) await sendSubscriptionToBackend(event.oldSubscription, "unsubscribe");
     let subscription = event.newSubscription;
     if (!subscription) {
-      if (event.oldSubscription) await sendSubscriptionToBackend(event.oldSubscription, "unsubscribe").catch(() => {});
-      const apiBase = await getPushApiBase();
-      if (!apiBase) return;
-      const response = await fetch(`${apiBase}/api/push/config`, { credentials: "omit" });
+      const config = await getPushConfig();
+      if (!config.apiBase) return;
+      const response = await fetch(`${config.apiBase}/api/push/config`, { credentials: "omit" });
       if (!response.ok) return;
-      const config = await response.json();
-      if (!config.configured || !config.publicKey) return;
-      const padded = config.publicKey + "=".repeat((4 - config.publicKey.length % 4) % 4);
+      const vapid = await response.json();
+      if (!vapid.configured || !vapid.publicKey) return;
+      const padded = vapid.publicKey + "=".repeat((4 - vapid.publicKey.length % 4) % 4);
       const raw = atob(padded.replace(/-/g, "+").replace(/_/g, "/"));
       const applicationServerKey = Uint8Array.from(raw, (character) => character.charCodeAt(0));
       subscription = await self.registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey });
     }
-    await sendSubscriptionToBackend(subscription);
+    await sendSubscriptionToBackend(subscription, "subscribe");
   })());
 });
+
 self.addEventListener("push", (event) => {
   let data = {};
-  try {
-    data = event.data?.json() || {};
-  } catch {
-    data = { body: event.data?.text() || "" };
-  }
-
-  const title = data.title || "Savitri Livings";
-  const body = data.body || "";
-  const icon = data.icon || "/brand/savitri-jewellers-mark.png";
-  const image = data.image || "";
-  const notificationData = {
-    url: data.url || "/",
-    campaignId: data.campaignId || null,
-    endpoint: data.endpoint || null,
-    trackUrl: data.trackUrl || null,
-  };
-
+  try { data = event.data?.json() || {}; } catch { data = { body: event.data?.text() || "" }; }
+  const brand = data.appId === "app_savinexa" ? "Savinexa" : "Savitri Livings";
   const options = {
-    body,
-    icon,
-    badge: "/brand/savitri-jewellers-mark.png",
-    image: image || undefined,
-    tag: data.tag || `sl-${Date.now()}`,
+    body: data.body || "",
+    icon: data.icon || "/brand/savitri-jewellers-mark.png",
+    badge: data.badge || "/brand/savitri-jewellers-mark.png",
+    image: data.image || undefined,
+    tag: data.tag || `${data.appId || "savitri"}-${Date.now()}`,
     renotify: true,
     requireInteraction: true,
-    data: notificationData,
-    actions: [
-      { action: "open", title: "Open" },
-      { action: "dismiss", title: "Dismiss" },
-    ],
+    data: { url: data.url || "/", campaignId: data.campaignId || null, endpoint: data.endpoint || null, trackUrl: data.trackUrl || null, appId: data.appId || "app_savitri_livings" },
+    actions: [{ action: "open", title: "Open" }, { action: "dismiss", title: "Dismiss" }],
   };
-
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(self.registration.showNotification(data.title || brand, options));
 });
 
 self.addEventListener("notificationclick", (event) => {
   const clickData = event.notification.data || {};
   const targetUrl = safeTarget(clickData.url || "/");
   event.notification.close();
-
-  if (event.action === "dismiss") {
-    return;
-  }
-
+  if (event.action === "dismiss") return;
   event.waitUntil(Promise.allSettled([
-    trackNotificationClick(clickData),
+    clickData.trackUrl && clickData.endpoint ? fetch(clickData.trackUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ endpoint: clickData.endpoint, campaignId: clickData.campaignId, appId: clickData.appId }), keepalive: true, credentials: "omit" }) : Promise.resolve(),
     self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
       const match = clients.find((client) => new URL(client.url).origin === self.location.origin);
       if (match) return match.focus().then(() => match.navigate(targetUrl));

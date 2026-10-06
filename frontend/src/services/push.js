@@ -1,6 +1,8 @@
 import { API_BASE_URL } from "./api.js";
 const API = API_BASE_URL;
-
+const SAVED_APPS = "sl_push_app_ids";
+const readApps = () => { try { const value = JSON.parse(localStorage.getItem(SAVED_APPS) || "[]"); return Array.isArray(value) ? value.filter((id) => typeof id === "string") : []; } catch { return []; } };
+const saveApps = (apps) => localStorage.setItem(SAVED_APPS, JSON.stringify([...new Set(apps)]));
 
 const base64 = (value) => {
   const padded = value + "=".repeat((4 - value.length % 4) % 4);
@@ -13,81 +15,51 @@ const request = async (path, options = {}) => {
   const token = localStorage.getItem("sl_token");
   const response = await fetch(`${API}/api/push${path}`, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(options.headers || {}),
-    },
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(options.headers || {}) },
   });
-
   const json = await response.json().catch(() => ({}));
   if (!response.ok || !json.success) throw new Error(json.message || "Push notifications could not be updated");
   return json;
 };
 
 export const pushClient = {
-  async status() {
+  async status(appId = "app_savitri_livings") {
     const config = await request("/config", { method: "GET" });
-    const registration = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : null;
+    const supported = "serviceWorker" in navigator && "PushManager" in window && "Notification" in window;
+    const registration = supported ? await navigator.serviceWorker.getRegistration() : null;
     const subscription = registration ? await registration.pushManager.getSubscription() : null;
-
-    return {
-      ...config,
-      supported: "serviceWorker" in navigator && "PushManager" in window && "Notification" in window,
-      permission: "Notification" in window ? Notification.permission : "unsupported",
-      subscribed: Boolean(subscription),
-    };
+    const association = subscription ? await request("/status", { method: "POST", body: JSON.stringify({ endpoint: subscription.endpoint, appId }) }) : { subscribed: false };
+    return { ...config, supported, permission: "Notification" in window ? Notification.permission : "unsupported", subscribed: Boolean(association.subscribed) };
   },
 
-  async enable() {
-    if (!("serviceWorker" in navigator && "PushManager" in window && "Notification" in window)) {
-      throw new Error("This browser does not support push notifications");
-    }
-
-    // Resolve configuration before showing a permission prompt. Permission is
-    // requested only from this explicit user action, never on page load.
+  async enable(appId = "app_savitri_livings") {
+    if (!("serviceWorker" in navigator && "PushManager" in window && "Notification" in window)) throw new Error("This browser does not support push notifications");
     const config = await request("/config", { method: "GET" });
-    if (!config.configured || !config.publicKey) {
-      throw new Error("Notifications are not configured yet. Please try again later.");
-    }
-
+    if (!config.configured || !config.publicKey) throw new Error("Notifications are not configured yet. Please try again later.");
     const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      throw new Error(permission === "denied" ? "Notifications are blocked in your browser settings" : "Notification permission was not granted");
-    }
+    if (permission !== "granted") throw new Error(permission === "denied" ? "Notifications are blocked in your browser settings" : "Notification permission was not granted");
 
     const registration = await navigator.serviceWorker.register("/sw.js");
     await navigator.serviceWorker.ready;
-    registration.active?.postMessage({ type: "CONFIG_PUSH_API", apiBase: API });
-
+    const appIds = [...new Set([...readApps(), appId])];
+    saveApps(appIds);
+    (registration.active || registration.waiting || registration.installing)?.postMessage({ type: "CONFIG_PUSH_API", apiBase: API, appId, appIds });
     const existing = await registration.pushManager.getSubscription();
-    const subscription = existing || await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: base64(config.publicKey),
-    });
-
+    const subscription = existing || await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: base64(config.publicKey) });
     await request("/subscribe", {
       method: "POST",
-      body: JSON.stringify({
-        endpoint: subscription.endpoint,
-        keys: subscription.toJSON().keys,
-        browser: getBrowserFamily(),
-        platform: getPlatformFamily(),
-        language: navigator.language,
-        expirationTime: subscription.expirationTime,
-      }),
+      body: JSON.stringify({ endpoint: subscription.endpoint, keys: subscription.toJSON().keys, browser: getBrowserFamily(), platform: getPlatformFamily(), language: navigator.language, expirationTime: subscription.expirationTime, appId }),
     });
-
     return true;
   },
 
-  async disable() {
+  async disable(appId = "app_savitri_livings") {
     const registration = await navigator.serviceWorker.getRegistration();
     const subscription = registration ? await registration.pushManager.getSubscription() : null;
-    if (subscription) {
-      await request("/unsubscribe", { method: "POST", body: JSON.stringify({ endpoint: subscription.endpoint }) }).catch(() => {});
-      await subscription.unsubscribe();
-    }
+    if (!subscription) return;
+    const result = await request("/unsubscribe", { method: "POST", body: JSON.stringify({ endpoint: subscription.endpoint, appId }) });
+    saveApps((result.remainingAppIds || readApps()).filter((id) => id !== appId));
+    if (!result.remainingAppIds?.length) await subscription.unsubscribe();
   },
 };
 
@@ -99,7 +71,6 @@ function getBrowserFamily() {
   if (/Safari\//.test(ua)) return "Safari";
   return "Other";
 }
-
 function getPlatformFamily() {
   const ua = navigator.userAgent || "";
   if (/Android/i.test(ua)) return "Android";

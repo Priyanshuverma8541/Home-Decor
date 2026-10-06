@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 // Encryption keys are intentionally excluded from normal queries and API output.
 const webPushSubscriptionSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true },
+  appIds: { type: [String], default: [], index: true },
   endpoint: { type: String, required: true, select: false },
   endpointHash: { type: String, required: true, unique: true, index: true },
   p256dh: { type: String, required: true, select: false },

@@ -36,6 +36,13 @@ const orderSchema = new mongoose.Schema({
   orderSource:       { type: String, enum: ["website","whatsapp","instagram","admin"], default: "website" },
   landingPageSlug:   { type: String, trim: true, maxlength: 80 },
   landingPageSessionId: { type: String, trim: true, maxlength: 80 },
+  acquisition: {
+    source: { type: String, trim: true, maxlength: 80 },
+    campaign: { type: String, trim: true, maxlength: 120 },
+    medium: { type: String, trim: true, maxlength: 80 },
+    referralCode: { type: String, trim: true, maxlength: 80 },
+    localArea: { type: String, trim: true, maxlength: 80 },
+  },
 
   status:            { type: String, enum: ["pending","confirmed","packed","assigned","out_for_delivery","delivered","cancelled"], default: "pending" },
   deliveryPartnerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

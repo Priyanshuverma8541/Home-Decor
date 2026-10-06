@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const pushCampaignSchema = new mongoose.Schema({
+  appId: { type: String, default: "app_savitri_livings", index: true },
   name: { type: String, required: true, trim: true, maxlength: 120 },
   title: { type: String, required: true, trim: true, maxlength: 100 },
   body: { type: String, required: true, trim: true, maxlength: 300 },

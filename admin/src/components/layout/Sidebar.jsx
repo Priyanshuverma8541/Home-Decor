@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
@@ -14,10 +14,12 @@ const LINKS = [
   { to:"/marketplace", Icon:Store,         label:"Marketplace"         },
   { to:"/marketing", Icon:Megaphone,       label:"Marketing Cloud"     },
   { to:"/push-notifications", Icon:Megaphone, label:"Push Notifications" },
+  { to:"/platform", Icon:KeyRound, label:"Platform Apps & Keys" },
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },
   { to:"/pages",     Icon:FileText,          label:"Savitri Pages"       },
   { to:"/savinexa",  Icon:UserCheck,        label:"SaviNexa Talent"     },
+  { to:"/savinexa/website", Icon:Paintbrush, label:"SaviNexa Website" },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 

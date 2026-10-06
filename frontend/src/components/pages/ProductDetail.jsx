@@ -21,7 +21,22 @@ export default function ProductDetail() {
 
   useEffect(() => {
     productAPI.getOne(id)
-      .then(({ data }) => setProduct(data.product))
+      .then(({ data }) => {
+        setProduct(data.product);
+        const handoff = new URLSearchParams(window.location.search);
+        if (handoff.get("addToCart") === "1" && data.product?.stock > 0) {
+          const user = JSON.parse(localStorage.getItem("sl_user") || "null");
+          const cartKey = user?._id ? `sl_cart_${user._id}` : "sl_cart_guest";
+          let cart = [];
+          try { cart = JSON.parse(localStorage.getItem(cartKey) || "[]"); } catch { cart = []; }
+          const existing = cart.find((item) => item._id === data.product._id);
+          if (existing) existing.quantity += 1;
+          else cart.push({ _id: data.product._id, name: data.product.name, price: data.product.price, image: data.product.images?.[0] || "", category: data.product.category, quantity: 1 });
+          localStorage.setItem(cartKey, JSON.stringify(cart));
+          const cartQuery = new URLSearchParams({ source: handoff.get("source") || "kolkata-local", lcSession: handoff.get("lcSession") || "", campaign: handoff.get("campaign") || "", location: handoff.get("location") || "", ref: handoff.get("ref") || "" });
+          window.location.replace(`/cart?${cartQuery}`);
+        }
+      })
       .catch(() => toast.error("Product not found"))
       .finally(() => setLoading(false));
   }, [id]);

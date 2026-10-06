@@ -27,7 +27,38 @@ exports.getAll = async (req, res) => {
 // POST /api/leads — create manually (admin or form)
 exports.create = async (req, res) => {
   try {
-    const lead = await Lead.create(req.body);
+    const body = req.body || {};
+    const name = typeof body.name === "string" ? body.name.trim().slice(0, 120) : "";
+    const phone = typeof body.phone === "string" ? body.phone.trim().slice(0, 24) : "";
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase().slice(0, 254) : "";
+    if (name.length < 2 || (!phone && !email)) return res.status(400).json({ success: false, message: "Please provide a name and at least one phone number or email address." });
+    if (phone && !/^[+0-9 ()-]{8,24}$/.test(phone)) return res.status(400).json({ success: false, message: "Please provide a valid phone number." });
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ success: false, message: "Please provide a valid email address." });
+    const lead = await Lead.create({
+      name,
+      phone,
+      email,
+      city: typeof body.city === "string" ? body.city.trim().slice(0, 120) : "",
+      source: ["website", "whatsapp", "instagram", "referral", "event", "admin"].includes(body.source) ? body.source : "website",
+      interestedIn: Array.isArray(body.interestedIn) ? body.interestedIn.filter((item) => typeof item === "string").slice(0, 8).map((item) => item.slice(0, 120)) : [],
+      budget: typeof body.budget === "string" ? body.budget.slice(0, 80) : "",
+      contactConsent: { granted: body.contactConsent?.granted === true, grantedAt: body.contactConsent?.granted === true ? new Date() : undefined, context: String(body.contactConsent?.context || "").slice(0, 100) },
+      marketingConsent: {
+        granted: body.marketingConsent?.granted === true,
+        grantedAt: body.marketingConsent?.granted === true ? new Date() : undefined,
+        channels: Array.isArray(body.marketingConsent?.channels) ? [...new Set(body.marketingConsent.channels.filter((channel) => ["whatsapp", "email"].includes(channel)))].slice(0, 2) : [],
+        purpose: String(body.marketingConsent?.purpose || "").slice(0, 160),
+        version: String(body.marketingConsent?.version || "").slice(0, 40),
+      },
+      acquisition: {
+        source: String(body.acquisition?.source || "").slice(0, 80),
+        medium: String(body.acquisition?.medium || "").slice(0, 80),
+        campaign: String(body.acquisition?.campaign || "").slice(0, 120),
+        referralCode: String(body.acquisition?.referralCode || "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80),
+      },
+      tags: Array.isArray(body.tags) ? body.tags.filter((tag) => typeof tag === "string").slice(0, 12).map((tag) => tag.slice(0, 80)) : [],
+      notes: Array.isArray(body.notes) ? body.notes.filter((note) => typeof note?.text === "string").slice(0, 5).map((note) => ({ text: note.text.slice(0, 3000) })) : [],
+    });
     res.status(201).json({ success: true, lead });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

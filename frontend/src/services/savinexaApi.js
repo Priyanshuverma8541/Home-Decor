@@ -8,6 +8,8 @@ export const savinexaAPI = {
   getCollections: () => api.get("/api/savinexa/collections"),
   getBanners: () => api.get("/api/savinexa/banners"),
   getSettings: () => api.get("/api/savinexa/settings"),
+  getPage: (slug) => api.get(`/api/savinexa/pages/${encodeURIComponent(slug)}`),
+  getJobs: () => api.get("/api/savinexa/jobs"),
   track: (event) => api.post("/api/savinexa/events", event),
 };
 
