@@ -57,6 +57,11 @@ exports.create = async (req, res) => {
     const { items, deliveryAddress, landmark, pincode, city, orderSource, guestName, guestPhone, paymentMethod, deliveryType, landingPageSlug, landingPageSessionId, acquisition } = req.body;
     if (!items?.length || !deliveryAddress || !city)
       return res.status(400).json({ success: false, message: "Items, address and city required" });
+    if (!req.user) {
+      const phoneDigits = String(guestPhone || "").replace(/\D/g, "");
+      if (!String(guestName || "").trim() || phoneDigits.length < 10 || phoneDigits.length > 15)
+        return res.status(400).json({ success: false, message: "Guest name and a valid contact phone are required" });
+    }
 
     // Fetch product details + validate stock
     let totalAmount = 0;
@@ -71,9 +76,16 @@ exports.create = async (req, res) => {
       totalAmount += product.price * item.quantity;
     }
 
-    // Delivery fee from settings
+    // Validate the requested city and calculate delivery using Admin settings.
     const settings = await Settings.findOne() || {};
-    const deliveryFee = (settings.deliveryFee?.get?.(city) ?? (settings.deliveryFee?.[city] ?? 0));
+    const requestedCity = String(city).trim();
+    const activeCities = Array.isArray(settings.activeCities) ? settings.activeCities.map((value) => String(value).trim()).filter(Boolean) : [];
+    const panIndia = activeCities.some((value) => value.toLowerCase() === "pan india");
+    const configuredCity = activeCities.find((value) => value.toLowerCase() === requestedCity.toLowerCase());
+    if (activeCities.length && !panIndia && !configuredCity)
+      return res.status(400).json({ success: false, message: "Delivery is not currently available in that city. Please select a supported city." });
+    const orderCity = configuredCity || requestedCity;
+    const deliveryFee = (settings.deliveryFee?.get?.(orderCity) ?? (settings.deliveryFee?.[orderCity] ?? 0));
     const freeAbove   = settings.freeDeliveryAbove ?? 500;
     const finalDeliveryFee = totalAmount >= freeAbove ? 0 : deliveryFee;
     const grandTotal = totalAmount + finalDeliveryFee;
@@ -82,12 +94,12 @@ exports.create = async (req, res) => {
       customerId: req.user?._id,
       guestName,
       guestPhone,
-      guestCity: !req.user ? city : undefined,
+      guestCity: !req.user ? orderCity : undefined,
       items: enrichedItems,
       totalAmount,
       deliveryFee: finalDeliveryFee,
       grandTotal,
-      city,
+      city: orderCity,
       deliveryAddress,
       landmark,
       pincode,
@@ -123,7 +135,7 @@ exports.create = async (req, res) => {
         existing.convertedAt = new Date();
         await existing.save();
       } else {
-        await Lead.create({ name: req.user?.fullName || guestName, phone, city, source: orderSource || "website", status: "converted", convertedOrderId: order._id, convertedAt: new Date(), userId: req.user?._id });
+        await Lead.create({ name: req.user?.fullName || guestName, phone, city: orderCity, source: orderSource || "website", status: "converted", convertedOrderId: order._id, convertedAt: new Date(), userId: req.user?._id });
       }
     }
 

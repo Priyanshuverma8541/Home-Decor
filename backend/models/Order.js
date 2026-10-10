@@ -51,7 +51,7 @@ const orderSchema = new mongoose.Schema({
   deliveredAt:       { type: Date },
 
   paymentStatus:     { type: String, enum: ["pending","paid","refunded"], default: "pending" },
-  paymentMethod:     { type: String, enum: ["upi","qr","cod","razorpay"], default: "upi" },
+  paymentMethod:     { type: String, enum: ["upi","qr","cod","razorpay","whatsapp"], default: "upi" },
   paymentRef:        { type: String },
   razorpayOrderId:   { type: String },
   razorpayPaymentId: { type: String },

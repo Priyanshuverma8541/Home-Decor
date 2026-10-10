@@ -5,7 +5,7 @@ const Subscription = require("../models/WebPushSubscription");
 const PushCampaign = require("../models/PushCampaign");
 const { optionalProtect, protect, adminOnly } = require("../middleware/auth");
 const { createNotificationEngine } = require("../platform/notifications/engine");
-const VALID_PUSH_APP_IDS = new Set(["app_savitri_livings", "app_savinexa"]);
+const VALID_PUSH_APP_IDS = new Set(["app_savitri_livings", "app_savinexa", "app_savitri_kolkata"]);
 const requestedAppId = (req) => VALID_PUSH_APP_IDS.has(req.query?.appId) ? req.query.appId : VALID_PUSH_APP_IDS.has(req.body?.appId) ? req.body.appId : "app_savitri_livings";
 const subscriptionAppFilter = (appId) => ({ $or: [{ appIds: appId }, ...(appId === "app_savitri_livings" ? [{ appIds: { $exists: false } }] : [])] });
 const campaignAppFilter = (appId) => ({ $or: [{ appId }, ...(appId === "app_savitri_livings" ? [{ appId: { $exists: false } }] : [])] });
@@ -44,6 +44,7 @@ const normalizeTargetUrl = (value, requestOrigin = "") => {
         "localhost",
         "127.0.0.1",
         "home-decor-inky.vercel.app",
+        "savitri-kolkata.vercel.app",
       ]);
       const host = url.hostname.toLowerCase();
       if (url.protocol === "https:" && hostnames.has(host)) {
@@ -82,7 +83,7 @@ const getTrackApiUrl = (req = {}) => {
 
 const buildPayload = (campaign, subscription, req = {}) => {
   const appId = campaign.appId || "app_savitri_livings";
-  const brand = appId === "app_savinexa" ? "Savinexa" : "Savitri Livings";
+  const brand = appId === "app_savinexa" ? "Savinexa" : appId === "app_savitri_kolkata" ? "Savitri Livings Kolkata" : "Savitri Livings";
   const title = normalizeText(campaign.title, 100, brand) || brand;
   const body = normalizeText(campaign.body, 300, "");
   const targetUrl = normalizeTargetUrl(campaign.targetUrl, getRequestOrigin(req));

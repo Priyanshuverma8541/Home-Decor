@@ -5,7 +5,7 @@ import { settingsAPI } from "../../services/api.js";
 import { PageLoader, Button } from "../ui/index.jsx";
 import toast from "react-hot-toast";
 
-const CITIES = ["Buxar","Varanasi","Kolkata"];
+const CITIES = ["Buxar","Varanasi","Kolkata","Pan India"];
 
 const DEFAULT_PERMISSION_CAPABILITIES = [
   { key: "location", label: "Location / Geolocation", purpose: "Delivery / nearby services", category: "permission", enabled: true, status: "not-granted", available: true },
@@ -61,11 +61,17 @@ export default function Settings() {
 
   const set = (k) => (e) => setSettings(p => ({ ...p, [k]: e.target.value }));
 
-  const toggleCity = (c) => {
-    setSettings(p => ({
-      ...p, activeCities: p.activeCities.includes(c) ? p.activeCities.filter(x=>x!==c) : [...p.activeCities, c]
-    }));
+  const toggleCity = (city) => {
+    setSettings((previous) => {
+      const activeCities = previous.activeCities || [];
+      if (activeCities.includes(city)) return { ...previous, activeCities: activeCities.filter((value) => value !== city) };
+      return { ...previous, activeCities: city === "Pan India" ? [city] : [...activeCities.filter((value) => value !== "Pan India"), city] };
+    });
   };
+
+  const setDeliveryFee = (city, value) => setSettings((previous) => ({
+    ...previous, deliveryFee: { ...(previous.deliveryFee || {}), [city]: value === "" ? "" : Number(value) }
+  }));
 
   const handleQrFile = (e) => {
     const f = e.target.files?.[0];
@@ -74,6 +80,7 @@ export default function Settings() {
   };
 
   const saveAll = async () => {
+    if (!settings.activeCities?.length) { toast.error("Select at least one delivery city before saving."); return; }
     setSaving(true);
     try {
       // Save settings
@@ -81,6 +88,7 @@ export default function Settings() {
         upiId: settings.upiId, brandName: settings.brandName, tagline: settings.tagline,
         contactPhone: settings.contactPhone, whatsappNumber: settings.whatsappNumber,
         instagramHandle: settings.instagramHandle, activeCities: settings.activeCities,
+        deliveryFee: Object.fromEntries(Object.entries(settings.deliveryFee || {}).filter(([city]) => settings.activeCities?.includes(city)).map(([city, fee]) => [city, Number(fee) || 0])),
         freeDeliveryAbove: settings.freeDeliveryAbove, announcementText: settings.announcementText,
         showAnnouncement: settings.showAnnouncement, maintenanceMode: settings.maintenanceMode,
         waOrderTemplate: settings.waOrderTemplate, facebookUrl: settings.facebookUrl,
@@ -193,8 +201,19 @@ export default function Settings() {
             ))}
           </div>
         </Field>
+        <Field label="Delivery Fee by City (Rs.)" full>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))", gap:10 }}>
+            {(settings.activeCities || []).map((city) => (
+              <label key={city} style={{ display:"grid", gap:5, fontSize:"0.8rem", color:"#6b5040" }}>
+                {city}
+                <input type="number" min="0" step="1" className="input" value={settings.deliveryFee?.[city] ?? 0} onChange={(event) => setDeliveryFee(city, event.target.value)}/>
+              </label>
+            ))}
+          </div>
+          <p style={{ fontSize:"0.7rem", color:"#8c7258", marginTop:6 }}>The backend applies the selected city fee to each new order. Use 0 for free delivery.</p>
+        </Field>
         <Field label="Free Delivery Above (Rs.)">
-          <input type="number" className="input" value={settings.freeDeliveryAbove||""} onChange={set("freeDeliveryAbove")}/>
+          <input type="number" min="0" className="input" value={settings.freeDeliveryAbove ?? ""} onChange={set("freeDeliveryAbove")}/>
         </Field>
       </Section>
 

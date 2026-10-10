@@ -137,6 +137,14 @@ export default function Orders() {
         {showModal && selected && (
           <Modal title={`Order ${selected.orderNumber}`} onClose={()=>setShowModal(false)} width={520}>
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+              {/* Customer and delivery details */}
+              <div style={{ background:"#fdf8f2", borderRadius:10, padding:"0.875rem 1rem", display:"grid", gap:7, fontSize:"0.8rem", color:"#6b5040" }}>
+                <strong style={{ color:"#2c1f14" }}>{selected.customerId?.fullName || selected.guestName || "Guest"} · {selected.customerId?.phone || selected.guestPhone || "No phone provided"}</strong>
+                <span><b>Deliver to:</b> {selected.deliveryAddress}{selected.landmark ? `, ${selected.landmark}` : ""}</span>
+                <span><b>City / PIN:</b> {selected.city}{selected.pincode ? ` · ${selected.pincode}` : ""}</span>
+                {selected.acquisition?.localArea && <span><b>Kolkata area:</b> {selected.acquisition.localArea}</span>}
+                <span><b>Delivery fee:</b> Rs.{Number(selected.deliveryFee || 0).toLocaleString("en-IN")} · <b>Payment:</b> {selected.paymentMethod || "upi"} ({selected.paymentStatus})</span>
+              </div>
               {/* Order summary */}
               <div style={{ background:"#fdf8f2", borderRadius:10, padding:"0.875rem 1rem" }}>
                 <p style={{ fontWeight:500, color:"#2c1f14", marginBottom:6 }}>Items ordered</p>

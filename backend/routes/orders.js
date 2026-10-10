@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const ctrl   = require("../controllers/orderController");
-const { protect, adminOnly, deliveryOrAdmin } = require("../middleware/auth");
-router.post("/",                     protect, ctrl.create);
+const { protect, optionalProtect, adminOnly, deliveryOrAdmin } = require("../middleware/auth");
+router.post("/",                     optionalProtect, ctrl.create);
 router.get("/",                      protect, adminOnly, ctrl.getAll);
 router.get("/analytics",             protect, adminOnly, ctrl.getAnalytics);
 router.get("/mine",                  protect, ctrl.getMine);

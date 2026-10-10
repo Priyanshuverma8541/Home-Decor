@@ -1,4 +1,4 @@
-// import { useState } from "react";
+// import { useEffect, useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
 // import { motion, AnimatePresence } from "framer-motion";
 // import { Trash2, ArrowRight, ShoppingCart, CreditCard, QrCode, MessageCircle } from "lucide-react";
@@ -114,7 +114,7 @@
 //             {step===2 && (
 //               <motion.div initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} className="card" style={{ padding:"1.5rem" }}>
 //                 <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-//                   {!isAuthenticated && <>
+//                   {(!isAuthenticated || !user?.phone) && <>
 //                     <div>
 //                       <label className="label">Your Name *</label>
 //                       <input required className="input" placeholder="Priya Sharma" value={details.name} onChange={e=>setDetails(d=>({...d,name:e.target.value}))}/>
@@ -152,7 +152,7 @@
 //                 <button onClick={handleUPI} disabled={busy} className="btn-outline" style={{ justifyContent:"center", gap:8 }}>
 //                   <QrCode style={{ width:16,height:16 }}/>Pay via UPI / QR
 //                 </button>
-//                 <button onClick={handleWhatsApp} className="btn-wa" style={{ justifyContent:"center", gap:8 }}>
+//                 <button onClick={handleWhatsApp} disabled={busy} className="btn-wa" style={{ justifyContent:"center", gap:8 }}>
 //                   <MessageCircle style={{ width:16,height:16 }}/>Order on WhatsApp (pay later)
 //                 </button>
 //                 <p style={{ fontSize:"0.75rem", color:"#8c7258", textAlign:"center" }}>All payments are secure. For WhatsApp orders, we confirm stock before collecting payment.</p>
@@ -173,13 +173,13 @@
 //               <div className="divider"/>
 //               <div style={{ display:"flex", justifyContent:"space-between", fontSize:"0.8rem", color:"#5c4a32", marginBottom:6 }}>
 //                 <span>Delivery</span>
-//                 <span>{deliveryFee===0 ? <span style={{ color:"#1a8e72", fontWeight:500 }}>Free</span> : `Rs.${deliveryFee}`}</span>
+//                 <span>{deliveryFee === null ? "Checking…" : deliveryFee === 0 ? <span style={{ color:"#1a8e72", fontWeight:500 }}>Free</span> : `Rs.${deliveryFee}`}</span>
 //               </div>
-//               {deliveryFee>0 && <p style={{ fontSize:"0.7rem", color:"#8c7258", marginBottom:8 }}>Free delivery above Rs.{FREE_ABOVE}</p>}
+//               {deliveryFee > 0 && <p style={{ fontSize:"0.7rem", color:"#8c7258", marginBottom:8 }}>Free delivery above Rs.{freeDeliveryAbove.toLocaleString("en-IN")}</p>}
 //               <div className="divider"/>
 //               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", marginBottom:"1.25rem" }}>
 //                 <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.2rem", color:"#1c1409" }}>Total</span>
-//                 <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", color:"#c96030" }}>Rs.{grandTotal.toLocaleString("en-IN")}</span>
+//                 <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", color:"#c96030" }}>{deliveryFee === null ? "Checking…" : `Rs.${grandTotal.toLocaleString("en-IN")}`}</span>
 //               </div>
 
 //               {step===1 && (
@@ -220,7 +220,7 @@
 
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, ArrowRight, ShoppingCart, CreditCard, QrCode, MessageCircle } from "lucide-react";
@@ -229,6 +229,7 @@ import { useAuth }    from "../../context/AuthContext.jsx";
 import { usePayment } from "../../hooks/usePayment.js";
 import { EmptyState, QRPayModal } from "../ui/Shared.jsx";
 import { orderAPI }   from "../../services/api.js";
+import api from "../../services/api.js";
 import toast from "react-hot-toast";
 
 export default function Cart() {
@@ -236,16 +237,38 @@ export default function Cart() {
   const { isAuthenticated, user } = useAuth();
   const { placeWithUPI, payWithRazorpay, orderViaWhatsApp, UPI_ID } = usePayment();
   const navigate   = useNavigate();
-
+  const checkoutParams = new URLSearchParams(window.location.search);
+  const isKolkataCheckout = checkoutParams.get("source") === "kolkata-local";
   const [step,     setStep]     = useState(1); // 1=cart, 2=details, 3=payment
-  const [details,  setDetails]  = useState({ name: user?.fullName||"", phone: user?.phone||"", address:"", city:user?.city||"", notes:"" });
+  const [details,  setDetails]  = useState({ name: user?.fullName||"", phone: user?.phone||"", address:"", city:isKolkataCheckout ? "Kolkata" : (user?.city||""), pincode:"", notes:"" });
+  const [settings, setSettings] = useState(null);
   const [busy,     setBusy]     = useState(false);
   const [qrModal,  setQrModal]  = useState(null); // { orderId, amount }
 
-  const DELIVERY_FEE = 30;
-  const FREE_ABOVE   = 500;
-  const deliveryFee  = totalPrice >= FREE_ABOVE ? 0 : DELIVERY_FEE;
-  const grandTotal   = totalPrice + deliveryFee;
+  useEffect(() => {
+    let active = true;
+    api.get("/api/settings").then(({ data }) => { if (active) setSettings(data.settings || {}); }).catch(() => { if (active) setSettings({}); });
+    return () => { active = false; };
+  }, []);
+
+  const activeCities = Array.isArray(settings?.activeCities) ? settings.activeCities.filter(Boolean) : [];
+  const hasPanIndia = activeCities.some((city) => String(city).toLowerCase() === "pan india");
+  const deliveryCities = activeCities.filter((city) => String(city).toLowerCase() !== "pan india");
+  const deliveryMap = settings?.deliveryFee?.toJSON?.() || settings?.deliveryFee || {};
+  const deliveryEntry = Object.entries(deliveryMap).find(([city]) => city.toLowerCase() === details.city.trim().toLowerCase());
+  const cityDeliveryFee = Number(deliveryEntry?.[1] ?? 0);
+  const freeDeliveryAbove = Number(settings?.freeDeliveryAbove ?? 500);
+  const deliveryFee = settings ? (totalPrice >= freeDeliveryAbove ? 0 : cityDeliveryFee) : null;
+  const grandTotal = totalPrice + (deliveryFee ?? 0);
+
+  useEffect(() => {
+    if (!settings || hasPanIndia || deliveryCities.length === 0) return;
+    setDetails((current) => {
+      const match = deliveryCities.find((city) => String(city).toLowerCase() === current.city.trim().toLowerCase());
+      if (match) return match !== current.city ? { ...current, city: match } : current;
+      return current.city ? { ...current, city: "" } : current;
+    });
+  }, [settings, hasPanIndia, deliveryCities]);
 
   if (items.length === 0) return (
     <EmptyState title="Your cart is empty" message="Discover Savitri Livings earrings, rings, and celebration pieces."
@@ -256,8 +279,9 @@ export default function Cart() {
     items:          items.map(i => ({ productId:i._id, quantity:i.quantity, price:i.price })),
     deliveryAddress: details.address,
     city:            details.city,
-    guestName:       isAuthenticated ? undefined : details.name,
-    guestPhone:      isAuthenticated ? undefined : details.phone,
+    guestName:       isAuthenticated ? (user?.fullName || details.name) : details.name,
+    guestPhone:      details.phone,
+    pincode:         details.pincode.trim(),
     orderSource:     "website",
     landingPageSlug: new URLSearchParams(window.location.search).get("source") === "kolkata-local" ? "kolkata-local-commerce" : undefined,
     landingPageSessionId: new URLSearchParams(window.location.search).get("lcSession") || undefined,
@@ -283,7 +307,8 @@ export default function Cart() {
   };
 
   const handleWhatsApp = () => {
-    orderViaWhatsApp({ items, totalPrice: grandTotal, city: details.city, address: details.address });
+    setBusy(true);
+    orderViaWhatsApp({ orderPayload: orderPayload(), items, whatsappNumber: settings?.whatsappNumber }).finally(() => setBusy(false));
   };
 
   return (
@@ -343,7 +368,7 @@ export default function Cart() {
             {step===2 && (
               <motion.div initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} className="card" style={{ padding:"1.5rem" }}>
                 <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
-                  {!isAuthenticated && <>
+                  {(!isAuthenticated || !user?.phone) && <>
                     <div>
                       <label className="label">Your Name *</label>
                       <input required className="input" placeholder="Priya Sharma" value={details.name} onChange={e=>setDetails(d=>({...d,name:e.target.value}))}/>
@@ -358,8 +383,19 @@ export default function Cart() {
                     <textarea required className="input" rows={3} style={{ resize:"vertical" }} placeholder="House no., street, area…" value={details.address} onChange={e=>setDetails(d=>({...d,address:e.target.value}))}/>
                   </div>
                   <div>
-                    <label className="label">City *</label>
-                    <input required className="input" value={details.city} onChange={e=>setDetails(d=>({...d,city:e.target.value}))} placeholder="Your city"/>
+                    <label className="label">Delivery city *</label>
+                    {deliveryCities.length > 0 && !hasPanIndia ? (
+                      <select required className="input" value={details.city} onChange={e=>setDetails(d=>({...d,city:e.target.value}))}>
+                        <option value="">Select a supported city</option>
+                        {deliveryCities.map((city) => <option key={city} value={city}>{city}</option>)}
+                      </select>
+                    ) : (
+                      <input required className="input" value={details.city} onChange={e=>setDetails(d=>({...d,city:e.target.value}))} placeholder="Your city"/>
+                    )}
+                  </div>
+                  <div>
+                    <label className="label">PIN code *</label>
+                    <input required inputMode="numeric" autoComplete="postal-code" maxLength={6} pattern="[1-9][0-9]{5}" className="input" value={details.pincode} onChange={e=>setDetails(d=>({...d,pincode:e.target.value.replace(/\D/g,"").slice(0,6)}))} placeholder="6-digit PIN code"/>
                   </div>
                   <div>
                     <label className="label">Order Notes (optional)</label>
@@ -379,10 +415,10 @@ export default function Cart() {
                 {/* /*<button onClick={handleUPI} disabled={busy} className="btn-outline" style={{ justifyContent:"center", gap:8 }}>
                   <QrCode style={{ width:16,height:16 }}/>Pay via UPI / QR
                 </button>*/ }
-                <button onClick={handleWhatsApp} className="btn-wa" style={{ justifyContent:"center", gap:8 }}>
+                <button onClick={handleWhatsApp} disabled={busy} className="btn-wa" style={{ justifyContent:"center", gap:8 }}>
                   <MessageCircle style={{ width:16,height:16 }}/>Order on WhatsApp (pay later)
                 </button>
-                <p style={{ fontSize:"0.75rem", color:"#8c7258", textAlign:"center" }}>All payments are secure. For WhatsApp orders, we confirm stock before collecting payment.</p>
+                <p style={{ fontSize:"0.75rem", color:"#8c7258", textAlign:"center" }}>We’ll confirm stock, delivery and payment details with you on WhatsApp before fulfilment.</p>
               </motion.div>
             )}
           </div>
@@ -400,13 +436,13 @@ export default function Cart() {
               <div className="divider"/>
               <div style={{ display:"flex", justifyContent:"space-between", fontSize:"0.8rem", color:"#5c4a32", marginBottom:6 }}>
                 <span>Delivery</span>
-                <span>{deliveryFee===0 ? <span style={{ color:"#1a8e72", fontWeight:500 }}>Free</span> : `Rs.${deliveryFee}`}</span>
+                <span>{deliveryFee === null ? "Checking…" : deliveryFee === 0 ? <span style={{ color:"#1a8e72", fontWeight:500 }}>Free</span> : `Rs.${deliveryFee}`}</span>
               </div>
-              {deliveryFee>0 && <p style={{ fontSize:"0.7rem", color:"#8c7258", marginBottom:8 }}>Free delivery above Rs.{FREE_ABOVE}</p>}
+              {deliveryFee > 0 && <p style={{ fontSize:"0.7rem", color:"#8c7258", marginBottom:8 }}>Free delivery above Rs.{freeDeliveryAbove.toLocaleString("en-IN")}</p>}
               <div className="divider"/>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", marginBottom:"1.25rem" }}>
                 <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.2rem", color:"#1c1409" }}>Total</span>
-                <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", color:"#c96030" }}>Rs.{grandTotal.toLocaleString("en-IN")}</span>
+                <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.5rem", color:"#c96030" }}>{deliveryFee === null ? "Checking…" : `Rs.${grandTotal.toLocaleString("en-IN")}`}</span>
               </div>
 
               {step===1 && (
@@ -417,8 +453,10 @@ export default function Cart() {
               {step===2 && (
                 <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
                   <button onClick={() => {
-                    if (!details.address || !details.city) { toast.error("Please enter your complete delivery address and city"); return; }
-                    if (!isAuthenticated && (!details.name || !details.phone)) { toast.error("Please enter name and phone"); return; }
+                    if (!details.address || !details.city) { toast.error("Please enter your complete delivery address and select a supported city"); return; }
+                    if (!/^[1-9][0-9]{5}$/.test(details.pincode)) { toast.error("Please enter a valid 6-digit PIN code"); return; }
+                    if (!details.phone || details.phone.replace(/\D/g, "").length < 10) { toast.error("Please enter a contact phone number"); return; }
+                    if (!isAuthenticated && !details.name) { toast.error("Please enter your name"); return; }
                     setStep(3);
                   }} className="btn-primary" style={{ width:"100%", justifyContent:"center" }}>
                     Choose Payment <ArrowRight style={{ width:15,height:15 }}/>

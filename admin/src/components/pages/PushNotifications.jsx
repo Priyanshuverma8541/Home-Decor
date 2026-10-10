@@ -10,6 +10,7 @@ const secondary = { border: "1px solid #e6d9cb", borderRadius: 8, background: "w
 const localDate = (value) => value ? new Date(value).toLocaleString() : "—";
 
 export default function PushNotifications() {
+  const [appId, setAppId] = useState("app_savitri_livings");
   const [data, setData] = useState(null);
   const [subscribers, setSubscribers] = useState([]);
   const [tab, setTab] = useState("Overview");
@@ -21,11 +22,11 @@ export default function PushNotifications() {
   const [message, setMessage] = useState("");
 
   const load = useCallback(async () => {
-    const [summary, subscriberResult] = await Promise.all([pushAPI.summary(), pushAPI.subscribers()]);
+    const [summary, subscriberResult] = await Promise.all([pushAPI.summary(appId), pushAPI.subscribers(appId)]);
     setData(summary.data);
     setSubscribers(subscriberResult.data.subscribers || []);
-  }, []);
-  useEffect(() => { load().catch(() => setMessage("Could not load push notification data.")); }, [load]);
+  }, [appId]);
+  useEffect(() => { setData(null); load().catch(() => setMessage("Could not load push notification data.")); }, [load]);
 
   const campaigns = data?.campaigns || [];
   const visibleCampaigns = useMemo(() => {
@@ -34,7 +35,7 @@ export default function PushNotifications() {
     return campaigns;
   }, [campaigns, tab]);
   const activeSubscribers = subscribers.filter((subscriber) => subscriber.status === "active");
-  const startNew = () => { setEditing(""); setForm(emptyForm); setShowForm(true); setMessage(""); };
+  const startNew = () => { setEditing(""); setForm({ ...emptyForm, targetUrl: appId === "app_savitri_kolkata" ? "https://savitri-kolkata.vercel.app/" : "/" }); setShowForm(true); setMessage(""); };
   const startEdit = (campaign) => {
     setEditing(campaign._id);
     setForm({ name: campaign.name || "", title: campaign.title || "", body: campaign.body || "", imageUrl: campaign.imageUrl || "", iconUrl: campaign.iconUrl || "", targetUrl: campaign.targetUrl || "/", audience: campaign.audience || "all", subscriptionIds: campaign.subscriptionIds || [], sendMode: campaign.sendMode || "draft", scheduledAt: campaign.scheduledAt ? new Date(campaign.scheduledAt).toISOString().slice(0, 16) : "" });
@@ -44,8 +45,8 @@ export default function PushNotifications() {
     event.preventDefault(); setBusy(true); setMessage("");
     try {
       const payload = { ...form, scheduledAt: form.scheduledAt ? new Date(form.scheduledAt).toISOString() : undefined };
-      if (editing) await pushAPI.updateCampaign(editing, payload);
-      else await pushAPI.createCampaign(payload);
+      if (editing) await pushAPI.updateCampaign(editing, { ...payload, appId }, appId);
+      else await pushAPI.createCampaign({ ...payload, appId });
       setShowForm(false); setForm(emptyForm); setEditing(""); await load();
       setMessage(form.sendMode === "now" && !editing ? "Push attempt complete. The push service acceptance count is not device delivery confirmation." : "Campaign saved.");
     } catch (error) { setMessage(error.response?.data?.message || "Could not save the campaign."); }
@@ -54,30 +55,30 @@ export default function PushNotifications() {
   const send = async (id) => {
     if (!window.confirm("Send this notification to its selected audience now?")) return;
     setBusy(true); setMessage("");
-    try { await pushAPI.sendCampaign(id); await load(); setMessage("Push attempt complete. Accepted means the push service accepted the request, not that a device displayed it."); }
+    try { await pushAPI.sendCampaign(id, appId); await load(); setMessage("Push attempt complete. Accepted means the push service accepted the request, not that a device displayed it."); }
     catch (error) { setMessage(error.response?.data?.message || "Could not send campaign."); }
     finally { setBusy(false); }
   };
   const cancel = async (id) => {
-    setBusy(true); try { await pushAPI.cancelCampaign(id); await load(); setMessage("Scheduled campaign cancelled and saved as a draft."); }
+    setBusy(true); try { await pushAPI.cancelCampaign(id, appId); await load(); setMessage("Scheduled campaign cancelled and saved as a draft."); }
     catch (error) { setMessage(error.response?.data?.message || "Could not cancel schedule."); } finally { setBusy(false); }
   };
   const remove = async (id) => {
     if (!window.confirm("Delete this campaign?")) return;
-    setBusy(true); try { await pushAPI.deleteCampaign(id); await load(); setMessage("Campaign deleted."); }
+    setBusy(true); try { await pushAPI.deleteCampaign(id, appId); await load(); setMessage("Campaign deleted."); }
     catch (error) { setMessage(error.response?.data?.message || "Could not delete campaign."); } finally { setBusy(false); }
   };
   const test = async () => {
     if (!testSubscriber) { setMessage("Choose an active subscriber to receive the test."); return; }
     setBusy(true); setMessage("");
-    try { await pushAPI.test({ subscriptionId: testSubscriber, title: "Savitri Livings test", body: "Your browser push notifications are working.", targetUrl: "/" }); setMessage("Test push accepted by the push service. Check the device notification panel."); }
+    try { await pushAPI.test({ subscriptionId: testSubscriber, title: appId === "app_savitri_kolkata" ? "Savitri Kolkata test" : appId === "app_savinexa" ? "SaviNexa test" : "Savitri Livings test", body: "Your browser push notifications are working.", targetUrl: appId === "app_savitri_kolkata" ? "https://savitri-kolkata.vercel.app/" : "/", appId }); setMessage("Test push accepted by the push service. Check the device notification panel."); }
     catch (error) { setMessage(error.response?.data?.message || "Test push failed."); } finally { setBusy(false); }
   };
 
   if (!data) return <p style={{ color: "#8c7060" }}>Loading push notifications…</p>;
   return <div style={{ color: "#2c1f14" }}>
     <header style={{ display: "flex", alignItems: "start", justifyContent: "space-between", gap: 12, marginBottom: 18 }}>
-      <div><p style={{ color: "#a66e28", margin: 0 }}>Savitri Livings</p><h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", margin: "4px 0" }}>Push Notifications</h1><p style={{ color: "#8c7060", margin: 0 }}>Manage opt-in browser notifications and campaigns.</p></div>
+      <div><p style={{ color: "#a66e28", margin: 0 }}>Push management <select aria-label="Select storefront" value={appId} onChange={(event) => setAppId(event.target.value)} style={{ ...inputStyle, width: "auto", padding: ".25rem .45rem" }}><option value="app_savitri_livings">Savitri Livings</option><option value="app_savinexa">SaviNexa</option><option value="app_savitri_kolkata">Savitri Kolkata</option></select></p><h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", margin: "4px 0" }}>Push Notifications</h1><p style={{ color: "#8c7060", margin: 0 }}>Manage opt-in browser notifications and campaigns for the selected storefront.</p></div>
       <div style={{ display: "flex", gap: 8 }}><button style={secondary} onClick={() => load().catch(() => setMessage("Refresh failed."))} aria-label="Refresh"><RefreshCw size={15} /></button><button style={primary} onClick={startNew}><Plus size={15} />New campaign</button></div>
     </header>
     <nav aria-label="Push notification sections" style={{ display: "flex", overflowX: "auto", gap: 6, borderBottom: "1px solid #eadfd3", marginBottom: 18 }}>

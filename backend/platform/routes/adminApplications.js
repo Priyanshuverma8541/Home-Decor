@@ -26,10 +26,11 @@ router.get("/", async (_req, res, next) => {
   try {
     await Application.findOneAndUpdate(
       { appId: "app_savitri_livings" },
-      { $setOnInsert: { name: "Savitri Livings", description: "Savitri Livings web application", platform: "web", status: "active", publicKey: makeKey("pk_live"), allowedDomains: ["home-decor-inky.vercel.app"] } },
+      { $setOnInsert: { name: "Savitri Livings", description: "Savitri Livings web application", platform: "web", status: "active", publicKey: makeKey("pk_live") }, $addToSet: { allowedDomains: { $each: ["home-decor-inky.vercel.app", "savitri-kolkata.vercel.app"] } } },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
     await Application.findOneAndUpdate({ appId: "app_savinexa" }, { $setOnInsert: { name: "SaviNexa", description: "SaviNexa talent and curated products website", platform: "web", status: "active", publicKey: makeKey("pk_live"), allowedDomains: ["home-decor-inky.vercel.app"] } }, { upsert: true, new: true, setDefaultsOnInsert: true });
+    await Application.findOneAndUpdate({ appId: "app_savitri_kolkata" }, { $setOnInsert: { name: "Savitri Livings Kolkata", description: "Kolkata storefront web push subscribers and campaigns", platform: "web", status: "active", publicKey: makeKey("pk_live"), allowedDomains: ["savitri-kolkata.vercel.app"] } }, { upsert: true, new: true, setDefaultsOnInsert: true });
     const apps = await Application.find().select("+publicKey").sort({ createdAt: -1 });
     res.json({ success: true, applications: apps.map(safeApplication) });
   } catch (error) { next(error); }
