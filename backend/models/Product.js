@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   stock:            { type: Number, default: 0 },
   sku:              { type: String },
   availableCities:  [{ type: String }], // retained for older records; Savitri Livings ships Pan-India
+  kolkataVisible:   { type: Boolean, default: true, index: true },
   vendorId:         { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   isFeatured:       { type: Boolean, default: false },
   isSeasonal:       { type: Boolean, default: false },

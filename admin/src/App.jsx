@@ -1,29 +1,34 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider }               from "./context/AuthContext.jsx";
 import { Layout, ProtectedRoute }     from "./components/layout/Layout.jsx";
-import Login                          from "./components/pages/Login.jsx";
-import Dashboard                      from "./components/pages/Dashboard.jsx";
-import Orders                         from "./components/pages/Orders.jsx";
-import Products                       from "./components/pages/Products.jsx";
-import CRM                            from "./components/pages/CRM.jsx";
-import Settings                       from "./components/pages/Settings.jsx";
-import { Partners, Campaigns } from "./components/pages/OtherPages.jsx";
-import Analytics from "./components/pages/Analytics.jsx";
-import Marketplace from "./components/pages/Marketplace.jsx";
-import Marketing from "./components/pages/Marketing.jsx";
-import BusinessOpportunities from "./components/pages/BusinessOpportunities.jsx";
-import PushNotifications from "./components/pages/PushNotifications.jsx";
-import PrivacyDataCenter from "./components/pages/PrivacyDataCenter.jsx";
-import Pages from "./components/pages/Pages.jsx";
-import Savinexa from "./components/pages/Savinexa.jsx";
-import Audience from "./components/pages/Audience.jsx";
-import PlatformApps from "./components/pages/PlatformApps.jsx";
-import SavinexaWebsite from "./components/savinexa/SavinexaWebsite.jsx";
+import { PageLoader } from "./components/ui/index.jsx";
+
+const Login = lazy(() => import("./components/pages/Login.jsx"));
+const Dashboard = lazy(() => import("./components/pages/Dashboard.jsx"));
+const Orders = lazy(() => import("./components/pages/Orders.jsx"));
+const Products = lazy(() => import("./components/pages/Products.jsx"));
+const CRM = lazy(() => import("./components/pages/CRM.jsx"));
+const Settings = lazy(() => import("./components/pages/Settings.jsx"));
+const Partners = lazy(() => import("./components/pages/OtherPages.jsx").then((module) => ({ default: module.Partners })));
+const Campaigns = lazy(() => import("./components/pages/OtherPages.jsx").then((module) => ({ default: module.Campaigns })));
+const Analytics = lazy(() => import("./components/pages/Analytics.jsx"));
+const Marketplace = lazy(() => import("./components/pages/Marketplace.jsx"));
+const Marketing = lazy(() => import("./components/pages/Marketing.jsx"));
+const BusinessOpportunities = lazy(() => import("./components/pages/BusinessOpportunities.jsx"));
+const PushNotifications = lazy(() => import("./components/pages/PushNotifications.jsx"));
+const PrivacyDataCenter = lazy(() => import("./components/pages/PrivacyDataCenter.jsx"));
+const Pages = lazy(() => import("./components/pages/Pages.jsx"));
+const Savinexa = lazy(() => import("./components/pages/Savinexa.jsx"));
+const Audience = lazy(() => import("./components/pages/Audience.jsx"));
+const PlatformApps = lazy(() => import("./components/pages/PlatformApps.jsx"));
+const SavinexaWebsite = lazy(() => import("./components/savinexa/SavinexaWebsite.jsx"));
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
@@ -47,6 +52,7 @@ export default function App() {
             <Route path="settings" element={<Settings />}   />
           </Route>
         </Routes>
+        </Suspense>
       </AuthProvider>
     </BrowserRouter>
   );

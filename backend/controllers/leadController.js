@@ -1,5 +1,64 @@
 const Lead = require("../models/Lead");
 
+exports.getWhatsAppMarketing = async (req, res) => {
+  try {
+    const { search = "", page = 1, limit = 100 } = req.query;
+    const pageNumber = Math.max(1, Number(page) || 1);
+    const pageSize = Math.min(100, Math.max(1, Number(limit) || 100));
+    const filter = { "marketingConsent.granted": true, "marketingConsent.channels": "whatsapp", phone: { $exists: true, $ne: "" } };
+    if (String(search).trim()) {
+      const escaped = String(search).trim().slice(0, 80).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const phoneSearch = String(search).replace(/[^+0-9]/g, "").slice(0, 24);
+      filter.$or = [{ name: { $regex: escaped, $options: "i" } }];
+      if (phoneSearch) filter.$or.push({ phone: { $regex: phoneSearch } });
+    }
+    const [contacts, total] = await Promise.all([
+      Lead.find(filter).select("name phone city marketingConsent createdAt lastContactedAt").sort({ createdAt: -1 }).skip((pageNumber - 1) * pageSize).limit(pageSize).lean(),
+      Lead.countDocuments(filter),
+    ]);
+    res.json({ success: true, contacts, total, page: pageNumber, pages: Math.ceil(total / pageSize) });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.addWhatsAppMarketing = async (req, res) => {
+  try {
+    const name = typeof req.body?.name === "string" ? req.body.name.trim().slice(0, 120) : "";
+    let phone = typeof req.body?.phone === "string" ? req.body.phone.trim().slice(0, 24) : "";
+    const consentSource = ["in-person", "whatsapp-chat", "written-message", "website-signup", "other"].includes(req.body?.consentSource) ? req.body.consentSource : "";
+    let digits = phone.replace(/\D/g, "");
+    if (digits.length === 10) digits = `91${digits}`;
+    else if (digits.length === 11 && digits.startsWith("0")) digits = `91${digits.slice(1)}`;
+    if (name.length < 2 || !/^[+0-9 ()-]{8,24}$/.test(phone) || digits.length < 10 || digits.length > 15) return res.status(400).json({ success: false, message: "Enter a name and a valid WhatsApp number with country code." });
+    if (req.body?.marketingConsent?.granted !== true || req.body?.marketingConsent?.channels?.includes("whatsapp") !== true) return res.status(400).json({ success: false, message: "Confirm this person has agreed to receive promotional WhatsApp messages before adding them." });
+    if (!consentSource) return res.status(400).json({ success: false, message: "Choose how the person gave permission so the consent source is recorded." });
+    phone = `+${digits}`;
+    const alreadyAdded = await Lead.exists({ phone, "marketingConsent.granted": true, "marketingConsent.channels": "whatsapp" });
+    if (alreadyAdded) return res.status(409).json({ success: false, message: "This WhatsApp number is already on the consented contact list." });
+    const lead = await Lead.create({
+      name, phone, city: typeof req.body?.city === "string" ? req.body.city.trim().slice(0, 120) : "",
+      source: "admin", status: "interested", tags: ["whatsapp-marketing"],
+      contactConsent: { granted: true, grantedAt: new Date(), context: `whatsapp-marketing:${consentSource}` },
+      marketingConsent: { granted: true, grantedAt: new Date(), channels: ["whatsapp"], purpose: "Savitri Livings and Savitri Kolkata product and offer updates", version: "2026-10-admin-opt-in" },
+      notes: [{ text: `Added to the WhatsApp marketing list after administrator confirmation. Consent source: ${consentSource}.` }],
+    });
+    res.status(201).json({ success: true, contact: lead });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.updateWhatsAppConsent = async (req, res) => {
+  try {
+    const lead = await Lead.findById(req.params.id);
+    if (!lead) return res.status(404).json({ success: false, message: "Contact not found." });
+    const enabled = req.body?.enabled === true;
+    const channels = (lead.marketingConsent?.channels || []).filter((channel) => channel !== "whatsapp");
+    if (enabled) channels.push("whatsapp");
+    lead.marketingConsent = { ...(lead.marketingConsent?.toObject?.() || lead.marketingConsent || {}), granted: enabled || channels.length > 0, grantedAt: enabled ? new Date() : lead.marketingConsent?.grantedAt, channels };
+    lead.notes.push({ text: enabled ? "Administrator re-confirmed WhatsApp promotional consent." : "Removed from WhatsApp promotional messages at administrator request." });
+    await lead.save();
+    res.json({ success: true, contact: lead });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
 // GET /api/leads — admin
 exports.getAll = async (req, res) => {
   try {

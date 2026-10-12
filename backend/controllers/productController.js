@@ -16,7 +16,7 @@ const validateMeeshoUrl = (value) => {
 
 const normalizeProductData = (data = {}) => {
   const cleaned = { ...data };
-  const booleanFields = ["isFeatured","isSeasonal","isActive","meeshoEnabled","shareEnabled","referralEnabled"];
+  const booleanFields = ["isFeatured","isSeasonal","isActive","kolkataVisible","meeshoEnabled","shareEnabled","referralEnabled"];
   booleanFields.forEach((field) => {
     if (cleaned[field] !== undefined) cleaned[field] = asBoolean(cleaned[field]);
   });
@@ -32,8 +32,10 @@ const normalizeProductData = (data = {}) => {
 // GET /api/products
 exports.getAll = async (req, res) => {
   try {
-    const { category, city, search, featured, seasonal, page = 1, limit = 20 } = req.query;
+    const { category, city, search, featured, seasonal, storefront, page = 1, limit = 20 } = req.query;
     const filter = { isActive: true };
+
+    if (storefront === "kolkata") filter.kolkataVisible = { $ne: false };
 
     if (category)               filter.category       = category;
     // Product availability is Pan-India. The city query is intentionally ignored

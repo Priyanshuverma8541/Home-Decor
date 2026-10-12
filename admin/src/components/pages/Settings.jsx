@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Save, Upload, QrCode, Smartphone, Globe, Truck, Bell } from "lucide-react";
+import { Save, Upload, QrCode, Smartphone, Globe, Truck, Bell, Paintbrush } from "lucide-react";
 import { settingsAPI } from "../../services/api.js";
 import { PageLoader, Button } from "../ui/index.jsx";
 import toast from "react-hot-toast";
@@ -60,6 +60,10 @@ export default function Settings() {
   }, []);
 
   const set = (k) => (e) => setSettings(p => ({ ...p, [k]: e.target.value }));
+  const setKolkata = (key) => (event) => setSettings((previous) => ({
+    ...previous,
+    kolkataStorefront: { ...(previous.kolkataStorefront || {}), [key]: event.target.type === "checkbox" ? event.target.checked : event.target.value },
+  }));
 
   const toggleCity = (city) => {
     setSettings((previous) => {
@@ -93,6 +97,7 @@ export default function Settings() {
         showAnnouncement: settings.showAnnouncement, maintenanceMode: settings.maintenanceMode,
         waOrderTemplate: settings.waOrderTemplate, facebookUrl: settings.facebookUrl,
         razorpayKeyId: settings.razorpayKeyId, permissionCapabilities: settings.permissionCapabilities,
+        kolkataStorefront: settings.kolkataStorefront,
       });
       // Upload QR if changed
       if (qrFile) {
@@ -233,6 +238,66 @@ export default function Settings() {
             <input type="checkbox" checked={settings.maintenanceMode||false} onChange={e=>setSettings(p=>({...p,maintenanceMode:e.target.checked}))} style={{ width:16, height:16, accentColor:"#ef4444" }}/>
             <span style={{ fontSize:"0.875rem", color:"#2c1f14" }}>Take site offline (maintenance)</span>
           </label>
+        </Field>
+      </Section>
+
+      <Section icon={Paintbrush} title="Savitri Kolkata storefront">
+        <Field label="Storefront status" full>
+          <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer" }}>
+            <input type="checkbox" checked={settings.kolkataStorefront?.enabled !== false} onChange={setKolkata("enabled")} style={{ width:16, height:16, accentColor:"#c96030" }}/>
+            <span style={{ fontSize:"0.875rem", color:"#2c1f14" }}>Storefront is live</span>
+          </label>
+        </Field>
+        <Field label="Store name">
+          <input className="input" maxLength={100} value={settings.kolkataStorefront?.siteName || ""} onChange={setKolkata("siteName")} placeholder="Savitri Livings"/>
+        </Field>
+        <Field label="Announcement bar text">
+          <input className="input" maxLength={180} value={settings.kolkataStorefront?.announcementText || ""} onChange={setKolkata("announcementText")} placeholder="A note for Kolkata shoppers"/>
+        </Field>
+        <Field label="Show announcement bar" full>
+          <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer" }}>
+            <input type="checkbox" checked={settings.kolkataStorefront?.showAnnouncement !== false} onChange={setKolkata("showAnnouncement")} style={{ width:16, height:16, accentColor:"#c96030"}}/>
+            <span style={{ fontSize:"0.875rem", color:"#2c1f14" }}>Display the Kolkata announcement</span>
+          </label>
+        </Field>
+        <Field label="Hero eyebrow">
+          <input className="input" maxLength={100} value={settings.kolkataStorefront?.heroEyebrow || ""} onChange={setKolkata("heroEyebrow")}/>
+        </Field>
+        <Field label="Hero button label">
+          <input className="input" maxLength={60} value={settings.kolkataStorefront?.heroButtonText || ""} onChange={setKolkata("heroButtonText")}/>
+        </Field>
+        <Field label="Hero title" full>
+          <textarea className="input" rows={2} maxLength={140} value={settings.kolkataStorefront?.heroTitle || ""} onChange={setKolkata("heroTitle")}/>
+        </Field>
+        <Field label="Hero description" full>
+          <textarea className="input" rows={3} maxLength={400} value={settings.kolkataStorefront?.heroDescription || ""} onChange={setKolkata("heroDescription")}/>
+        </Field>
+        <Field label="Hero image URL" full>
+          <input className="input" type="url" value={settings.kolkataStorefront?.heroImageUrl || ""} onChange={setKolkata("heroImageUrl")} placeholder="https://… (leave blank to use a featured product image)"/>
+        </Field>
+        <Field label="Featured section title">
+          <input className="input" maxLength={120} value={settings.kolkataStorefront?.featuredHeading || ""} onChange={setKolkata("featuredHeading")}/>
+        </Field>
+        <Field label="Featured section description">
+          <textarea className="input" rows={2} maxLength={300} value={settings.kolkataStorefront?.featuredDescription || ""} onChange={setKolkata("featuredDescription")}/>
+        </Field>
+        <Field label="Story section title">
+          <input className="input" maxLength={120} value={settings.kolkataStorefront?.storyTitle || ""} onChange={setKolkata("storyTitle")}/>
+        </Field>
+        <Field label="Story section description">
+          <textarea className="input" rows={2} maxLength={400} value={settings.kolkataStorefront?.storyDescription || ""} onChange={setKolkata("storyDescription")}/>
+        </Field>
+        <Field label="Primary colour">
+          <input className="input" type="color" value={settings.kolkataStorefront?.primaryColor || "#28483d"} onChange={setKolkata("primaryColor")}/>
+        </Field>
+        <Field label="Accent colour">
+          <input className="input" type="color" value={settings.kolkataStorefront?.accentColor || "#bc7155"} onChange={setKolkata("accentColor")}/>
+        </Field>
+        <Field label="Background colour">
+          <input className="input" type="color" value={settings.kolkataStorefront?.backgroundColor || "#f8f5ef"} onChange={setKolkata("backgroundColor")}/>
+        </Field>
+        <Field label="Catalogue management" full>
+          <p style={{ fontSize:"0.82rem", lineHeight:1.7, color:"#8c7060", margin:0 }}>Active products marked “Show in Savitri Kolkata” appear here. Product photos, prices, stock and purchase links update from this shared catalogue.</p>
         </Field>
       </Section>
 

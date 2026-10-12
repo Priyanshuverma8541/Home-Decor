@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import { Megaphone, Users, Images, Store, RefreshCw, CheckCircle2, CircleAlert } from "lucide-react";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { Megaphone, Users, Images, Store, RefreshCw, CheckCircle2, CircleAlert, MessageCircle, ArrowLeft } from "lucide-react";
 import { marketingAPI } from "../../services/api.js";
 import { PageLoader, StatCard } from "../ui/index.jsx";
+const WhatsAppMarketing = lazy(() => import("./WhatsAppMarketing.jsx"));
 
 export default function Marketing() {
   const [dashboard, setDashboard] = useState(null);
   const [audiences, setAudiences] = useState([]);
   const [integrations, setIntegrations] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showWhatsApp, setShowWhatsApp] = useState(false);
   const load = async () => {
     setLoading(true);
     try {
@@ -16,11 +18,12 @@ export default function Marketing() {
     } finally { setLoading(false); }
   };
   useEffect(() => { load(); }, []);
+  if (showWhatsApp) return <div><div style={{ display:"flex", justifyContent:"space-between", alignItems:"start", gap:12, marginBottom:18 }}><div><p className="section-tag">Shared Savitri contact list</p><h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"1.75rem", color:"#2c1f14", margin:"4px 0" }}>WhatsApp outreach</h1><p style={{ color:"#8c7060", margin:0 }}>Prepare one-to-one promotional messages for consented contacts.</p></div><button className="btn-outline" onClick={()=>setShowWhatsApp(false)}><ArrowLeft size={15}/>Marketing Cloud</button></div><Suspense fallback={<PageLoader/>}><WhatsAppMarketing/></Suspense></div>;
   if (loading && !dashboard) return <PageLoader />;
   return <div>
     <div style={{ display:"flex", justifyContent:"space-between", gap:16, alignItems:"start", marginBottom:24 }}>
       <div><p className="section-tag">Shared marketing control</p><h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"1.75rem", color:"#2c1f14" }}>Marketing Cloud</h1><p style={{ color:"#8c7060", marginTop:4 }}>Customers, Thikana listings and Savitri Livings campaigns all use one backend.</p></div>
-      <button className="btn-outline" onClick={load}><RefreshCw size={15}/> Refresh</button>
+      <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}><button className="btn-outline" onClick={()=>setShowWhatsApp(true)}><MessageCircle size={15}/>WhatsApp outreach</button><button className="btn-outline" onClick={load}><RefreshCw size={15}/> Refresh</button></div>
     </div>
     <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:14, marginBottom:24 }} className="marketing-stats">
       <StatCard label="Reachable customers" value={dashboard?.customers || 0} color="#b7791f" icon={Users}/><StatCard label="Saved audiences" value={dashboard?.audiences || 0} color="#a85a32" icon={Megaphone}/><StatCard label="Content assets" value={(dashboard?.creatives || 0) + (dashboard?.captions || 0)} color="#806146" icon={Images}/><StatCard label="Live Thikana listings" value={dashboard?.marketplaceListings || 0} color="#16805c" icon={Store}/>

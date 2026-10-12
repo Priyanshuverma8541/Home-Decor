@@ -50,6 +50,9 @@ export const leadAPI = {
   create:  (d) => api.post("/api/leads", d),
   update:  (id, d) => api.patch(`/api/leads/${id}`, d),
   remove:  (id)=> api.delete(`/api/leads/${id}`),
+  whatsappContacts: (params) => api.get("/api/leads/whatsapp-marketing", { params }),
+  addWhatsAppContact: (data) => api.post("/api/leads/whatsapp-marketing", data),
+  updateWhatsAppConsent: (id, enabled) => api.patch(`/api/leads/whatsapp-marketing/${id}/consent`, { enabled }),
 };
 export const userAPI = {
   getAll:          (p) => api.get("/api/users", { params: p }),

@@ -41,6 +41,26 @@ const settingsSchema = new mongoose.Schema({
   announcementText:  { type: String, default: "" },
   showAnnouncement:  { type: Boolean, default: false },
 
+  // Kolkata storefront — content and brand styling editable from Admin.
+  kolkataStorefront: {
+    enabled: { type: Boolean, default: true },
+    siteName: { type: String, trim: true, default: "Savitri Livings" },
+    announcementText: { type: String, trim: true, maxlength: 180, default: "Thoughtfully found jewellery, with a Kolkata point of view · Ask about availability in your area" },
+    showAnnouncement: { type: Boolean, default: true },
+    heroEyebrow: { type: String, trim: true, maxlength: 100, default: "Kolkata · limited jewellery drops" },
+    heroTitle: { type: String, trim: true, maxlength: 140, default: "Jewellery you'll love.\nRight here in Kolkata." },
+    heroDescription: { type: String, trim: true, maxlength: 400, default: "Discover thoughtful jewellery for everyday looks, celebrations and gifting — from a Savitri Livings collection you can explore right here in Kolkata." },
+    heroButtonText: { type: String, trim: true, maxlength: 60, default: "Explore latest pieces" },
+    heroImageUrl: { type: String, trim: true, default: "" },
+    featuredHeading: { type: String, trim: true, maxlength: 120, default: "Latest pieces, close to home." },
+    featuredDescription: { type: String, trim: true, maxlength: 300, default: "Fresh from the Savitri Livings catalogue. No made-up countdowns — just pieces you can ask us about." },
+    storyTitle: { type: String, trim: true, maxlength: 120, default: "Thoughtful finds, with people behind them." },
+    storyDescription: { type: String, trim: true, maxlength: 400, default: "Our Kolkata edit is shaped around real conversations: helping you choose a piece, discover local favourites and find something lovely for the moments that matter." },
+    primaryColor: { type: String, match: /^#[0-9a-fA-F]{6}$/, default: "#28483d" },
+    accentColor: { type: String, match: /^#[0-9a-fA-F]{6}$/, default: "#bc7155" },
+    backgroundColor: { type: String, match: /^#[0-9a-fA-F]{6}$/, default: "#f8f5ef" },
+  },
+
   // Permission / capability catalog exposed to the frontend permission center
   permissionCapabilities: {
     type: [

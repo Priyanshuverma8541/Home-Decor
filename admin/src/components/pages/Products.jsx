@@ -16,7 +16,8 @@ function ProductForm({ initial, onSave, onClose }) {
     price:"",
     comparePrice:"",
     stock:"",
-    availableCities:["Buxar"],
+    availableCities:["Buxar","Varanasi","Kolkata"],
+    kolkataVisible:true,
     tags:"",
     material:"",
     isFeatured:false,
@@ -124,6 +125,11 @@ function ProductForm({ initial, onSave, onClose }) {
         ))}
       </div>
 
+      <label style={{ display:"flex", alignItems:"center", gap:9, padding:".8rem .9rem", border:"1px solid #ead8c5", borderRadius:10, background:"#fffaf5", cursor:"pointer" }}>
+        <input type="checkbox" checked={form.kolkataVisible !== false} onChange={e=>setForm(f=>({...f,kolkataVisible:e.target.checked}))} style={{ width:16, height:16, accentColor:"#c96030" }}/>
+        <span><strong style={{ display:"block", color:"#2c1f14", fontSize:".85rem" }}>Show in Savitri Kolkata</strong><small style={{ color:"#8c7060" }}>Visible in Kolkata’s storefront catalogue while this product is active.</small></span>
+      </label>
+
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
         <div>
           <label className="label">Purchase mode</label>
@@ -192,16 +198,25 @@ export default function Products() {
   const load = async () => {
     setLoading(true);
     try {
-      const params = { limit:100 };
+      const params = { limit:100, page:1 };
       if (catFilter) params.category = catFilter;
       if (search)    params.search   = search;
       const { data } = await productAPI.getAll(params);
-      setProducts(data.products || []);
+      const allProducts = [...(data.products || [])];
+      const pages = Number(data.pages) || 1;
+      for (let page = 2; page <= pages; page += 4) {
+        const results = await Promise.all(Array.from({ length: Math.min(4, pages - page + 1) }, (_, offset) => productAPI.getAll({ ...params, page: page + offset })));
+        results.forEach((result) => allProducts.push(...(result.data.products || [])));
+      }
+      setProducts(allProducts);
     } catch { toast.error("Failed to load"); }
     finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, [catFilter, search]);
+  useEffect(() => {
+    const timer = setTimeout(() => load(), 250);
+    return () => clearTimeout(timer);
+  }, [catFilter, search]);
 
   const handleDelete = async (id) => {
     if (!confirm("Delete this product?")) return;
@@ -256,6 +271,7 @@ export default function Products() {
                   <span className="badge badge-sand" style={{ textTransform:"capitalize" }}>{p.category}</span>
                   {p.isFeatured && <span className="badge badge-clay">Featured</span>}
                   {p.isSeasonal && <span className="badge badge-teal">Seasonal</span>}
+                  <span className={`badge ${p.kolkataVisible !== false?"badge-teal":"badge-gray"}`}>{p.kolkataVisible !== false?"Kolkata":"Livings only"}</span>
                   <span className={`badge ${p.isActive?"badge-green":"badge-gray"}`}>{p.isActive?"Active":"Inactive"}</span>
                 </div>
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
