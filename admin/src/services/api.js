@@ -79,7 +79,7 @@ export const marketplaceAPI = {
   listings:   (status) => api.get("/api/marketplace/admin/listings", { params: status ? { status } : {} }),
   moderate:   (id, data) => api.patch(`/api/marketplace/admin/listings/${id}`, data),
   categories: () => api.get("/api/marketplace/admin/categories"),
-  addCategory:(data) => api.post("/api/marketplace/admin/categories", data),
+ addCategory:(data) => api.post("/api/marketplace/admin/categories", data),
   updateCategory:(id, data) => api.patch(`/api/marketplace/admin/categories/${id}`, data),
 };
 

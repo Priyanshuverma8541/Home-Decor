@@ -13,7 +13,7 @@ exports.getWhatsAppMarketing = async (req, res) => {
       if (phoneSearch) filter.$or.push({ phone: { $regex: phoneSearch } });
     }
     const [contacts, total] = await Promise.all([
-      Lead.find(filter).select("name phone city marketingConsent createdAt lastContactedAt").sort({ createdAt: -1 }).skip((pageNumber - 1) * pageSize).limit(pageSize).lean(),
+      Lead.find(filter).select("name phone email city source interestedIn budget marketingConsent createdAt lastContactedAt").sort({ createdAt: -1 }).skip((pageNumber - 1) * pageSize).limit(pageSize).lean(),
       Lead.countDocuments(filter),
     ]);
     res.json({ success: true, contacts, total, page: pageNumber, pages: Math.ceil(total / pageSize) });
