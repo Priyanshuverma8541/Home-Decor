@@ -23,6 +23,7 @@ const Savinexa = lazy(() => import("./components/pages/Savinexa.jsx"));
 const Audience = lazy(() => import("./components/pages/Audience.jsx"));
 const PlatformApps = lazy(() => import("./components/pages/PlatformApps.jsx"));
 const SavinexaWebsite = lazy(() => import("./components/savinexa/SavinexaWebsite.jsx"));
+const ClientStores = lazy(() => import("./components/pages/ClientStores.jsx"));
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="business-opportunities" element={<BusinessOpportunities />} />
             <Route path="push-notifications" element={<PushNotifications />} />
             <Route path="platform" element={<PlatformApps />} />
+            <Route path="client-stores" element={<ClientStores />} />
             <Route path="privacy" element={<PrivacyDataCenter />} />
             <Route path="pages" element={<Pages />} />
             <Route path="savinexa" element={<Savinexa />} />

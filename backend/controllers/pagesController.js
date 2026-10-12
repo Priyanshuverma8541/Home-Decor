@@ -415,7 +415,7 @@ exports.analytics = async (req, res) => {
       PageEvent.aggregate([{ $match: { pageId: page._id } }, { $group: { _id: "$type", count: { $sum: 1 }, revenue: { $sum: { $ifNull: ["$metadata.revenue", 0] } } } }]),
       PageEvent.distinct("sessionId", { pageId: page._id, type: "page_view", sessionId: { $ne: "" } }),
       PageSubmission.countDocuments({ pageId: page._id }),
-      Product.countDocuments({ isActive: true }),
+      Product.countDocuments({ tenantId: null, isActive: true }),
     ]);
     const totals = Object.fromEntries(events.map(({ _id, count }) => [_id, count]));
     const revenue = events.find(({ _id }) => _id === "purchase")?.revenue || 0;

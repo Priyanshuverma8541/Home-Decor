@@ -4,6 +4,7 @@ const orderItemSchema = new mongoose.Schema({
   productId:   { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
   name:        { type: String },
   image:       { type: String },
+  variant:     { type: String, trim: true, maxlength: 120 },
   quantity:    { type: Number, required: true, min: 1 },
   price:       { type: Number, required: true },
 }, { _id: false });
@@ -15,6 +16,7 @@ const timelineSchema = new mongoose.Schema({
 }, { _id: false });
 
 const orderSchema = new mongoose.Schema({
+  tenantId:          { type: mongoose.Schema.Types.ObjectId, ref: "Tenant", default: null, index: true },
   // Identifiers
   orderNumber:       { type: String, unique: true },
   customerId:        { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -64,8 +66,12 @@ const orderSchema = new mongoose.Schema({
 // Auto-generate order number
 orderSchema.pre("save", async function (next) {
   if (!this.orderNumber) {
-    const count = await mongoose.model("Order").countDocuments();
-    this.orderNumber = `SL-${String(count + 1).padStart(5, "0")}`;
+    if (this.tenantId) {
+      this.orderNumber = `MV-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+    } else {
+      const count = await mongoose.model("Order").countDocuments({ tenantId: null });
+      this.orderNumber = `SL-${String(count + 1).padStart(5, "0")}`;
+    }
   }
   next();
 });

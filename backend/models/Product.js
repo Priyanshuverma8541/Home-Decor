@@ -2,14 +2,16 @@ const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   name:             { type: String, required: true, trim: true },
+  tenantId:         { type: mongoose.Schema.Types.ObjectId, ref: "Tenant", default: null, index: true },
   description:      { type: String },
-  category:         { type: String, enum: ["rings","necklaces","earrings","bangles","bridal","silver","decor","gift","other"], required: true },
+  category:         { type: String, required: true, trim: true },
   subCategory:      { type: String },
   tags:             [{ type: String }],
   images:           [{ type: String }],  // Cloudinary URLs
   price:            { type: Number, required: true, min: 0 },
   comparePrice:     { type: Number },    // strikethrough price
   stock:            { type: Number, default: 0 },
+  variants:         [{ name: String, value: String, sku: String, stock: { type: Number, default: 0 }, priceAdjustment: { type: Number, default: 0 } }],
   sku:              { type: String },
   availableCities:  [{ type: String }], // retained for older records; Savitri Livings ships Pan-India
   kolkataVisible:   { type: Boolean, default: true, index: true },
@@ -36,5 +38,6 @@ const productSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 productSchema.index({ name: "text", description: "text", tags: "text" });
+productSchema.index({ tenantId: 1, isActive: 1, createdAt: -1 });
 
 module.exports = mongoose.model("Product", productSchema);

@@ -183,3 +183,15 @@ export const platformAPI = {
   rotateKey: (appId, id) => api.post(`/api/platform/v1/admin/applications/${appId}/keys/${id}/rotate`),
   revokeKey: (appId, id) => api.delete(`/api/platform/v1/admin/applications/${appId}/keys/${id}`),
 };
+
+export const tenantAPI = {
+  list: () => api.get("/api/tenants/admin"),
+  create: (data) => api.post("/api/tenants/admin", data),
+  get: (id) => api.get(`/api/tenants/admin/${id}`),
+  update: (id, data) => api.put(`/api/tenants/admin/${id}`, data),
+  setSetupCode: (id, code) => api.put(`/api/tenants/admin/${id}/setup-code`, { code }),
+  revokeAccess: (id) => api.delete(`/api/tenants/admin/${id}/access`),
+  admins: (id) => api.get(`/api/tenants/admin/${id}/admins`),
+  updateAdmin: (id, adminId, data) => api.put(`/api/tenants/admin/${id}/admins/${adminId}`, data),
+  sharedProducts: () => api.get("/api/tenants/admin/shared-products"),
+};

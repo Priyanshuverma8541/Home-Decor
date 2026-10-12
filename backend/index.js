@@ -10,6 +10,7 @@ dotenv.config();
 const connectDB  = require("./config/db");
 const pushNotificationsRouter = require("./routes/pushNotifications");
 const PlatformApplication = require("./platform/models/Application");
+const Tenant = require("./models/Tenant");
 const app        = express();
 const server     = http.createServer(app);
 const PORT       = process.env.PORT || 8081;
@@ -43,7 +44,8 @@ const corsOptions = {
     try {
       const host = new URL(clean).host.toLowerCase();
       const registered = await PlatformApplication.exists({ status: "active", allowedDomains: host });
-      if (registered) return cb(null, true);
+      const tenantDomain = await Tenant.exists({ status: "active", $or: [{ published: true, $or: [{ domain: host }, { aliases: host }] }, { adminDomain: host }] });
+      if (registered || tenantDomain) return cb(null, true);
     } catch (_error) { /* reject malformed or unregistered origins below */ }
     console.warn("🚫 CORS blocked:", origin);
     cb(new Error(`CORS: ${origin} not allowed`));
@@ -87,6 +89,7 @@ app.use("/api/overview", require("./routes/overview"));
 app.use("/api/entertainment", require("./routes/entertainment"));
 app.use("/api/pages",      require("./routes/pages"));
 app.use("/api/savinexa",   require("./modules/savinexa/routes"));
+app.use("/api/tenants", require("./routes/tenants"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

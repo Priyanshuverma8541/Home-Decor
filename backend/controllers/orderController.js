@@ -67,7 +67,7 @@ exports.create = async (req, res) => {
     let totalAmount = 0;
     const enrichedItems = [];
     for (const item of items) {
-      const product = await Product.findById(item.productId);
+      const product = await Product.findOne({ _id: item.productId, tenantId: null });
       if (!product || !product.isActive)
         return res.status(400).json({ success: false, message: `Product not available: ${item.productId}` });
       if (product.stock < item.quantity)
@@ -122,20 +122,20 @@ exports.create = async (req, res) => {
 
     // Reduce stock
     for (const item of items) {
-      await Product.findByIdAndUpdate(item.productId, { $inc: { stock: -item.quantity, soldCount: item.quantity } });
+      await Product.findOneAndUpdate({ _id: item.productId, tenantId: null, stock: { $gte: item.quantity } }, { $inc: { stock: -item.quantity, soldCount: item.quantity } });
     }
 
     // Auto-create / update lead
     const phone = req.user?.phone || guestPhone;
     if (phone) {
-      const existing = await Lead.findOne({ phone });
+      const existing = await Lead.findOne({ phone, tenantId: null });
       if (existing) {
         existing.status = "converted";
         existing.convertedOrderId = order._id;
         existing.convertedAt = new Date();
         await existing.save();
       } else {
-        await Lead.create({ name: req.user?.fullName || guestName, phone, city: orderCity, source: orderSource || "website", status: "converted", convertedOrderId: order._id, convertedAt: new Date(), userId: req.user?._id });
+        await Lead.create({ tenantId: null, name: req.user?.fullName || guestName, phone, city: orderCity, source: orderSource || "website", status: "converted", convertedOrderId: order._id, convertedAt: new Date(), userId: req.user?._id });
       }
     }
 

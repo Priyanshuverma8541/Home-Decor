@@ -44,7 +44,7 @@ exports.send = async (req, res) => {
     const cityFilter = campaign.targetCity !== "all" ? { city: campaign.targetCity } : {};
 
     if (campaign.targetAudience === "leads" || campaign.targetAudience === "interested") {
-      const leads = await Lead.find({ ...cityFilter, phone: { $exists: true, $ne: "" } });
+      const leads = await Lead.find({ tenantId: null, ...cityFilter, phone: { $exists: true, $ne: "" } });
       phones = leads.map(l => l.phone).filter(Boolean);
     } else {
       const users = await User.find({ ...cityFilter, role: "customer", phone: { $exists: true, $ne: "" } });

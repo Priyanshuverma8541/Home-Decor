@@ -5,7 +5,7 @@ exports.getWhatsAppMarketing = async (req, res) => {
     const { search = "", page = 1, limit = 100 } = req.query;
     const pageNumber = Math.max(1, Number(page) || 1);
     const pageSize = Math.min(100, Math.max(1, Number(limit) || 100));
-    const filter = { "marketingConsent.granted": true, "marketingConsent.channels": "whatsapp", phone: { $exists: true, $ne: "" } };
+    const filter = { tenantId: null, "marketingConsent.granted": true, "marketingConsent.channels": "whatsapp", phone: { $exists: true, $ne: "" } };
     if (String(search).trim()) {
       const escaped = String(search).trim().slice(0, 80).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const phoneSearch = String(search).replace(/[^+0-9]/g, "").slice(0, 24);
@@ -32,10 +32,10 @@ exports.addWhatsAppMarketing = async (req, res) => {
     if (req.body?.marketingConsent?.granted !== true || req.body?.marketingConsent?.channels?.includes("whatsapp") !== true) return res.status(400).json({ success: false, message: "Confirm this person has agreed to receive promotional WhatsApp messages before adding them." });
     if (!consentSource) return res.status(400).json({ success: false, message: "Choose how the person gave permission so the consent source is recorded." });
     phone = `+${digits}`;
-    const alreadyAdded = await Lead.exists({ phone, "marketingConsent.granted": true, "marketingConsent.channels": "whatsapp" });
+    const alreadyAdded = await Lead.exists({ tenantId: null, phone, "marketingConsent.granted": true, "marketingConsent.channels": "whatsapp" });
     if (alreadyAdded) return res.status(409).json({ success: false, message: "This WhatsApp number is already on the consented contact list." });
     const lead = await Lead.create({
-      name, phone, city: typeof req.body?.city === "string" ? req.body.city.trim().slice(0, 120) : "",
+      tenantId: null, name, phone, city: typeof req.body?.city === "string" ? req.body.city.trim().slice(0, 120) : "",
       source: "admin", status: "interested", tags: ["whatsapp-marketing"],
       contactConsent: { granted: true, grantedAt: new Date(), context: `whatsapp-marketing:${consentSource}` },
       marketingConsent: { granted: true, grantedAt: new Date(), channels: ["whatsapp"], purpose: "Savitri Livings and Savitri Kolkata product and offer updates", version: "2026-10-admin-opt-in" },
@@ -47,7 +47,7 @@ exports.addWhatsAppMarketing = async (req, res) => {
 
 exports.updateWhatsAppConsent = async (req, res) => {
   try {
-    const lead = await Lead.findById(req.params.id);
+    const lead = await Lead.findOne({ _id: req.params.id, tenantId: null });
     if (!lead) return res.status(404).json({ success: false, message: "Contact not found." });
     const enabled = req.body?.enabled === true;
     const channels = (lead.marketingConsent?.channels || []).filter((channel) => channel !== "whatsapp");
@@ -63,7 +63,7 @@ exports.updateWhatsAppConsent = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const { status, city, source, search, page = 1, limit = 30 } = req.query;
-    const filter = {};
+    const filter = { tenantId: null };
     if (status) filter.status = status;
     if (city)   filter.city   = city;
     if (source) filter.source = source;
@@ -128,7 +128,7 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { status, note, assignedTo, nextFollowUpAt, tags } = req.body;
-    const lead = await Lead.findById(req.params.id);
+    const lead = await Lead.findOne({ _id: req.params.id, tenantId: null });
     if (!lead) return res.status(404).json({ success: false, message: "Lead not found" });
 
     if (status)        lead.status = status;
@@ -149,7 +149,7 @@ exports.update = async (req, res) => {
 // DELETE /api/leads/:id
 exports.remove = async (req, res) => {
   try {
-    await Lead.findByIdAndDelete(req.params.id);
+    await Lead.findOneAndDelete({ _id: req.params.id, tenantId: null });
     res.json({ success: true, message: "Lead deleted" });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -159,13 +159,13 @@ exports.remove = async (req, res) => {
 // GET /api/leads/stats
 exports.getStats = async (req, res) => {
   try {
-    const pipeline = [{ $group: { _id: "$status", count: { $sum: 1 } } }];
+    const pipeline = [{ $match: { tenantId: null } }, { $group: { _id: "$status", count: { $sum: 1 } } }];
     const byStatus = await Lead.aggregate(pipeline);
-    const bySource = await Lead.aggregate([{ $group: { _id: "$source", count: { $sum: 1 } } }]);
-    const byCity   = await Lead.aggregate([{ $group: { _id: "$city",   count: { $sum: 1 } } }]);
-    const total    = await Lead.countDocuments();
+    const bySource = await Lead.aggregate([{ $match: { tenantId: null } }, { $group: { _id: "$source", count: { $sum: 1 } } }]);
+    const byCity   = await Lead.aggregate([{ $match: { tenantId: null } }, { $group: { _id: "$city",   count: { $sum: 1 } } }]);
+    const total    = await Lead.countDocuments({ tenantId: null });
     const today    = new Date(); today.setHours(0,0,0,0);
-    const todayNew = await Lead.countDocuments({ createdAt: { $gte: today } });
+    const todayNew = await Lead.countDocuments({ tenantId: null, createdAt: { $gte: today } });
     res.json({ success: true, total, todayNew, byStatus, bySource, byCity });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

@@ -33,7 +33,7 @@ const normalizeProductData = (data = {}) => {
 exports.getAll = async (req, res) => {
   try {
     const { category, city, search, featured, seasonal, storefront, page = 1, limit = 20 } = req.query;
-    const filter = { isActive: true };
+    const filter = { isActive: true, tenantId: null };
 
     if (storefront === "kolkata") filter.kolkataVisible = { $ne: false };
 
@@ -58,7 +58,7 @@ exports.getAll = async (req, res) => {
 // GET /api/products/:id
 exports.getOne = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate("vendorId","fullName shopName phone");
+    const product = await Product.findOne({ _id: req.params.id, tenantId: null }).populate("vendorId","fullName shopName phone");
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
     res.json({ success: true, product });
   } catch (err) {
@@ -70,7 +70,7 @@ exports.getOne = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const images = req.files?.map(f => f.path) || [];
-    const data   = normalizeProductData({ ...req.body, images });
+    const data   = normalizeProductData({ ...req.body, images, tenantId: null });
     if (data.meeshoEnabled) {
       const validationError = validateMeeshoUrl(data.meeshoUrl);
       if (validationError) return res.status(400).json({ success: false, message: validationError });
@@ -91,7 +91,8 @@ exports.update = async (req, res) => {
       if (validationError) return res.status(400).json({ success: false, message: validationError });
     }
     if (req.files?.length) data.images = req.files.map(f => f.path);
-    const product = await Product.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true });
+    delete data.tenantId;
+    const product = await Product.findOneAndUpdate({ _id: req.params.id, tenantId: null }, data, { new: true, runValidators: true });
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
     res.json({ success: true, product });
   } catch (err) {
@@ -102,7 +103,7 @@ exports.update = async (req, res) => {
 // DELETE /api/products/:id (admin)
 exports.remove = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id, tenantId: null });
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
     // Delete from Cloudinary
     for (const url of product.images) {
@@ -119,7 +120,7 @@ exports.remove = async (req, res) => {
 // PATCH /api/products/:id/toggle — activate/deactivate
 exports.toggle = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findOne({ _id: req.params.id, tenantId: null });
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
     product.isActive = !product.isActive;
     await product.save();

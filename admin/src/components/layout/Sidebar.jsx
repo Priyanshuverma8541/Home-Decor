@@ -15,6 +15,7 @@ const LINKS = [
   { to:"/marketing", Icon:Megaphone,       label:"Marketing Cloud"     },
   { to:"/push-notifications", Icon:Megaphone, label:"Push Notifications" },
   { to:"/platform", Icon:KeyRound, label:"Platform Apps & Keys" },
+  { to:"/client-stores", Icon:Store, label:"Client Stores" },
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },
   { to:"/pages",     Icon:FileText,          label:"Savitri Pages"       },

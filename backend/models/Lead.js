@@ -7,6 +7,7 @@ const noteSchema = new mongoose.Schema({
 }, { _id: false });
 
 const leadSchema = new mongoose.Schema({
+  tenantId:          { type: mongoose.Schema.Types.ObjectId, ref: "Tenant", default: null, index: true },
   name:              { type: String, trim: true },
   phone:             { type: String },
   email:             { type: String },

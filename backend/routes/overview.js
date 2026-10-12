@@ -23,9 +23,9 @@ const normalizeOverview = (data) => ({
 router.get("/", async (_req, res, next) => {
   try {
     const [products, orders, leads, users, listings, campaigns, settings] = await Promise.all([
-      Product.find({ isActive: true }).sort({ createdAt: -1 }).limit(12),
-      Order.find().sort({ createdAt: -1 }).limit(8),
-      Lead.find().sort({ createdAt: -1 }).limit(8),
+      Product.find({ tenantId: null, isActive: true }).sort({ createdAt: -1 }).limit(12),
+      Order.find({ tenantId: null }).sort({ createdAt: -1 }).limit(8),
+      Lead.find({ tenantId: null }).sort({ createdAt: -1 }).limit(8),
       User.find({ isActive: true }).sort({ createdAt: -1 }).limit(8),
       MarketplaceListing.find({ status: "active" }).sort({ createdAt: -1 }).limit(8),
       Campaign.find().sort({ createdAt: -1 }).limit(6),
@@ -52,9 +52,9 @@ router.get("/", async (_req, res, next) => {
 router.get("/admin", protect, adminOnly, async (_req, res, next) => {
   try {
     const [products, orders, leads, users, listings, campaigns, settings] = await Promise.all([
-      Product.find().sort({ createdAt: -1 }).limit(20),
-      Order.find().sort({ createdAt: -1 }).limit(20),
-      Lead.find().sort({ createdAt: -1 }).limit(20),
+      Product.find({ tenantId: null }).sort({ createdAt: -1 }).limit(20),
+      Order.find({ tenantId: null }).sort({ createdAt: -1 }).limit(20),
+      Lead.find({ tenantId: null }).sort({ createdAt: -1 }).limit(20),
       User.find().sort({ createdAt: -1 }).limit(20),
       MarketplaceListing.find().sort({ createdAt: -1 }).limit(20),
       Campaign.find().sort({ createdAt: -1 }).limit(20),
