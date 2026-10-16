@@ -21,6 +21,10 @@ const ALLOWED = [
   "https://home-decor-inky.vercel.app/",
   "https://online-delivery-wxjr.vercel.app/",
   "https://thikana-marketplace.vercel.app/",
+  // Maa Vindhwashni production apps. Keep these exact-origin entries so the
+  // admin can bootstrap its tenant before its domain is registered in MongoDB.
+  "https://admin-mauve-three-74.vercel.app",
+  "https://maa-vindhwashni-jewellery.vercel.app",
   "http://localhost:5175",
   "http://localhost:5176",
   "http://localhost:5173",
@@ -32,6 +36,8 @@ const ALLOWED = [
   process.env.CLIENT_URL,
   process.env.SAVINEXA_URL,
   process.env.KOLKATA_COMMERCE_URL,
+  process.env.MAA_ADMIN_URL,
+  process.env.MAA_CLIENT_URL,
 ].filter(Boolean).map(u => u.trim().replace(/\/$/, ""));
 
 console.log("✅ CORS origins:", ALLOWED);
