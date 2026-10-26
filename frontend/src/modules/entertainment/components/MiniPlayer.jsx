@@ -50,7 +50,7 @@ export default function MiniPlayer() {
   };
 
   return (
-    <div style={{ position: "fixed", left: 12, right: 12, bottom: 12, zIndex: 120, background: "rgba(30, 20, 12, 0.96)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 22, boxShadow: "0 25px 60px rgba(0,0,0,0.35)", backdropFilter: "blur(12px)", overflow: "hidden" }}>
+    <div style={{ position: "fixed", left: 12, right: 12, bottom: "calc(86px + env(safe-area-inset-bottom,0px))", zIndex: 120, background: "rgba(30, 20, 12, 0.96)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 22, boxShadow: "0 25px 60px rgba(0,0,0,0.35)", backdropFilter: "blur(12px)", overflow: "hidden" }}>
       <button
         type="button"
         onClick={() => setHiddenTrackId(currentTrack.youtubeVideoId)}

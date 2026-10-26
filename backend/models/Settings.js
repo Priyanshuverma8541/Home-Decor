@@ -78,7 +78,7 @@ const settingsSchema = new mongoose.Schema({
       { key: "location", label: "Location / Geolocation", purpose: "Delivery / nearby services", category: "permission", enabled: true, status: "not-granted", available: true },
       { key: "camera", label: "Camera", purpose: "Capture and upload product photos", category: "permission", enabled: true, status: "not-granted", available: true },
       { key: "microphone", label: "Microphone", purpose: "Voice search / voice input", category: "permission", enabled: true, status: "not-granted", available: true },
-      { key: "notifications", label: "Browser / Web Push Notifications", purpose: "Order and account alerts", category: "permission", enabled: true, status: "not-granted", available: true },
+      { key: "notifications", label: "Browser / Web Push Notifications", purpose: "Order updates, new arrivals and offers you choose to receive", category: "permission", enabled: true, status: "not-granted", available: true },
       { key: "contacts", label: "Contacts, where supported", purpose: "Import customer contact details", category: "permission", enabled: false, status: "not-granted", available: false },
       { key: "files", label: "Photos / File Upload", purpose: "Upload invoices and business documents", category: "permission", enabled: true, status: "not-granted", available: true },
       { key: "clipboard", label: "Clipboard", purpose: "Copy referral links and codes", category: "permission", enabled: true, status: "not-granted", available: true },

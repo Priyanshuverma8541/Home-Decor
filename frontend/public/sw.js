@@ -1,6 +1,22 @@
 /* Canonical Savitri service worker for PWA lifecycle and app-scoped Web Push. */
-self.addEventListener("install", () => self.skipWaiting());
-self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
+const APP_SHELL_CACHE = "sl-shell-v1";
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(APP_SHELL_CACHE).then((cache) => cache.add("/")).catch(() => {}));
+  self.skipWaiting();
+});
+self.addEventListener("activate", (event) => event.waitUntil(Promise.all([
+  self.clients.claim(),
+  caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith("sl-shell-") && key !== APP_SHELL_CACHE).map((key) => caches.delete(key)))),
+])));
+
+self.addEventListener("fetch", (event) => {
+  const request = event.request;
+  if (request.method !== "GET" || request.mode !== "navigate" || new URL(request.url).origin !== self.location.origin) return;
+  event.respondWith(fetch(request).then((response) => {
+    if (response.ok) caches.open(APP_SHELL_CACHE).then((cache) => cache.put(request, response.clone())).catch(() => {});
+    return response;
+  }).catch(async () => (await caches.match(request)) || (await caches.match("/"))));
+});
 
 const safeTarget = (raw) => {
   try { const target = new URL(raw || "/", self.location.origin); return target.origin === self.location.origin ? target.href : `${self.location.origin}/`; }

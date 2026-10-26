@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
 // ── Contexts ──────────────────────────────────────────────────────
@@ -34,12 +34,21 @@ import SavinexaProducts from "./components/pages/SavinexaProducts.jsx";
 import SavinexaProductDetail from "./components/pages/SavinexaProductDetail.jsx";
 import SavinexaLayout from "./components/layout/SavinexaLayout.jsx";
 import SavinexaPage from "./components/pages/SavinexaPage.jsx";
+import Tools from "./components/pages/Tools.jsx";
+import MallExperience from "./components/pages/MallExperience.jsx";
+import EngagementPrompts from "./components/ui/EngagementPrompts.jsx";
 
 function AppShell() {
   const [permissionOpen, setPermissionOpen] = useState(false);
   const [privacyLauncherVisible, setPrivacyLauncherVisible] = useState(
     () => localStorage.getItem("savitri-hide-privacy-launcher") !== "true"
   );
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator && window.isSecureContext) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
 
   const hidePrivacyLauncher = () => {
     localStorage.setItem("savitri-hide-privacy-launcher", "true");
@@ -51,6 +60,7 @@ function AppShell() {
       <Routes>
         <Route element={<Layout onOpenPermissions={() => setPermissionOpen(true)} />}>
           <Route index element={<Home />} />
+          <Route path="mall" element={<MallExperience />} />
           <Route path="shop" element={<Shop />} />
           <Route path="product/:id" element={<ProductDetail />} />
           <Route path="cart" element={<Cart />} />
@@ -73,6 +83,7 @@ function AppShell() {
             <Route path="jobs" element={<SavinexaJobs />} />
           </Route>
           <Route path="ecosystem" element={<Ecosystem />} />
+          <Route path="tools" element={<Tools />} />
           <Route path="partner-with-us" element={<PartnerWithUs />} />
           <Route path="entertainment" element={<EntertainmentHome />} />
           <Route path="entertainment/search" element={<EntertainmentSearch />} />
@@ -87,7 +98,7 @@ function AppShell() {
       </Routes>
 
       {privacyLauncherVisible && (
-        <div style={{ position: "fixed", right: 18, bottom: 22, zIndex: 1000 }}>
+        <div style={{ position: "fixed", right: 18, bottom: "calc(88px + env(safe-area-inset-bottom,0px))", zIndex: 1000 }}>
           <button
             type="button"
             onClick={() => setPermissionOpen(true)}
@@ -133,6 +144,7 @@ function AppShell() {
       )}
 
       <PermissionCenter open={permissionOpen} onClose={() => setPermissionOpen(false)} />
+      <EngagementPrompts />
     </>
   );
 }

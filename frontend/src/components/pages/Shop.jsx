@@ -55,10 +55,10 @@ function ProductCard({ p }) {
 }
 
 export default function Shop() {
+  const [sp, setSp] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading,  setLoading]  = useState(true);
-  const [search,   setSearch]   = useState("");
-  const [sp, setSp] = useSearchParams();
+  const [search,   setSearch]   = useState(() => sp.get("search") || "");
   const cat  = sp.get("category") || "All";
 
   const load = useCallback(async () => {

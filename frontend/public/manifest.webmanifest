@@ -1,0 +1,16 @@
+{
+  "id": "/",
+  "name": "Savitri Livings — Lifestyle · Living · More",
+  "short_name": "Savitri Livings",
+  "description": "Shop, discover your city, and explore more from Savitri Livings.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fffaf3",
+  "theme_color": "#56391e",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    { "src": "/brand/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
