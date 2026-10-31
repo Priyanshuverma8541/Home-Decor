@@ -58,7 +58,7 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
-  allowedHeaders: ["Content-Type","Authorization","X-Page-Preview","X-Privacy-Subject-Id","X-Savitri-Public-Key"],
+  allowedHeaders: ["Content-Type","Authorization","X-Page-Preview","X-Privacy-Subject-Id","X-Savitri-Public-Key","X-Tenant-Session"],
   optionsSuccessStatus: 200,
 };
 
@@ -96,6 +96,7 @@ app.use("/api/entertainment", require("./routes/entertainment"));
 app.use("/api/pages",      require("./routes/pages"));
 app.use("/api/savinexa",   require("./modules/savinexa/routes"));
 app.use("/api/tenants", require("./routes/tenants"));
+app.use("/api/checklists", require("./routes/checklists"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));
@@ -120,6 +121,7 @@ app.set("io", io);
 // ── START ─────────────────────────────────────────────────────────────────────
 (async () => {
   await connectDB();
+  await require("./scripts/ensureBusinessTenants")();
   pushNotificationsRouter.startScheduledCampaigns();
   server.listen(PORT, () => console.log(`🚀 Savitri Livings backend on port ${PORT}`));
 })();

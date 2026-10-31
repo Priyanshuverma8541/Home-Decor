@@ -9,7 +9,7 @@ const cookieToken = (header = "") => {
 
 exports.tenantAdmin = async (req, res, next) => {
   try {
-    const token = cookieToken(req.headers.cookie || "");
+    const token = String(req.headers["x-tenant-session"] || "") || cookieToken(req.headers.cookie || "");
     if (!token) return res.status(401).json({ success: false, message: "Sign in to continue" });
     const claims = jwt.verify(token, process.env.JWT_SECRET);
     if (claims.kind !== "tenant-admin" || !claims.clientAdminId || !claims.tenantId) throw new Error("Invalid session");

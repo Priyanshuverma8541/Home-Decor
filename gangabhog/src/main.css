@@ -1,0 +1,20 @@
+.carousel-item img {
+    object-fit: cover; /* Ensures the image covers the entire container without stretching */
+    height: 100vh; /* Makes the images take up the full height of the viewport */
+    width: 100%; /* Ensures the image takes up the full width of the container */
+}
+
+.card-img-top {
+    object-fit: cover; /* Ensures the card image is properly fitted */
+    height: 180px; /* Set a fixed height for the card image */
+    width: 100%; /* Makes the card image fit the full width */
+}
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll {
+  display: flex;
+  width: max-content;
+  animation: scroll 30s linear infinite;
+}

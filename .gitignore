@@ -1,0 +1,7 @@
+# Local environment files contain credentials; keep deployment secrets server-side.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example

@@ -73,6 +73,17 @@ export const partnerBusinessAPI = {
   apply: (data) => api.post("/api/partner-businesses/apply", data),
 };
 
+export const checklistAPI = {
+  templates: () => api.get("/api/checklists/templates"),
+  template: (id, version) => api.get(`/api/checklists/templates/${encodeURIComponent(id)}`, { params: version ? { version } : {} }),
+  drafts: () => api.get("/api/checklists/drafts"),
+  draft: (id) => api.get(`/api/checklists/drafts/${encodeURIComponent(id)}`),
+  createDraft: (data) => api.post("/api/checklists/drafts", data),
+  saveDraft: (id, data) => api.put(`/api/checklists/drafts/${encodeURIComponent(id)}`, data),
+  guidance: (data) => api.post("/api/checklists/guidance", data),
+  exportDraft: (id) => api.get(`/api/checklists/drafts/${encodeURIComponent(id)}/export`, { responseType: "blob" }),
+};
+
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),
   listings: (params) => api.get("/api/marketplace/listings", { params }),

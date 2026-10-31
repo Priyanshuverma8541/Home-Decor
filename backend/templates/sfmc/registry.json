@@ -1,0 +1,4141 @@
+[
+  {
+    "id": "email-qa",
+    "name": "Email QA",
+    "category": "Email QA",
+    "description": "Email creative and peer review checks.",
+    "checklistSheet": "Creative QA",
+    "version": "1.0.0",
+    "active": true,
+    "templateFile": "email-qa-v1.xlsx",
+    "fields": [
+      {
+        "id": "peer_2",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 2,
+        "label": "ServiceNow",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_3",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 3,
+        "label": "Category",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_4",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 4,
+        "label": "Task",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_5",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 5,
+        "label": "Assigned To",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_6",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 6,
+        "label": "Self QA",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_7",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 7,
+        "label": "Reviewed By",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_8",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 8,
+        "label": "Reviewed On",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_9",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 9,
+        "label": "Review Comments",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": true,
+        "editable": true
+      },
+      {
+        "id": "peer_10",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 10,
+        "label": "Review Closed",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r2_c4",
+        "sheet": "Creative QA",
+        "row": 2,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Email copy: spelling and grammar (Only for English Content)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r2_c5",
+        "sheet": "Creative QA",
+        "row": 2,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Email copy: spelling and grammar (Only for English Content)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r2_c6",
+        "sheet": "Creative QA",
+        "row": 2,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Email copy: spelling and grammar (Only for English Content)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r2_c7",
+        "sheet": "Creative QA",
+        "row": 2,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Email copy: spelling and grammar (Only for English Content)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r3_c4",
+        "sheet": "Creative QA",
+        "row": 3,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Follow a proper folder/Directory Structure like Year > Month. Example: 2021 > 03 March",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r3_c5",
+        "sheet": "Creative QA",
+        "row": 3,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Follow a proper folder/Directory Structure like Year > Month. Example: 2021 > 03 March",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r3_c6",
+        "sheet": "Creative QA",
+        "row": 3,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Follow a proper folder/Directory Structure like Year > Month. Example: 2021 > 03 March",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r3_c7",
+        "sheet": "Creative QA",
+        "row": 3,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Follow a proper folder/Directory Structure like Year > Month. Example: 2021 > 03 March",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r4_c4",
+        "sheet": "Creative QA",
+        "row": 4,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Follow a proper naming convention like AMI_EventName_EmailType_EventDate_CountryCode. Example: AMI_ABCD_Invite_MMDDYYYY_AN",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r4_c5",
+        "sheet": "Creative QA",
+        "row": 4,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Follow a proper naming convention like AMI_EventName_EmailType_EventDate_CountryCode. Example: AMI_ABCD_Invite_MMDDYYYY_AN",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r4_c6",
+        "sheet": "Creative QA",
+        "row": 4,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Follow a proper naming convention like AMI_EventName_EmailType_EventDate_CountryCode. Example: AMI_ABCD_Invite_MMDDYYYY_AN",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r4_c7",
+        "sheet": "Creative QA",
+        "row": 4,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Follow a proper naming convention like AMI_EventName_EmailType_EventDate_CountryCode. Example: AMI_ABCD_Invite_MMDDYYYY_AN",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r5_c4",
+        "sheet": "Creative QA",
+        "row": 5,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Subject line & preheader are correct",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r5_c5",
+        "sheet": "Creative QA",
+        "row": 5,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Subject line & preheader are correct",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r5_c6",
+        "sheet": "Creative QA",
+        "row": 5,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Subject line & preheader are correct",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r5_c7",
+        "sheet": "Creative QA",
+        "row": 5,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Subject line & preheader are correct",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r6_c4",
+        "sheet": "Creative QA",
+        "row": 6,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Any link to Cloudpage should be used with CloudPagesURL function",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r6_c5",
+        "sheet": "Creative QA",
+        "row": 6,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Any link to Cloudpage should be used with CloudPagesURL function",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r6_c6",
+        "sheet": "Creative QA",
+        "row": 6,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Any link to Cloudpage should be used with CloudPagesURL function",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r6_c7",
+        "sheet": "Creative QA",
+        "row": 6,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Any link to Cloudpage should be used with CloudPagesURL function",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r7_c4",
+        "sheet": "Creative QA",
+        "row": 7,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Dynamic/personalised content is working and default/backup content is specified",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r7_c5",
+        "sheet": "Creative QA",
+        "row": 7,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Dynamic/personalised content is working and default/backup content is specified",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r7_c6",
+        "sheet": "Creative QA",
+        "row": 7,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Dynamic/personalised content is working and default/backup content is specified",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r7_c7",
+        "sheet": "Creative QA",
+        "row": 7,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Dynamic/personalised content is working and default/backup content is specified",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r8_c4",
+        "sheet": "Creative QA",
+        "row": 8,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Checking all the Images are getting download",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r8_c5",
+        "sheet": "Creative QA",
+        "row": 8,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Checking all the Images are getting download",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r8_c6",
+        "sheet": "Creative QA",
+        "row": 8,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Checking all the Images are getting download",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r8_c7",
+        "sheet": "Creative QA",
+        "row": 8,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Checking all the Images are getting download",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r9_c4",
+        "sheet": "Creative QA",
+        "row": 9,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "\"View In Web\" link is included and working correctly",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r9_c5",
+        "sheet": "Creative QA",
+        "row": 9,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "\"View In Web\" link is included and working correctly",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r9_c6",
+        "sheet": "Creative QA",
+        "row": 9,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "\"View In Web\" link is included and working correctly",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r9_c7",
+        "sheet": "Creative QA",
+        "row": 9,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "\"View In Web\" link is included and working correctly",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r10_c4",
+        "sheet": "Creative QA",
+        "row": 10,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Do a test send and verify the links are redirecting to the correct landing page.",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r10_c5",
+        "sheet": "Creative QA",
+        "row": 10,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Do a test send and verify the links are redirecting to the correct landing page.",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r10_c6",
+        "sheet": "Creative QA",
+        "row": 10,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Do a test send and verify the links are redirecting to the correct landing page.",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r10_c7",
+        "sheet": "Creative QA",
+        "row": 10,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Do a test send and verify the links are redirecting to the correct landing page.",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r11_c4",
+        "sheet": "Creative QA",
+        "row": 11,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "All the links are directed to the right page with no error",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r11_c5",
+        "sheet": "Creative QA",
+        "row": 11,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "All the links are directed to the right page with no error",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r11_c6",
+        "sheet": "Creative QA",
+        "row": 11,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "All the links are directed to the right page with no error",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r11_c7",
+        "sheet": "Creative QA",
+        "row": 11,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "All the links are directed to the right page with no error",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r12_c4",
+        "sheet": "Creative QA",
+        "row": 12,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Images used are hosted in Salesforce Marketing Cloud",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r12_c5",
+        "sheet": "Creative QA",
+        "row": 12,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Images used are hosted in Salesforce Marketing Cloud",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r12_c6",
+        "sheet": "Creative QA",
+        "row": 12,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Images used are hosted in Salesforce Marketing Cloud",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r12_c7",
+        "sheet": "Creative QA",
+        "row": 12,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Images used are hosted in Salesforce Marketing Cloud",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r13_c4",
+        "sheet": "Creative QA",
+        "row": 13,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "CAN-SPAM rules are followed (Physical Mailing Address, Unsubscirbe link, Privacy links)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r13_c5",
+        "sheet": "Creative QA",
+        "row": 13,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "CAN-SPAM rules are followed (Physical Mailing Address, Unsubscirbe link, Privacy links)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r13_c6",
+        "sheet": "Creative QA",
+        "row": 13,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "CAN-SPAM rules are followed (Physical Mailing Address, Unsubscirbe link, Privacy links)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r13_c7",
+        "sheet": "Creative QA",
+        "row": 13,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "CAN-SPAM rules are followed (Physical Mailing Address, Unsubscirbe link, Privacy links)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r14_c4",
+        "sheet": "Creative QA",
+        "row": 14,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Full width images shoud be of 600px width.",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r14_c5",
+        "sheet": "Creative QA",
+        "row": 14,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Full width images shoud be of 600px width.",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r14_c6",
+        "sheet": "Creative QA",
+        "row": 14,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Full width images shoud be of 600px width.",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r14_c7",
+        "sheet": "Creative QA",
+        "row": 14,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Full width images shoud be of 600px width.",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r15_c4",
+        "sheet": "Creative QA",
+        "row": 15,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Email rendering in outlook for Desktop and mobile",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r15_c5",
+        "sheet": "Creative QA",
+        "row": 15,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Email rendering in outlook for Desktop and mobile",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r15_c6",
+        "sheet": "Creative QA",
+        "row": 15,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Email rendering in outlook for Desktop and mobile",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r15_c7",
+        "sheet": "Creative QA",
+        "row": 15,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Email rendering in outlook for Desktop and mobile",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r16_c4",
+        "sheet": "Creative QA",
+        "row": 16,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "In test send which send classification is appearing : (Confirm with developer)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r16_c5",
+        "sheet": "Creative QA",
+        "row": 16,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "In test send which send classification is appearing : (Confirm with developer)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r16_c6",
+        "sheet": "Creative QA",
+        "row": 16,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "In test send which send classification is appearing : (Confirm with developer)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r16_c7",
+        "sheet": "Creative QA",
+        "row": 16,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "In test send which send classification is appearing : (Confirm with developer)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r17_c4",
+        "sheet": "Creative QA",
+        "row": 17,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "* Product & Service Direct marketing",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r17_c5",
+        "sheet": "Creative QA",
+        "row": 17,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "* Product & Service Direct marketing",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r17_c6",
+        "sheet": "Creative QA",
+        "row": 17,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "* Product & Service Direct marketing",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r17_c7",
+        "sheet": "Creative QA",
+        "row": 17,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "* Product & Service Direct marketing",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r18_c4",
+        "sheet": "Creative QA",
+        "row": 18,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "* Allergan Event",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r18_c5",
+        "sheet": "Creative QA",
+        "row": 18,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "* Allergan Event",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r18_c6",
+        "sheet": "Creative QA",
+        "row": 18,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "* Allergan Event",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r18_c7",
+        "sheet": "Creative QA",
+        "row": 18,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "* Allergan Event",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r19_c4",
+        "sheet": "Creative QA",
+        "row": 19,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "* Non_Allergan Event",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r19_c5",
+        "sheet": "Creative QA",
+        "row": 19,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "* Non_Allergan Event",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r19_c6",
+        "sheet": "Creative QA",
+        "row": 19,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "* Non_Allergan Event",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r19_c7",
+        "sheet": "Creative QA",
+        "row": 19,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "* Non_Allergan Event",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r20_c4",
+        "sheet": "Creative QA",
+        "row": 20,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Unsubscription link is included & working fine.",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r20_c5",
+        "sheet": "Creative QA",
+        "row": 20,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Unsubscription link is included & working fine.",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r20_c6",
+        "sheet": "Creative QA",
+        "row": 20,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Unsubscription link is included & working fine.",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r20_c7",
+        "sheet": "Creative QA",
+        "row": 20,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Unsubscription link is included & working fine.",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r21_c4",
+        "sheet": "Creative QA",
+        "row": 21,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Email is tagged with correct campaign association",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r21_c5",
+        "sheet": "Creative QA",
+        "row": 21,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Email is tagged with correct campaign association",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r21_c6",
+        "sheet": "Creative QA",
+        "row": 21,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Email is tagged with correct campaign association",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r21_c7",
+        "sheet": "Creative QA",
+        "row": 21,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Email is tagged with correct campaign association",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r22_c4",
+        "sheet": "Creative QA",
+        "row": 22,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Confirm all dynamic content & ampscript variables are functioning with test DE",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r22_c5",
+        "sheet": "Creative QA",
+        "row": 22,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Confirm all dynamic content & ampscript variables are functioning with test DE",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r22_c6",
+        "sheet": "Creative QA",
+        "row": 22,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Confirm all dynamic content & ampscript variables are functioning with test DE",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r22_c7",
+        "sheet": "Creative QA",
+        "row": 22,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Confirm all dynamic content & ampscript variables are functioning with test DE",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r23_c4",
+        "sheet": "Creative QA",
+        "row": 23,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Confirm URLs & UTMs match brief",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r23_c5",
+        "sheet": "Creative QA",
+        "row": 23,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Confirm URLs & UTMs match brief",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r23_c6",
+        "sheet": "Creative QA",
+        "row": 23,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Confirm URLs & UTMs match brief",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r23_c7",
+        "sheet": "Creative QA",
+        "row": 23,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Confirm URLs & UTMs match brief",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r24_c4",
+        "sheet": "Creative QA",
+        "row": 24,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check Open Tracking Pixel is coded (if HTML paste)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r24_c5",
+        "sheet": "Creative QA",
+        "row": 24,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Check Open Tracking Pixel is coded (if HTML paste)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r24_c6",
+        "sheet": "Creative QA",
+        "row": 24,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check Open Tracking Pixel is coded (if HTML paste)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r24_c7",
+        "sheet": "Creative QA",
+        "row": 24,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Check Open Tracking Pixel is coded (if HTML paste)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r25_c4",
+        "sheet": "Creative QA",
+        "row": 25,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the sender profile is correct",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r25_c5",
+        "sheet": "Creative QA",
+        "row": 25,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Check the sender profile is correct",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r25_c6",
+        "sheet": "Creative QA",
+        "row": 25,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the sender profile is correct",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r25_c7",
+        "sheet": "Creative QA",
+        "row": 25,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Check the sender profile is correct",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r26_c4",
+        "sheet": "Creative QA",
+        "row": 26,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Confirm IP is 'Received-SPF: Pass' (open View Original in Gmail)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r26_c5",
+        "sheet": "Creative QA",
+        "row": 26,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Confirm IP is 'Received-SPF: Pass' (open View Original in Gmail)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r26_c6",
+        "sheet": "Creative QA",
+        "row": 26,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Confirm IP is 'Received-SPF: Pass' (open View Original in Gmail)",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r26_c7",
+        "sheet": "Creative QA",
+        "row": 26,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Confirm IP is 'Received-SPF: Pass' (open View Original in Gmail)",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r27_c4",
+        "sheet": "Creative QA",
+        "row": 27,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the provided assets are matching",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r27_c5",
+        "sheet": "Creative QA",
+        "row": 27,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Check the provided assets are matching",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r27_c6",
+        "sheet": "Creative QA",
+        "row": 27,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the provided assets are matching",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r27_c7",
+        "sheet": "Creative QA",
+        "row": 27,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Check the provided assets are matching",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r28_c4",
+        "sheet": "Creative QA",
+        "row": 28,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the alt text is present for all images",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r28_c5",
+        "sheet": "Creative QA",
+        "row": 28,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Check the alt text is present for all images",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r28_c6",
+        "sheet": "Creative QA",
+        "row": 28,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the alt text is present for all images",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r28_c7",
+        "sheet": "Creative QA",
+        "row": 28,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Check the alt text is present for all images",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r29_c4",
+        "sheet": "Creative QA",
+        "row": 29,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the Veeva code is present in an email",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r29_c5",
+        "sheet": "Creative QA",
+        "row": 29,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Check the Veeva code is present in an email",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r29_c6",
+        "sheet": "Creative QA",
+        "row": 29,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the Veeva code is present in an email",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r29_c7",
+        "sheet": "Creative QA",
+        "row": 29,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Check the Veeva code is present in an email",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r30_c4",
+        "sheet": "Creative QA",
+        "row": 30,
+        "col": 4,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the rendering for desktop and mobile",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r30_c5",
+        "sheet": "Creative QA",
+        "row": 30,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Email",
+        "description": "Check the rendering for desktop and mobile",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "creative_qa_r30_c6",
+        "sheet": "Creative QA",
+        "row": 30,
+        "col": 6,
+        "label": "Status",
+        "section": "Email",
+        "description": "Check the rendering for desktop and mobile",
+        "category": "Email",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "creative_qa_r30_c7",
+        "sheet": "Creative QA",
+        "row": 30,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Email",
+        "description": "Check the rendering for desktop and mobile",
+        "category": "Email",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "peer_r6_c2",
+        "sheet": "Peer Review",
+        "row": 6,
+        "col": 2,
+        "label": "Emails Path",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "Emails Path: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r7_c2",
+        "sheet": "Peer Review",
+        "row": 7,
+        "col": 2,
+        "label": "Email Name",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "Email Name: ",
+        "editable": true
+      }
+    ],
+    "worksheets": [
+      "Peer Review",
+      "Creative QA",
+      "Email Snap"
+    ],
+    "evidenceSheets": [
+      "Email Snap"
+    ]
+  },
+  {
+    "id": "data-extension-qa",
+    "name": "Data Extension QA",
+    "category": "Data Extension QA",
+    "description": "Data Extension, SQL Query and Automation checks.",
+    "checklistSheet": "Data Set Logic QA",
+    "version": "1.0.0",
+    "active": true,
+    "templateFile": "data-extension-qa-v1.xlsx",
+    "fields": [
+      {
+        "id": "peer_2",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 2,
+        "label": "ServiceNow",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_3",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 3,
+        "label": "Category",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_4",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 4,
+        "label": "Task",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_5",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 5,
+        "label": "Assigned To",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_6",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 6,
+        "label": "Self QA",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_7",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 7,
+        "label": "Reviewed By",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_8",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 8,
+        "label": "Reviewed On",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_9",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 9,
+        "label": "Review Comments",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": true,
+        "editable": true
+      },
+      {
+        "id": "peer_10",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 10,
+        "label": "Review Closed",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r2_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 2,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Follow a proper naming convetion for DEs like AMI_<EventName>_<EventDate>_<EventID>_<CountryCode>. Example: AMI_ABCD_DDMMYYYY_abcd1234_AN",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r2_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 2,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Follow a proper naming convetion for DEs like AMI_<EventName>_<EventDate>_<EventID>_<CountryCode>. Example: AMI_ABCD_DDMMYYYY_abcd1234_AN",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r2_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 2,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Follow a proper naming convetion for DEs like AMI_<EventName>_<EventDate>_<EventID>_<CountryCode>. Example: AMI_ABCD_DDMMYYYY_abcd1234_AN",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r2_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 2,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Follow a proper naming convetion for DEs like AMI_<EventName>_<EventDate>_<EventID>_<CountryCode>. Example: AMI_ABCD_DDMMYYYY_abcd1234_AN",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r3_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 3,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Verify SubscriberKey is properly identified",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r3_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 3,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Verify SubscriberKey is properly identified",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r3_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 3,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Verify SubscriberKey is properly identified",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r3_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 3,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Verify SubscriberKey is properly identified",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r4_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 4,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Primary Key is set as per defined data model",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r4_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 4,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Primary Key is set as per defined data model",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r4_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 4,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Primary Key is set as per defined data model",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r4_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 4,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Primary Key is set as per defined data model",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r5_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 5,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Data extension audience features AccountID, ContactID(Subscriber Key) and Email fields",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r5_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 5,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Data extension audience features AccountID, ContactID(Subscriber Key) and Email fields",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r5_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 5,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Data extension audience features AccountID, ContactID(Subscriber Key) and Email fields",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r5_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 5,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Data extension audience features AccountID, ContactID(Subscriber Key) and Email fields",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r6_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 6,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Seed list recipients are added to data extension audience if necessary",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r6_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 6,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Seed list recipients are added to data extension audience if necessary",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r6_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 6,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Seed list recipients are added to data extension audience if necessary",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r6_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 6,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Seed list recipients are added to data extension audience if necessary",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r7_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 7,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Verify Data Retention for Update tables",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r7_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 7,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Verify Data Retention for Update tables",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r7_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 7,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Verify Data Retention for Update tables",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r7_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 7,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Verify Data Retention for Update tables",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r8_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 8,
+        "col": 4,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Only Target DE and DE used in Attribute Groups should be marked as Sendable",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r8_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 8,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Data Extension",
+        "description": "Only Target DE and DE used in Attribute Groups should be marked as Sendable",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r8_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 8,
+        "col": 6,
+        "label": "Status",
+        "section": "Data Extension",
+        "description": "Only Target DE and DE used in Attribute Groups should be marked as Sendable",
+        "category": "Data Extension",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r8_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 8,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Data Extension",
+        "description": "Only Target DE and DE used in Attribute Groups should be marked as Sendable",
+        "category": "Data Extension",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r9_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 9,
+        "col": 4,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Follow a proper Folder structure and naming convention for query",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r9_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 9,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "SQL Query",
+        "description": "Follow a proper Folder structure and naming convention for query",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r9_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 9,
+        "col": 6,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Follow a proper Folder structure and naming convention for query",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r9_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 9,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "SQL Query",
+        "description": "Follow a proper Folder structure and naming convention for query",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r10_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 10,
+        "col": 4,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Check the logic is correct as per the business rule",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r10_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 10,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "SQL Query",
+        "description": "Check the logic is correct as per the business rule",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r10_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 10,
+        "col": 6,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Check the logic is correct as per the business rule",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r10_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 10,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "SQL Query",
+        "description": "Check the logic is correct as per the business rule",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r11_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 11,
+        "col": 4,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Check the Target DE is correct for each query",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r11_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 11,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "SQL Query",
+        "description": "Check the Target DE is correct for each query",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r11_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 11,
+        "col": 6,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Check the Target DE is correct for each query",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r11_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 11,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "SQL Query",
+        "description": "Check the Target DE is correct for each query",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r12_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 12,
+        "col": 4,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Check the data action is correct (Overwrite,Append,Update)",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r12_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 12,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "SQL Query",
+        "description": "Check the data action is correct (Overwrite,Append,Update)",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r12_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 12,
+        "col": 6,
+        "label": "Status",
+        "section": "SQL Query",
+        "description": "Check the data action is correct (Overwrite,Append,Update)",
+        "category": "SQL Query",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r12_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 12,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "SQL Query",
+        "description": "Check the data action is correct (Overwrite,Append,Update)",
+        "category": "SQL Query",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r13_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 13,
+        "col": 4,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Follow a proper Folder structure and naming convetion for automation",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r13_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 13,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Automation",
+        "description": "Follow a proper Folder structure and naming convetion for automation",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r13_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 13,
+        "col": 6,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Follow a proper Folder structure and naming convetion for automation",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r13_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 13,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Automation",
+        "description": "Follow a proper Folder structure and naming convetion for automation",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r14_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 14,
+        "col": 4,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Check timezone setting and frequency for scheduled automation",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r14_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 14,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Automation",
+        "description": "Check timezone setting and frequency for scheduled automation",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r14_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 14,
+        "col": 6,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Check timezone setting and frequency for scheduled automation",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r14_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 14,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Automation",
+        "description": "Check timezone setting and frequency for scheduled automation",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r15_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 15,
+        "col": 4,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Check the defined automation is completed successfully without any runtime error",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r15_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 15,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Automation",
+        "description": "Check the defined automation is completed successfully without any runtime error",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r15_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 15,
+        "col": 6,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Check the defined automation is completed successfully without any runtime error",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r15_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 15,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Automation",
+        "description": "Check the defined automation is completed successfully without any runtime error",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r16_c4",
+        "sheet": "Data Set Logic QA",
+        "row": 16,
+        "col": 4,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Check for notification emails configured for both success and failure",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r16_c5",
+        "sheet": "Data Set Logic QA",
+        "row": 16,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Automation",
+        "description": "Check for notification emails configured for both success and failure",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "data_set_logic_qa_r16_c6",
+        "sheet": "Data Set Logic QA",
+        "row": 16,
+        "col": 6,
+        "label": "Status",
+        "section": "Automation",
+        "description": "Check for notification emails configured for both success and failure",
+        "category": "Automation",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Passed",
+          "NA"
+        ]
+      },
+      {
+        "id": "data_set_logic_qa_r16_c7",
+        "sheet": "Data Set Logic QA",
+        "row": 16,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Automation",
+        "description": "Check for notification emails configured for both success and failure",
+        "category": "Automation",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "peer_r7_c3",
+        "sheet": "Peer Review",
+        "row": 7,
+        "col": 3,
+        "label": "ClientDE Details",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "ClientDE Details: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r8_c3",
+        "sheet": "Peer Review",
+        "row": 8,
+        "col": 3,
+        "label": "ClientDE Path",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "ClientDE Path: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r9_c3",
+        "sheet": "Peer Review",
+        "row": 9,
+        "col": 3,
+        "label": "ClientDE Name",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "ClientDE Name: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r10_c3",
+        "sheet": "Peer Review",
+        "row": 10,
+        "col": 3,
+        "label": "Count",
+        "section": "Peer Review",
+        "type": "number",
+        "prefix": "Count: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r12_c3",
+        "sheet": "Peer Review",
+        "row": 12,
+        "col": 3,
+        "label": "TargetDE Details",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "TargetDE Details: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r13_c3",
+        "sheet": "Peer Review",
+        "row": 13,
+        "col": 3,
+        "label": "TargetDE Path",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "TargetDE Path: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r14_c3",
+        "sheet": "Peer Review",
+        "row": 14,
+        "col": 3,
+        "label": "TargetDE Name",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "TargetDE Name: ",
+        "editable": true
+      },
+      {
+        "id": "peer_r15_c3",
+        "sheet": "Peer Review",
+        "row": 15,
+        "col": 3,
+        "label": "Count",
+        "section": "Peer Review",
+        "type": "number",
+        "prefix": "Count: ",
+        "editable": true
+      }
+    ],
+    "worksheets": [
+      "Peer Review",
+      "Data Set Logic QA",
+      " ClientDE Snap",
+      "TargetDE Snap"
+    ],
+    "evidenceSheets": [
+      " ClientDE Snap",
+      "TargetDE Snap"
+    ]
+  },
+  {
+    "id": "journey-whatsapp-qa",
+    "name": "Journey Builder + WhatsApp QA",
+    "category": "Journey Builder QA",
+    "description": "Journey Builder and WhatsApp configuration checks in the supplied workbook.",
+    "checklistSheet": "Journey Builder QA",
+    "version": "1.0.0",
+    "active": true,
+    "templateFile": "journey-whatsapp-qa-v1.xlsx",
+    "fields": [
+      {
+        "id": "peer_2",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 2,
+        "label": "JIRA",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_3",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 3,
+        "label": "Category",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_4",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 4,
+        "label": "Task",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_5",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 5,
+        "label": "Assigned To",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_6",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 6,
+        "label": "Self QA",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_7",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 7,
+        "label": "Reviewed By",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_8",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 8,
+        "label": "Reviewed On",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "peer_9",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 9,
+        "label": "Review Comments",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": true,
+        "editable": true
+      },
+      {
+        "id": "peer_10",
+        "sheet": "Peer Review",
+        "row": 2,
+        "col": 10,
+        "label": "Review Closed",
+        "section": "Peer Review",
+        "type": "text",
+        "multiline": false,
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r2_c4",
+        "sheet": "Journey Builder QA",
+        "row": 2,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Follow a proper Folder structure and naming convetion for journey",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r2_c5",
+        "sheet": "Journey Builder QA",
+        "row": 2,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Follow a proper Folder structure and naming convetion for journey",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r2_c6",
+        "sheet": "Journey Builder QA",
+        "row": 2,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Follow a proper Folder structure and naming convetion for journey",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r2_c7",
+        "sheet": "Journey Builder QA",
+        "row": 2,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Follow a proper Folder structure and naming convetion for journey",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r3_c4",
+        "sheet": "Journey Builder QA",
+        "row": 3,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Confirm the entry source is correct as per the business rule",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r3_c5",
+        "sheet": "Journey Builder QA",
+        "row": 3,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Confirm the entry source is correct as per the business rule",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r3_c6",
+        "sheet": "Journey Builder QA",
+        "row": 3,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Confirm the entry source is correct as per the business rule",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r3_c7",
+        "sheet": "Journey Builder QA",
+        "row": 3,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Confirm the entry source is correct as per the business rule",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r4_c4",
+        "sheet": "Journey Builder QA",
+        "row": 4,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Journey has filter criteria configured",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r4_c5",
+        "sheet": "Journey Builder QA",
+        "row": 4,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Journey has filter criteria configured",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r4_c6",
+        "sheet": "Journey Builder QA",
+        "row": 4,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Journey has filter criteria configured",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r4_c7",
+        "sheet": "Journey Builder QA",
+        "row": 4,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Journey has filter criteria configured",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r5_c4",
+        "sheet": "Journey Builder QA",
+        "row": 5,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Verify the related WA automations are active",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r5_c5",
+        "sheet": "Journey Builder QA",
+        "row": 5,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Verify the related WA automations are active",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r5_c6",
+        "sheet": "Journey Builder QA",
+        "row": 5,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Verify the related WA automations are active",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r5_c7",
+        "sheet": "Journey Builder QA",
+        "row": 5,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Verify the related WA automations are active",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r6_c4",
+        "sheet": "Journey Builder QA",
+        "row": 6,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Check the Journey Logic as per the requirement",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r6_c5",
+        "sheet": "Journey Builder QA",
+        "row": 6,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Check the Journey Logic as per the requirement",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r6_c6",
+        "sheet": "Journey Builder QA",
+        "row": 6,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Check the Journey Logic as per the requirement",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r6_c7",
+        "sheet": "Journey Builder QA",
+        "row": 6,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Check the Journey Logic as per the requirement",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r7_c4",
+        "sheet": "Journey Builder QA",
+        "row": 7,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Check the data count at the entry point",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r7_c5",
+        "sheet": "Journey Builder QA",
+        "row": 7,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Check the data count at the entry point",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r7_c6",
+        "sheet": "Journey Builder QA",
+        "row": 7,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Check the data count at the entry point",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r7_c7",
+        "sheet": "Journey Builder QA",
+        "row": 7,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Check the data count at the entry point",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r8_c4",
+        "sheet": "Journey Builder QA",
+        "row": 8,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Check the correct journey setting is selected",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r8_c5",
+        "sheet": "Journey Builder QA",
+        "row": 8,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Check the correct journey setting is selected",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r8_c6",
+        "sheet": "Journey Builder QA",
+        "row": 8,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Check the correct journey setting is selected",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r8_c7",
+        "sheet": "Journey Builder QA",
+        "row": 8,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Check the correct journey setting is selected",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r9_c4",
+        "sheet": "Journey Builder QA",
+        "row": 9,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Journey features a check for consent",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r9_c5",
+        "sheet": "Journey Builder QA",
+        "row": 9,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Journey features a check for consent",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r9_c6",
+        "sheet": "Journey Builder QA",
+        "row": 9,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Journey features a check for consent",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r9_c7",
+        "sheet": "Journey Builder QA",
+        "row": 9,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Journey features a check for consent",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r10_c4",
+        "sheet": "Journey Builder QA",
+        "row": 10,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Validate the Journey",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r10_c5",
+        "sheet": "Journey Builder QA",
+        "row": 10,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Validate the Journey",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r10_c6",
+        "sheet": "Journey Builder QA",
+        "row": 10,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Validate the Journey",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r10_c7",
+        "sheet": "Journey Builder QA",
+        "row": 10,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Validate the Journey",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r11_c4",
+        "sheet": "Journey Builder QA",
+        "row": 11,
+        "col": 4,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Test the journey with test data or live data without triggering any messages to check, how the journey/'s logic is working.",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r11_c5",
+        "sheet": "Journey Builder QA",
+        "row": 11,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Journey Configuration",
+        "description": "Test the journey with test data or live data without triggering any messages to check, how the journey/'s logic is working.",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r11_c6",
+        "sheet": "Journey Builder QA",
+        "row": 11,
+        "col": 6,
+        "label": "Status",
+        "section": "Journey Configuration",
+        "description": "Test the journey with test data or live data without triggering any messages to check, how the journey/'s logic is working.",
+        "category": "Journey Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r11_c7",
+        "sheet": "Journey Builder QA",
+        "row": 11,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Journey Configuration",
+        "description": "Test the journey with test data or live data without triggering any messages to check, how the journey/'s logic is working.",
+        "category": "Journey Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r12_c4",
+        "sheet": "Journey Builder QA",
+        "row": 12,
+        "col": 4,
+        "label": "Status",
+        "section": "Schedule",
+        "description": "Confirm the start date and time for the Journey schedule",
+        "category": "Schedule",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r12_c5",
+        "sheet": "Journey Builder QA",
+        "row": 12,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Schedule",
+        "description": "Confirm the start date and time for the Journey schedule",
+        "category": "Schedule",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r12_c6",
+        "sheet": "Journey Builder QA",
+        "row": 12,
+        "col": 6,
+        "label": "Status",
+        "section": "Schedule",
+        "description": "Confirm the start date and time for the Journey schedule",
+        "category": "Schedule",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r12_c7",
+        "sheet": "Journey Builder QA",
+        "row": 12,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Schedule",
+        "description": "Confirm the start date and time for the Journey schedule",
+        "category": "Schedule",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r13_c4",
+        "sheet": "Journey Builder QA",
+        "row": 13,
+        "col": 4,
+        "label": "Status",
+        "section": "Schedule",
+        "description": "Confirm time zone of Journey schedule as per the business",
+        "category": "Schedule",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r13_c5",
+        "sheet": "Journey Builder QA",
+        "row": 13,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Schedule",
+        "description": "Confirm time zone of Journey schedule as per the business",
+        "category": "Schedule",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r13_c6",
+        "sheet": "Journey Builder QA",
+        "row": 13,
+        "col": 6,
+        "label": "Status",
+        "section": "Schedule",
+        "description": "Confirm time zone of Journey schedule as per the business",
+        "category": "Schedule",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r13_c7",
+        "sheet": "Journey Builder QA",
+        "row": 13,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Schedule",
+        "description": "Confirm time zone of Journey schedule as per the business",
+        "category": "Schedule",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r14_c4",
+        "sheet": "Journey Builder QA",
+        "row": 14,
+        "col": 4,
+        "label": "Status",
+        "section": "Schedule",
+        "description": "Check the frequency of schdeule if its is recurring Journey",
+        "category": "Schedule",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r14_c5",
+        "sheet": "Journey Builder QA",
+        "row": 14,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Schedule",
+        "description": "Check the frequency of schdeule if its is recurring Journey",
+        "category": "Schedule",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r14_c6",
+        "sheet": "Journey Builder QA",
+        "row": 14,
+        "col": 6,
+        "label": "Status",
+        "section": "Schedule",
+        "description": "Check the frequency of schdeule if its is recurring Journey",
+        "category": "Schedule",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r14_c7",
+        "sheet": "Journey Builder QA",
+        "row": 14,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Schedule",
+        "description": "Check the frequency of schdeule if its is recurring Journey",
+        "category": "Schedule",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r15_c4",
+        "sheet": "Journey Builder QA",
+        "row": 15,
+        "col": 4,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Confirm STO steps are set per brief (if using Einstein)",
+        "category": "Activites",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r15_c5",
+        "sheet": "Journey Builder QA",
+        "row": 15,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Activites",
+        "description": "Confirm STO steps are set per brief (if using Einstein)",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r15_c6",
+        "sheet": "Journey Builder QA",
+        "row": 15,
+        "col": 6,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Confirm STO steps are set per brief (if using Einstein)",
+        "category": "Activites",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r15_c7",
+        "sheet": "Journey Builder QA",
+        "row": 15,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Activites",
+        "description": "Confirm STO steps are set per brief (if using Einstein)",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r16_c4",
+        "sheet": "Journey Builder QA",
+        "row": 16,
+        "col": 4,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Check the decision Split working correctly",
+        "category": "Activites",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r16_c5",
+        "sheet": "Journey Builder QA",
+        "row": 16,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Activites",
+        "description": "Check the decision Split working correctly",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r16_c6",
+        "sheet": "Journey Builder QA",
+        "row": 16,
+        "col": 6,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Check the decision Split working correctly",
+        "category": "Activites",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r16_c7",
+        "sheet": "Journey Builder QA",
+        "row": 16,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Activites",
+        "description": "Check the decision Split working correctly",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r17_c4",
+        "sheet": "Journey Builder QA",
+        "row": 17,
+        "col": 4,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Check engagement split is configured and working correctly as per business",
+        "category": "Activites",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r17_c5",
+        "sheet": "Journey Builder QA",
+        "row": 17,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Activites",
+        "description": "Check engagement split is configured and working correctly as per business",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r17_c6",
+        "sheet": "Journey Builder QA",
+        "row": 17,
+        "col": 6,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Check engagement split is configured and working correctly as per business",
+        "category": "Activites",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r17_c7",
+        "sheet": "Journey Builder QA",
+        "row": 17,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Activites",
+        "description": "Check engagement split is configured and working correctly as per business",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r18_c4",
+        "sheet": "Journey Builder QA",
+        "row": 18,
+        "col": 4,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Check the wait activity is configured correctly as per the requirement",
+        "category": "Activites",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r18_c5",
+        "sheet": "Journey Builder QA",
+        "row": 18,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "Activites",
+        "description": "Check the wait activity is configured correctly as per the requirement",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r18_c6",
+        "sheet": "Journey Builder QA",
+        "row": 18,
+        "col": 6,
+        "label": "Status",
+        "section": "Activites",
+        "description": "Check the wait activity is configured correctly as per the requirement",
+        "category": "Activites",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r18_c7",
+        "sheet": "Journey Builder QA",
+        "row": 18,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "Activites",
+        "description": "Check the wait activity is configured correctly as per the requirement",
+        "category": "Activites",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r19_c4",
+        "sheet": "Journey Builder QA",
+        "row": 19,
+        "col": 4,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct message is selected",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r19_c5",
+        "sheet": "Journey Builder QA",
+        "row": 19,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct message is selected",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r19_c6",
+        "sheet": "Journey Builder QA",
+        "row": 19,
+        "col": 6,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct message is selected",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r19_c7",
+        "sheet": "Journey Builder QA",
+        "row": 19,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct message is selected",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r20_c4",
+        "sheet": "Journey Builder QA",
+        "row": 20,
+        "col": 4,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct channel is selected",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r20_c5",
+        "sheet": "Journey Builder QA",
+        "row": 20,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct channel is selected",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r20_c6",
+        "sheet": "Journey Builder QA",
+        "row": 20,
+        "col": 6,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct channel is selected",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r20_c7",
+        "sheet": "Journey Builder QA",
+        "row": 20,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct channel is selected",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r21_c4",
+        "sheet": "Journey Builder QA",
+        "row": 21,
+        "col": 4,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct Mobile Number attribute is selected",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r21_c5",
+        "sheet": "Journey Builder QA",
+        "row": 21,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct Mobile Number attribute is selected",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r21_c6",
+        "sheet": "Journey Builder QA",
+        "row": 21,
+        "col": 6,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct Mobile Number attribute is selected",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r21_c7",
+        "sheet": "Journey Builder QA",
+        "row": 21,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Confirm correct Mobile Number attribute is selected",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r22_c4",
+        "sheet": "Journey Builder QA",
+        "row": 22,
+        "col": 4,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Check whether update activity is correctly configured if required",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r22_c5",
+        "sheet": "Journey Builder QA",
+        "row": 22,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Check whether update activity is correctly configured if required",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r22_c6",
+        "sheet": "Journey Builder QA",
+        "row": 22,
+        "col": 6,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Check whether update activity is correctly configured if required",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r22_c7",
+        "sheet": "Journey Builder QA",
+        "row": 22,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Check whether update activity is correctly configured if required",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r23_c4",
+        "sheet": "Journey Builder QA",
+        "row": 23,
+        "col": 4,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Check Correct \"Campaign Association\" is added",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true,
+        "choices": [
+          "Yes",
+          "Approved",
+          "NA"
+        ]
+      },
+      {
+        "id": "journey_builder_qa_r23_c5",
+        "sheet": "Journey Builder QA",
+        "row": 23,
+        "col": 5,
+        "label": "Developer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Check Correct \"Campaign Association\" is added",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r23_c6",
+        "sheet": "Journey Builder QA",
+        "row": 23,
+        "col": 6,
+        "label": "Status",
+        "section": "WhatsApp Configuration",
+        "description": "Check Correct \"Campaign Association\" is added",
+        "category": "WhatsApp Configuration",
+        "type": "status",
+        "editable": true
+      },
+      {
+        "id": "journey_builder_qa_r23_c7",
+        "sheet": "Journey Builder QA",
+        "row": 23,
+        "col": 7,
+        "label": "Reviewer Comments",
+        "section": "WhatsApp Configuration",
+        "description": "Check Correct \"Campaign Association\" is added",
+        "category": "WhatsApp Configuration",
+        "type": "textarea",
+        "editable": true
+      },
+      {
+        "id": "peer_r5_c2",
+        "sheet": "Peer Review",
+        "row": 5,
+        "col": 2,
+        "label": "Journey Name",
+        "section": "Peer Review",
+        "type": "text",
+        "prefix": "Journey Name: ",
+        "editable": true
+      }
+    ],
+    "worksheets": [
+      "Peer Review",
+      "Journey Builder QA",
+      "Journey SS"
+    ],
+    "evidenceSheets": [
+      "Journey SS"
+    ]
+  }
+]

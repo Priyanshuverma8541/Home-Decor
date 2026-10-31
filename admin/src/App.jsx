@@ -1,10 +1,13 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider }               from "./context/AuthContext.jsx";
-import { Layout, ProtectedRoute }     from "./components/layout/Layout.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { BusinessAuthProvider, BusinessProtectedRoute } from "./context/BusinessAuthContext.jsx";
+import { Layout, ProtectedRoute } from "./components/layout/Layout.jsx";
 import { PageLoader } from "./components/ui/index.jsx";
 
 const Login = lazy(() => import("./components/pages/Login.jsx"));
+const BusinessDashboard = lazy(() => import("./components/pages/BusinessDashboard.jsx"));
+const BusinessSetup = lazy(() => import("./components/pages/BusinessSetup.jsx"));
 const Dashboard = lazy(() => import("./components/pages/Dashboard.jsx"));
 const Orders = lazy(() => import("./components/pages/Orders.jsx"));
 const Products = lazy(() => import("./components/pages/Products.jsx"));
@@ -24,38 +27,15 @@ const Audience = lazy(() => import("./components/pages/Audience.jsx"));
 const PlatformApps = lazy(() => import("./components/pages/PlatformApps.jsx"));
 const SavinexaWebsite = lazy(() => import("./components/savinexa/SavinexaWebsite.jsx"));
 const ClientStores = lazy(() => import("./components/pages/ClientStores.jsx"));
+const ChecklistTemplates = lazy(() => import("./components/pages/ChecklistTemplates.jsx"));
 
 export default function App() {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-            <Route index           element={<Dashboard />}  />
-            <Route path="orders"   element={<Orders />}     />
-            <Route path="products" element={<Products />}   />
-            <Route path="crm"      element={<CRM />}        />
-            <Route path="audience" element={<Audience />}   />
-            <Route path="partners" element={<Partners />}   />
-            <Route path="campaigns"element={<Campaigns />}  />
-            <Route path="analytics"element={<Analytics />}  />
-            <Route path="marketplace" element={<Marketplace />} />
-            <Route path="marketing" element={<Marketing />} />
-            <Route path="business-opportunities" element={<BusinessOpportunities />} />
-            <Route path="push-notifications" element={<PushNotifications />} />
-            <Route path="platform" element={<PlatformApps />} />
-            <Route path="client-stores" element={<ClientStores />} />
-            <Route path="privacy" element={<PrivacyDataCenter />} />
-            <Route path="pages" element={<Pages />} />
-            <Route path="savinexa" element={<Savinexa />} />
-            <Route path="savinexa/website" element={<SavinexaWebsite />} />
-            <Route path="settings" element={<Settings />}   />
-          </Route>
-        </Routes>
-        </Suspense>
-      </AuthProvider>
-    </BrowserRouter>
-  );
+  return <BrowserRouter><AuthProvider><BusinessAuthProvider><Suspense fallback={<PageLoader />}><Routes>
+    <Route path="/login" element={<Login />} />
+    <Route path="/business" element={<BusinessProtectedRoute><BusinessDashboard /></BusinessProtectedRoute>} />
+    <Route path="/business/setup" element={<BusinessSetup />} />
+    <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+      <Route index element={<Dashboard />} /><Route path="orders" element={<Orders />} /><Route path="products" element={<Products />} /><Route path="crm" element={<CRM />} /><Route path="audience" element={<Audience />} /><Route path="partners" element={<Partners />} /><Route path="campaigns" element={<Campaigns />} /><Route path="analytics" element={<Analytics />} /><Route path="marketplace" element={<Marketplace />} /><Route path="marketing" element={<Marketing />} /><Route path="business-opportunities" element={<BusinessOpportunities />} /><Route path="push-notifications" element={<PushNotifications />} /><Route path="platform" element={<PlatformApps />} /><Route path="client-stores" element={<ClientStores />} /><Route path="privacy" element={<PrivacyDataCenter />} /><Route path="pages" element={<Pages />} /><Route path="savinexa" element={<Savinexa />} /><Route path="savinexa/website" element={<SavinexaWebsite />} /><Route path="developer-zone/checklists" element={<ChecklistTemplates />} /><Route path="settings" element={<Settings />} />
+    </Route>
+  </Routes></Suspense></BusinessAuthProvider></AuthProvider></BrowserRouter>;
 }

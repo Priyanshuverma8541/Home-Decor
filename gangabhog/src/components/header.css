@@ -1,0 +1,15 @@
+.top{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, #a8930a, #715404); /* Gold gradient */
+    color: white;
+    font-family: 'Playfair Display', serif; /* Elegant font */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}

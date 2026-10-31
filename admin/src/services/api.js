@@ -195,3 +195,11 @@ export const tenantAPI = {
   updateAdmin: (id, adminId, data) => api.put(`/api/tenants/admin/${id}/admins/${adminId}`, data),
   sharedProducts: () => api.get("/api/tenants/admin/shared-products"),
 };
+
+export const checklistAdminAPI = {
+  templates: () => api.get("/api/checklists/admin/templates"),
+  upload: (file, templateId) => { const body = new FormData(); body.append("workbook", file); if (templateId) body.append("templateId", templateId); return api.post("/api/checklists/admin/templates/upload", body, { headers: { "Content-Type": "multipart/form-data" } }); },
+  update: (id, data) => api.patch(`/api/checklists/admin/templates/${encodeURIComponent(id)}`, data),
+  activate: (id) => api.patch(`/api/checklists/admin/templates/${encodeURIComponent(id)}/activate`),
+  deactivate: (id) => api.patch(`/api/checklists/admin/templates/${encodeURIComponent(id)}/deactivate`),
+};

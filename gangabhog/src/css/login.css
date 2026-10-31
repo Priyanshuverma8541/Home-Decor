@@ -1,0 +1,75 @@
+
+/* Set background color for the whole page */
+.main {
+    background-color: rgb(231, 231, 231);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full screen height */
+    margin: 0;
+}
+
+/* Center the main container */
+.main_container {
+    display: flex;
+    position: absolute;
+    top: 25%;
+    left: 18%;
+    background: white;
+    padding: 20px;
+    border-radius: 0.6rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Style the image container */
+.login_img img {
+    border-radius: 0.6rem;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Style the login form */
+.login_form {
+    /* background-color: rgb(121, 226, 255); */
+    background-image: linear-gradient(to top, rgba(22, 119, 210, 0.9), rgba(168, 255, 168, 0.8)); /* Gradient from blue to green with slight opacity */
+    color: white;
+    padding: 1.8rem;
+    border-radius: 0.6rem;
+    width: 20rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Input fields */
+.login_form input {
+    width: 100%;
+    padding: 0.6rem;
+    margin: 0.6rem 0;
+    border: none;
+    border-radius: 0.3rem;
+}
+
+
+
+
+/* Media query for mobile screens */
+@media screen and (max-width: 768px) {
+    .main_container {
+        flex-direction: column;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+    }
+
+    .login_img {
+        display: none; /* Hide image on mobile */
+    }
+
+    .login_form {
+        width: 90%; /* Make login form take full width */
+        /* padding: 2rem; */
+    }
+}

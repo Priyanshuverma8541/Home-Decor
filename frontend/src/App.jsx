@@ -37,6 +37,8 @@ import SavinexaPage from "./components/pages/SavinexaPage.jsx";
 import Tools from "./components/pages/Tools.jsx";
 import MallExperience from "./components/pages/MallExperience.jsx";
 import EngagementPrompts from "./components/ui/EngagementPrompts.jsx";
+import DeveloperZone from "./components/pages/DeveloperZone.jsx";
+import ChecklistEditor from "./components/pages/ChecklistEditor.jsx";
 
 function AppShell() {
   const [permissionOpen, setPermissionOpen] = useState(false);
@@ -84,6 +86,8 @@ function AppShell() {
           </Route>
           <Route path="ecosystem" element={<Ecosystem />} />
           <Route path="tools" element={<Tools />} />
+          <Route path="tools/developer-zone" element={<DeveloperZone />} />
+          <Route path="tools/developer-zone/checklist/:templateId" element={<ChecklistEditor />} />
           <Route path="partner-with-us" element={<PartnerWithUs />} />
           <Route path="entertainment" element={<EntertainmentHome />} />
           <Route path="entertainment/search" element={<EntertainmentSearch />} />

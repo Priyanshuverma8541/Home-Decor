@@ -1,0 +1,81 @@
+/* registration.css */
+
+/* Main wrapper for the registration page with background image */
+.main_reg {
+    background-image: url('/public/image/bg.jpg');
+    background-color: rgb(41, 12, 76);
+    background-size: cover; /* Make the image cover the entire page */
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full screen height */
+    width: 100vw; /* Full screen width */
+}
+
+/* Registration form container */
+.reg_form {
+    background-color: rgba(199, 177, 255, 0.5); /* Transparent white background */
+    color: rgb(41, 12, 76); /* Dark blue text */
+    padding: 1.8rem;
+    border-radius: 0.6rem;
+    width: 40%; /* Width of the form */
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Input fields */
+.reg_form input {
+    width: 95%;
+    padding: 0.6rem;
+    margin: 0.6rem 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Register button */
+.reg_form button {
+    width: 80%;
+    padding: 0.6rem;
+    background-color: rgb(41, 12, 76);
+    /* background: linear-gradient(45deg, white, rgb(116, 20, 52));
+    animation: gradientMovement 5s ease infinite; */
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 0.6rem;
+    transition: 0.3s;
+    
+}
+
+/*  */
+
+
+.reg_form button:hover {
+    background-color: rgb(144, 78, 223);
+}
+
+/* Link to go to login page */
+.reg_form div {
+    margin-top: 0.9rem;
+}
+
+.reg_form a {
+    color: rgb(41, 12, 76);
+    text-decoration: none;
+}
+
+.reg_form a:hover {
+    text-decoration: underline;
+}
+
+/* Media query for mobile screens */
+@media screen and (max-width: 768px) {
+    .reg_form {
+        width: 90%; /* Make the registration form take up more space on mobile */
+        padding: 1.2rem;
+    }
+}

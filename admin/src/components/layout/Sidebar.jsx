@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
@@ -21,6 +21,7 @@ const LINKS = [
   { to:"/pages",     Icon:FileText,          label:"Savitri Pages"       },
   { to:"/savinexa",  Icon:UserCheck,        label:"SaviNexa Talent"     },
   { to:"/savinexa/website", Icon:Paintbrush, label:"SaviNexa Website" },
+  { to:"/developer-zone/checklists", Icon:FileSpreadsheet, label:"SFMC Checklists" },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 

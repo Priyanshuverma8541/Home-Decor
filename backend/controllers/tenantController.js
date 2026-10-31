@@ -129,7 +129,7 @@ exports.setup = async (req, res) => {
   if (!result.modifiedCount) return res.status(409).json({ success: false, message: "Setup code has already been used" });
   try {
     const admin = await ClientAdmin.create({ tenantId: tenant._id, fullName, email, password, modules: modules.filter((m) => tenant.modules[m] !== false) });
-    cookie(res, sessionToken(admin)); return res.status(201).json({ success: true, admin: { fullName: admin.fullName, email: admin.email, modules: admin.modules } });
+    const token = sessionToken(admin); cookie(res, token); return res.status(201).json({ success: true, token, admin: { fullName: admin.fullName, email: admin.email, modules: admin.modules } });
   } catch (e) { return res.status(e.code === 11000 ? 409 : 400).json({ success: false, message: e.code === 11000 ? "That email already has an account" : "Could not create the account" }); }
 };
 exports.login = async (req, res) => {
@@ -138,8 +138,8 @@ exports.login = async (req, res) => {
   const tenant = await Tenant.findOne({ slug, status: "active" });
   const admin = tenant && await ClientAdmin.findOne({ tenantId: tenant._id, email: String(req.body.email || "").trim().toLowerCase() }).select("+password");
   if (!admin || !admin.isActive || !(await admin.matchPassword(String(req.body.password || "")))) return res.status(401).json({ success: false, message: "Email or password is incorrect" });
-  admin.lastLoginAt = new Date(); await admin.save(); cookie(res, sessionToken(admin));
-  res.json({ success: true, admin: { fullName: admin.fullName, email: admin.email, modules: admin.modules } });
+  admin.lastLoginAt = new Date(); await admin.save(); const token = sessionToken(admin); cookie(res, token);
+  res.json({ success: true, token, admin: { fullName: admin.fullName, email: admin.email, modules: admin.modules } });
 };
 exports.logout = async (_req, res) => { cookie(res, ""); res.json({ success: true }); };
 exports.me = async (req, res) => res.json({ success: true, store: { slug: req.tenant.slug, name: req.tenant.name, domain: req.tenant.domain, website: req.tenant.website, modules: req.tenant.modules }, admin: { fullName: req.clientAdmin.fullName, email: req.clientAdmin.email, modules: req.clientAdmin.modules } });
