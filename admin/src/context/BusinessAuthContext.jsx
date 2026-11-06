@@ -24,6 +24,8 @@ export const businessAPI = {
   updateEnquiry: (slug, id, status) => client.patch(apiPath(slug, `/enquiries/${id}`), { status }),
   analytics: (slug) => client.get(apiPath(slug, "/analytics")),
   updateWebsite: (slug, website) => client.put(apiPath(slug, "/website"), website),
+  pushSummary: () => client.get("/api/push/tenant/summary"),
+  sendPush: (data) => client.post("/api/push/tenant/send", data),
 };
 
 const Ctx = createContext(null);
@@ -88,6 +90,7 @@ export function BusinessProtectedRoute({ children }) {
   return children;
 }
 function NavigateBusinessLogin() { window.location.replace("/login?mode=business"); return null; }
+
 
 
 

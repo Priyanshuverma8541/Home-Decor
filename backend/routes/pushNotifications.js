@@ -4,8 +4,9 @@ const webpush = require("web-push");
 const Subscription = require("../models/WebPushSubscription");
 const PushCampaign = require("../models/PushCampaign");
 const { optionalProtect, protect, adminOnly } = require("../middleware/auth");
+const { tenantAdmin } = require("../middleware/tenantAuth");
 const { createNotificationEngine } = require("../platform/notifications/engine");
-const VALID_PUSH_APP_IDS = new Set(["app_savitri_livings", "app_savinexa", "app_savitri_kolkata"]);
+const VALID_PUSH_APP_IDS = new Set(["app_savitri_livings", "app_savinexa", "app_savitri_kolkata", "app_gangabhog"]);
 const requestedAppId = (req) => VALID_PUSH_APP_IDS.has(req.query?.appId) ? req.query.appId : VALID_PUSH_APP_IDS.has(req.body?.appId) ? req.body.appId : "app_savitri_livings";
 const subscriptionAppFilter = (appId) => ({ $or: [{ appIds: appId }, ...(appId === "app_savitri_livings" ? [{ appIds: { $exists: false } }] : [])] });
 const campaignAppFilter = (appId) => ({ $or: [{ appId }, ...(appId === "app_savitri_livings" ? [{ appId: { $exists: false } }] : [])] });
@@ -83,11 +84,11 @@ const getTrackApiUrl = (req = {}) => {
 
 const buildPayload = (campaign, subscription, req = {}) => {
   const appId = campaign.appId || "app_savitri_livings";
-  const brand = appId === "app_savinexa" ? "Savinexa" : appId === "app_savitri_kolkata" ? "Savitri Livings Kolkata" : "Savitri Livings";
+  const brand = appId === "app_gangabhog" ? "GangaBhog" : appId === "app_savinexa" ? "Savinexa" : appId === "app_savitri_kolkata" ? "Savitri Livings Kolkata" : "Savitri Livings";
   const title = normalizeText(campaign.title, 100, brand) || brand;
   const body = normalizeText(campaign.body, 300, "");
   const targetUrl = normalizeTargetUrl(campaign.targetUrl, getRequestOrigin(req));
-  const icon = normalizeImageUrl(campaign.iconUrl) || (appId === "app_savinexa" ? "/brand/savitri-jewellers-mark.png" : "/brand/savitri-jewellers-mark.png");
+  const icon = normalizeImageUrl(campaign.iconUrl) || (appId === "app_gangabhog" ? "/gangabhog/logo.png" : "/brand/savitri-jewellers-mark.png");
   const image = normalizeImageUrl(campaign.imageUrl);
 
   return {
@@ -123,6 +124,31 @@ const startScheduledCampaigns = () => {
   }, 60000);
 };
 
+// Tenant business campaign endpoints; the app ID is fixed server-side to GangaBhog.
+router.get("/tenant/summary", tenantAdmin, async (req, res, next) => {
+  try {
+    if (req.tenant.slug !== "gangabhog") return fail(res, 403, "Push management is not enabled for this business");
+    const scope = subscriptionAppFilter("app_gangabhog");
+    const [activeSubscribers, campaigns, history] = await Promise.all([
+      Subscription.countDocuments({ $and: [scope, { status: "active" }] }),
+      PushCampaign.find(campaignAppFilter("app_gangabhog")).sort({ createdAt: -1 }).limit(12).lean(),
+      PushCampaign.countDocuments(campaignAppFilter("app_gangabhog")),
+    ]);
+    res.json({ success: true, configured: configured(), activeSubscribers, campaignCount: history, campaigns });
+  } catch (error) { next(error); }
+});
+router.post("/tenant/send", tenantAdmin, async (req, res, next) => {
+  try {
+    if (req.tenant.slug !== "gangabhog") return fail(res, 403, "Push management is not enabled for this business");
+    const { name, title, body, targetUrl = "/", imageUrl = "" } = req.body || {};
+    if (!name?.trim() || !title?.trim() || !body?.trim()) return fail(res, 400, "Campaign name, title and message are required");
+    const activeCount = await Subscription.countDocuments({ $and: [subscriptionAppFilter("app_gangabhog"), { status: "active" }] });
+    if (!activeCount) return fail(res, 400, "No GangaBhog subscribers have opted in yet");
+    const campaign = await PushCampaign.create({ appId: "app_gangabhog", name: normalizeText(name,120,""), title: normalizeText(title,100,"GangaBhog"), body: normalizeText(body,300,""), targetUrl: normalizeTargetUrl(targetUrl), imageUrl: normalizeImageUrl(imageUrl), iconUrl: "/gangabhog/logo.png", audience: "all", sendMode: "now", status: "draft" });
+    const result = await dispatchCampaign(campaign, req);
+    res.status(201).json({ success: true, campaign: result.campaign, stats: result.stats });
+  } catch (error) { next(error); }
+});
 router.get("/config", (_req, res) => res.json({ success: true, configured: configured(), publicKey: process.env.VAPID_PUBLIC_KEY || "" }));
 router.post("/status", optionalProtect, async (req, res, next) => { try { const appId = requestedAppId(req); const endpoint = req.body?.endpoint; const registration = endpoint ? await Subscription.findOne({ endpointHash: hash(endpoint) }) : null; const appIds = registration?.appIds?.length ? registration.appIds : ["app_savitri_livings"]; res.json({ success: true, appId, subscribed: Boolean(registration && appIds.includes(appId) && registration.status === "active") }); } catch (error) { next(error); } });
 
@@ -411,3 +437,6 @@ router.post("/track-click", async (req, res, next) => {
 
 module.exports = router;
 module.exports.startScheduledCampaigns = startScheduledCampaigns;
+
+
+
