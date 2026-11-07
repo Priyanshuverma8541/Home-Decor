@@ -13,7 +13,7 @@ export default function ExperienceSwitcher({ hidden = false, homepage = false })
     {tabs.map(({ label, description, to, Icon, title }) => {
       const className = ({ isActive } = {}) => `experience-tab experience-tab-shop${(isActive || (to === "/shop" && (pathname === "/" || pathname.startsWith("/product/")))) ? " is-active" : ""}`;
       const content = <><Icon aria-hidden="true" size={homepage ? 24 : 16} /><span>{label}<small>{description}</small></span></>;
-      return homepage && label === "SL Explorer" ? <a key={to} href="#sl-explorer" title={title} className={className()}>{content}</a> : <NavLink key={to} to={to} title={title} className={className}>{content}</NavLink>;
+      return <NavLink key={to} to={label === "SL Explorer" ? "/explorer" : to} title={title} className={className}>{content}</NavLink>;
     })}
     <button className="experience-tab experience-tab-food is-unavailable" type="button" disabled aria-disabled="true" title="Food ordering is coming soon">
       <Utensils aria-hidden="true" size={homepage ? 24 : 16} /><span>Food & Snacks<small>{homepage ? "Taste your city" : "Coming soon"}</small></span>

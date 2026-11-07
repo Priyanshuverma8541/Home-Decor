@@ -9,6 +9,7 @@ import BottomNavigation from "./BottomNavigation.jsx";
 export default function Layout({ onOpenPermissions }) {
   const { pathname, hash } = useLocation();
   useEffect(() => { if (!hash) window.scrollTo({ top:0, behavior:"instant" }); }, [pathname, hash]);
+  if (pathname === "/explorer") return <Outlet />;
   return (
     <div style={{ minHeight:"100vh", display:"flex", flexDirection:"column" }}>
       <Navbar />

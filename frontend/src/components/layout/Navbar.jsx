@@ -1,18 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Menu, X, MapPin, ChevronDown, User, LogOut, Package } from "lucide-react";
+import { Menu, X, MapPin, ChevronDown, User, LogOut, Package } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { useCart } from "../../context/CartContext.jsx";
 import { useCity } from "../../context/CityContext.jsx";
 import NotificationButton from "../ui/NotificationButton.jsx";
 
-const NAV = [
-  { to:"/",         label:"Home",     end:true },
-  { to:"/shop",     label:"Shop"             },
-  { to:"/mall",     label:"Mall"              },
-  { to:"/growth-livings", label:"Growth Livings" },
-];
+const NAV = [];
 
 export default function Navbar() {
   const [open,     setOpen]     = useState(false);
@@ -21,7 +15,6 @@ export default function Navbar() {
   const [ecosystemMenu, setEcosystemMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
-  const { totalItems } = useCart();
   const { city, selectCity, cities } = useCity();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -134,16 +127,6 @@ export default function Navbar() {
                 )}
               </AnimatePresence>
             </div>
-
-            {/* Cart */}
-            <Link to="/cart" style={{ position:"relative", width:40, height:40, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", color:"rgba(255,255,255,.8)", textDecoration:"none" }}>
-              <ShoppingCart style={{ width:20, height:20 }}/>
-              {totalItems > 0 && (
-                <span style={{ position:"absolute", top:2, right:2, minWidth:17, height:17, background:"#c96030", color:"white", fontSize:10, fontWeight:700, borderRadius:"9999px", display:"flex", alignItems:"center", justifyContent:"center", padding:"0 3px" }}>
-                  {totalItems > 9 ? "9+" : totalItems}
-                </span>
-              )}
-            </Link>
 
             {/* User dropdown — desktop */}
             {isAuthenticated ? (
@@ -260,9 +243,6 @@ export default function Navbar() {
                       })}>{label}</NavLink>
                   )
                 ))}
-                <Link to="/cart" style={{ display:"flex", alignItems:"center", gap:10, padding:"0.875rem 1rem", borderRadius:"0.75rem", fontSize:"0.9rem", fontWeight:500, color:"rgba(255,255,255,.7)", textDecoration:"none", marginBottom:2 }}>
-                  <ShoppingCart style={{ width:15, height:15, color:"#f4ce7c", flexShrink:0 }}/>Cart ({totalItems})
-                </Link>
                 <div style={{ height:1, background:"rgba(255,255,255,.1)", margin:"0.75rem 0.25rem" }}/>
                 {isAuthenticated ? (
                   <>

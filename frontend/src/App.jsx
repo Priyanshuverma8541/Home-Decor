@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 
@@ -28,20 +28,18 @@ import PermissionCenter from "./components/ui/PermissionCenter.jsx";
 import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
 import PageRenderer from "./components/pages/PageRenderer.jsx";
-import SavinexaHome from "./components/pages/SavinexaHome.jsx";
-import SavinexaJobs from "./components/pages/SavinexaJobs.jsx";
-import SavinexaProducts from "./components/pages/SavinexaProducts.jsx";
-import SavinexaProductDetail from "./components/pages/SavinexaProductDetail.jsx";
-import SavinexaLayout from "./components/layout/SavinexaLayout.jsx";
-import SavinexaPage from "./components/pages/SavinexaPage.jsx";
+import SavinexaRedirect from "./components/pages/SavinexaRedirect.jsx";
 import Tools from "./components/pages/Tools.jsx";
 import MallExperience from "./components/pages/MallExperience.jsx";
 import EngagementPrompts from "./components/ui/EngagementPrompts.jsx";
 import DeveloperZone from "./components/pages/DeveloperZone.jsx";
 import ChecklistEditor from "./components/pages/ChecklistEditor.jsx";
 import GrowthLivings from "./components/pages/GrowthLivings.jsx";
+import ExplorerLanding from "./components/pages/ExplorerLanding.jsx";
 
 function AppShell() {
+  const { pathname } = useLocation();
+  const standaloneExplorer = pathname === "/explorer";
   const [permissionOpen, setPermissionOpen] = useState(false);
   const [privacyLauncherVisible, setPrivacyLauncherVisible] = useState(
     () => localStorage.getItem("savitri-hide-privacy-launcher") !== "true"
@@ -74,17 +72,10 @@ function AppShell() {
           <Route path="account" element={<MyAccount />} />
           <Route path="account/orders" element={<MyOrders />} />
           <Route path="marketplace" element={<MarketplaceHome />} />
+          <Route path="explorer" element={<ExplorerLanding />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />
-          <Route path="savinexa" element={<SavinexaLayout />}>
-            <Route index element={<SavinexaHome />} />
-            <Route path="products" element={<SavinexaProducts />} />
-            <Route path="product/:slug" element={<SavinexaProductDetail />} />
-            <Route path="category/:slug" element={<SavinexaProducts />} />
-            <Route path="collection/:slug" element={<SavinexaProducts />} />
-            <Route path="page/:slug" element={<SavinexaPage />} />
-            <Route path="jobs" element={<SavinexaJobs />} />
-          </Route>
+          <Route path="savinexa/*" element={<SavinexaRedirect />} />
           <Route path="ecosystem" element={<Ecosystem />} />
           <Route path="growth-livings" element={<GrowthLivings />} />
           <Route path="tools" element={<Tools />} />
@@ -103,7 +94,7 @@ function AppShell() {
         <Route path="p/:slug" element={<PageRenderer Navbar={Navbar} Footer={Footer} />} />
       </Routes>
 
-      {privacyLauncherVisible && (
+      {!standaloneExplorer && privacyLauncherVisible && (
         <div style={{ position: "fixed", right: 18, bottom: "calc(88px + env(safe-area-inset-bottom,0px))", zIndex: 1000 }}>
           <button
             type="button"
@@ -149,8 +140,8 @@ function AppShell() {
         </div>
       )}
 
-      <PermissionCenter open={permissionOpen} onClose={() => setPermissionOpen(false)} />
-      <EngagementPrompts />
+      {!standaloneExplorer && <PermissionCenter open={permissionOpen} onClose={() => setPermissionOpen(false)} />}
+      {!standaloneExplorer && <EngagementPrompts />}
     </>
   );
 }

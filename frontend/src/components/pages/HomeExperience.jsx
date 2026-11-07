@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Gift, Gem, Home, Search, Shirt, Store, Utensils, Compass, BriefcaseBusiness, Hammer, Users, ExternalLink, Building2 } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Gift, Gem, Home, Search, Shirt, Store } from "lucide-react";
 import ExperienceSwitcher from "../layout/ExperienceSwitcher.jsx";
 import { productAPI } from "../../services/api.js";
 import { getProductImage } from "../../utils/productImage.js";
@@ -13,21 +13,16 @@ const collections = [
   { title: "Gifts", Icon: Gift, match: /gift|occasion/i, to: "/shop?category=gift" },
 ];
 
-const explorerLinks = [
-  { title: "Savitri Explorer", copy: "Discover local places, people and opportunities.", Icon: Compass, to: "/marketplace", tone: "cyan", label: "Explore the city" },
-  { title: "Growth Livings", copy: "Build your professional identity and find your next opportunity.", Icon: BriefcaseBusiness, to: "/growth-livings", tone: "violet", label: "Grow with us" },
-  { title: "Tools Hub", copy: "Useful tools and ideas to help you build what’s next.", Icon: Hammer, to: "/tools", tone: "teal", label: "Explore tools" },
-];
-
 const homeSlides = [
+  { title: "Savitri Livings Jewellery", copy: "Find pieces for everyday moments and celebrations.", label: "Shop jewellery", image: "/brand/campaign/jewellery.webp", alt: "Gold necklace and earrings displayed on an ivory bust", to: "/shop?category=jewellery", theme: "jewellery" },
   { title: "BuildHub", copy: "Plan, design and build your next project.", label: "Explore BuildHub", image: "/brand/campaign/buildhub.webp", alt: "Architectural plans and a modern home construction project", href: "https://build-hub-lake.vercel.app/", theme: "build" },
-  { title: "GangaBhog & Savinexa Client Projects", copy: "Discover thoughtful food and digital experiences.", label: "Explore our projects", image: "/brand/campaign/gangabhog-savinexa.webp", alt: "Indian sweets and an elegant online storefront", to: "/ecosystem", theme: "projects" },
+  { title: "GangaBhog & Savinexa Client Projects", copy: "Discover thoughtful food and digital experiences.", label: "Explore Savinexa", image: "/brand/campaign/gangabhog-savinexa.webp", alt: "Indian sweets and an elegant online storefront", href: "https://savinexa.vercel.app/", theme: "projects" },
   { title: "Thikana", copy: "Find local businesses, services and discoveries.", label: "Explore Thikana", image: "/brand/campaign/thikana.webp", alt: "Kolkata at twilight with a local discovery map", to: "/marketplace", theme: "thikana" },
   { title: "ToolHub", copy: "Useful tools for work, learning and creativity.", label: "Explore ToolHub", image: "/brand/campaign/toolhub.webp", alt: "A laptop displaying creative and productivity tools", to: "/tools", theme: "tools" },
   { title: "SL Business", copy: "Explore ideas and support for growing businesses.", label: "Discover SL Business", image: "/brand/campaign/sl-business.webp", alt: "A business workspace with a growth chart", to: "/ecosystem", theme: "business" },
-  { title: "Savitri Livings Jewellery", copy: "Find pieces for everyday moments and celebrations.", label: "Shop jewellery", image: "/brand/campaign/jewellery.webp", alt: "Gold necklace and earrings displayed on an ivory bust", to: "/shop?category=jewellery", theme: "jewellery" },
   { title: "Website Builder", copy: "Bring your next idea online with BuildHub.", label: "Explore the builder", image: "/brand/campaign/website-builder.webp", alt: "A laptop with a visual website design editor", href: "https://build-hub-lake.vercel.app/", theme: "website" },
   { title: "Portfolio AI Builder", copy: "Create a polished home for your work and experience.", label: "Explore portfolio tools", image: "/brand/campaign/portfolio-ai.webp", alt: "Portfolio pages presented across a desktop and phone", to: "/growth-livings", theme: "portfolio" },
+  { title: "Growth Livings", copy: "Build your professional identity and discover new opportunities.", label: "Explore Growth Livings", image: "/brand/campaign/growth-livings.webp", alt: "A modern business workspace with a digital growth dashboard", to: "/growth-livings", theme: "growth" },
 ];
 
 export default function HomeExperience() {
@@ -80,21 +75,6 @@ export default function HomeExperience() {
       </div>
     </section>
 
-    <section className="sl-explorer" id="sl-explorer" aria-labelledby="sl-explorer-title">
-      <div className="sl-explorer-backdrop" aria-hidden="true" />
-      <div className="sl-explorer-inner">
-        <div className="sl-explorer-heading"><span className="sl-explorer-kicker"><i /> SL EXPLORER · CONNECTED EXPERIENCES</span><h2 id="sl-explorer-title">Explore our <em>ecosystem</em></h2><p>One connected space to discover, shop, build and grow.</p></div>
-        <div className="sl-explorer-grid">{explorerLinks.map(({ title, copy, Icon, to, href, tone, label }) => {
-          const content = <><span className="sl-explorer-card-icon"><Icon size={21} /></span><span className="sl-explorer-card-copy"><b>{title}</b><small>{copy}</small><strong>{label}<ArrowRight size={14} /></strong></span><span className="sl-explorer-card-arrow"><ArrowUpRight size={16} /></span></>;
-          return href ? <a key={title} className={`sl-explorer-card tone-${tone}`} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in a new tab)`}>{content}</a> : <button key={title} className={`sl-explorer-card tone-${tone}`} type="button" onClick={() => navigate(to)}>{content}</button>;
-        })}</div>
-        <div className="sl-growth-featured"><div className="sl-growth-featured-title"><span className="sl-explorer-kicker"><i /> FEATURED IN GROWTH LIVINGS</span><h3>Make your next move.</h3></div>
-          <button className="sl-growth-spotlight sl-portfolio-spotlight" type="button" onClick={() => navigate("/growth-livings")}><span className="sl-spotlight-visual sl-portfolio-visual"><Building2 size={34}/><span className="sl-mini-window"><i/><i/><i/><b>YOUR NEXT CHAPTER</b><small>Portfolio · Experience · Skills</small></span></span><span className="sl-spotlight-copy"><b>Resume / Portfolio</b><small>Create a polished professional identity that opens doors.</small><strong>Explore Growth Livings <ArrowRight size={14}/></strong></span></button>
-          <a className="sl-growth-spotlight sl-trust-spotlight" href="https://trust-them.vercel.app/" target="_blank" rel="noopener noreferrer"><span className="sl-spotlight-visual sl-trust-visual"><Users size={34}/><span className="sl-trust-orbit orbit-one"/><span className="sl-trust-orbit orbit-two"/></span><span className="sl-spotlight-copy"><b>Trust Them</b><small>Connect with professionals, recruiters and career opportunities.</small><strong>Explore Trust Them <ExternalLink size={14}/></strong></span></a>
-        </div>
-      </div>
-    </section>
-
     <section className="sl-collections" id="sl-collections" aria-labelledby="sl-collections-title">
       <div className="sl-collections-heading"><h2 id="sl-collections-title">Explore Our Collections</h2><button type="button" onClick={() => navigate("/shop")}>View all <ArrowRight size={16} /></button></div>
       <div className="sl-collection-rail">
@@ -139,3 +119,4 @@ export default function HomeExperience() {
     `}</style>
   </main>;
 }
+
