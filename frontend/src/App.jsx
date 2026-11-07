@@ -39,6 +39,7 @@ import MallExperience from "./components/pages/MallExperience.jsx";
 import EngagementPrompts from "./components/ui/EngagementPrompts.jsx";
 import DeveloperZone from "./components/pages/DeveloperZone.jsx";
 import ChecklistEditor from "./components/pages/ChecklistEditor.jsx";
+import GrowthLivings from "./components/pages/GrowthLivings.jsx";
 
 function AppShell() {
   const [permissionOpen, setPermissionOpen] = useState(false);
@@ -85,6 +86,7 @@ function AppShell() {
             <Route path="jobs" element={<SavinexaJobs />} />
           </Route>
           <Route path="ecosystem" element={<Ecosystem />} />
+          <Route path="growth-livings" element={<GrowthLivings />} />
           <Route path="tools" element={<Tools />} />
           <Route path="tools/developer-zone" element={<DeveloperZone />} />
           <Route path="tools/developer-zone/checklist/:templateId" element={<ChecklistEditor />} />

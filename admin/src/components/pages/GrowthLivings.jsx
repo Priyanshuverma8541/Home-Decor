@@ -1,0 +1,131 @@
+import { useCallback, useEffect, useState } from "react";
+import { BriefcaseBusiness, Building2, Check, FileUp, Globe2, RefreshCw, Save, UploadCloud, Users } from "lucide-react";
+import { growthLivingsAPI } from "../../services/api.js";
+
+const defaults = {
+  enabled: true,
+  title: "Growth Livings",
+  headline: "Build Your Professional Identity. Discover Opportunities. Grow Together.",
+  description: "A connected ecosystem for professional portfolios, networking, recruitment and career opportunities.",
+  products: {
+    resume: { title: "Resume / Portfolio", description: "Create a professional identity with a recruiter-ready portfolio and architectural experience.", url: "", status: "in-development", previewImage: "" },
+    trustThem: { title: "Trust Them", description: "Connect professionals, recruiters, companies and candidates around career opportunities.", url: "", status: "in-development", previewImage: "" },
+  },
+  seo: { title: "Growth Livings | Savitri Livings", description: "Professional portfolios, connections and career opportunities from Growth Livings." },
+};
+const tabs = [["overview", "Overview", Globe2], ["candidates", "Portfolios", Users], ["companies", "Companies", Building2], ["jobs", "Opportunities", BriefcaseBusiness], ["applications", "Applications", Users]];
+const box = { padding: 18, border: "1px solid #eee4da", borderRadius: 12, background: "white" };
+const fieldStyle = { width: "100%", minHeight: 42, padding: "9px 11px", border: "1px solid #e6d9cb", borderRadius: 8, font: "inherit", color: "#33251a", background: "white" };
+const button = { display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 12px", border: 0, borderRadius: 8, background: "#a56832", color: "white", fontWeight: 600, cursor: "pointer" };
+const secondary = { ...button, border: "1px solid #e3d5c5", background: "white", color: "#5b432a" };
+const messageOf = (error) => error.response?.data?.message || error.message || "The request could not be completed.";
+
+function Field({ label, value, onChange, multiline = false, type = "text", ...props }) {
+  return <label style={{ display: "grid", gap: 5, color: "#745c45", fontSize: 13 }}>{label}{multiline ? <textarea rows={props.rows || 3} style={{ ...fieldStyle, resize: "vertical" }} value={value || ""} onChange={(event) => onChange(event.target.value)} {...props} /> : <input type={type} style={fieldStyle} value={value || ""} onChange={(event) => onChange(event.target.value)} {...props} />}</label>;
+}
+function Select({ label, value, onChange, options }) {
+  return <label style={{ display: "grid", gap: 5, color: "#745c45", fontSize: 13 }}>{label}<select style={fieldStyle} value={value || options[0]?.[0] || ""} onChange={(event) => onChange(event.target.value)}>{options.map(([id, name]) => <option key={id} value={id}>{name}</option>)}</select></label>;
+}
+const companyBlank = { name: "", slug: "", industry: "", summary: "", location: "", website: "", logoUrl: "", publicEmail: "", visibility: "draft" };
+const jobBlank = { companyId: "", title: "", summary: "", description: "", location: "", workMode: "unspecified", employmentType: "full-time", experience: "", skills: [], applicationUrl: "", visibility: "draft", closesAt: "" };
+
+export default function GrowthLivingsAdmin() {
+  const [tab, setTab] = useState("overview");
+  const [settings, setSettings] = useState(defaults);
+  const [candidates, setCandidates] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [applications, setApplications] = useState([]);
+  const [candidateSlug, setCandidateSlug] = useState("");
+  const [candidateForm, setCandidateForm] = useState(null);
+  const [profileJson, setProfileJson] = useState("{}");
+  const [privateJson, setPrivateJson] = useState("{}");
+  const [newCandidate, setNewCandidate] = useState({ slug: "", displayName: "", ownerEmail: "" });
+  const [companyForm, setCompanyForm] = useState(companyBlank);
+  const [jobForm, setJobForm] = useState(jobBlank);
+  const [companyId, setCompanyId] = useState("");
+  const [jobId, setJobId] = useState("");
+  const [asset, setAsset] = useState(null);
+  const [uploadedAssetUrl, setUploadedAssetUrl] = useState("");
+  const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const load = useCallback(async () => {
+    const response = await growthLivingsAPI.settings();
+    setSettings((current) => ({ ...current, ...response.data.settings, products: { ...current.products, ...response.data.settings.products }, seo: { ...current.seo, ...response.data.settings.seo } }));
+    const list = await Promise.all([growthLivingsAPI.candidates(), growthLivingsAPI.companies(), growthLivingsAPI.jobs(), growthLivingsAPI.applications()]);
+    const [candidatesResponse, companiesResponse, jobsResponse, applicationsResponse] = list;
+    const candidateList = candidatesResponse.data.candidates || [];
+    const companyList = companiesResponse.data.companies || [];
+    setCandidates(candidateList); setCompanies(companyList); setJobs(jobsResponse.data.jobs || []); setApplications(applicationsResponse.data.applications || []);
+    if (candidateList.length && !candidateList.some((candidate) => candidate.slug === candidateSlug)) selectCandidate(candidateList[0]);
+    if (!companyId && companyList.length) setCompanyId(String(companyList[0]._id));
+  }, [candidateSlug, companyId]);
+
+  useEffect(() => { load().catch((err) => setError(messageOf(err))); }, [load]);
+
+  const selectCandidate = (candidate) => {
+    setCandidateSlug(candidate.slug); setCandidateForm({ ...candidate, ownerEmail: candidate.ownerUserId?.email || "" });
+    setProfileJson(JSON.stringify(candidate.publicProfile || {}, null, 2)); setPrivateJson(JSON.stringify(candidate.privateContact || {}, null, 2));
+  };
+  const updateProduct = (key, field, value) => setSettings((current) => ({ ...current, products: { ...current.products, [key]: { ...current.products[key], [field]: value } } }));
+  const saveSettings = async () => {
+    setBusy(true); setError(""); setNotice(""); try { const { data } = await growthLivingsAPI.updateSettings(settings); setSettings((current) => ({ ...current, ...data.settings })); setNotice("Growth Livings settings saved."); } catch (err) { setError(messageOf(err)); } finally { setBusy(false); }
+  };
+  const createCandidate = async (event) => {
+    event.preventDefault(); setBusy(true); setError("");
+    try { const { data } = await growthLivingsAPI.createCandidate(newCandidate); await load(); selectCandidate(data.candidate); setTab("candidates"); setNotice("Candidate added as a private draft. Candidate approval is required before the page can be public."); }
+    catch (err) { setError(messageOf(err)); } finally { setBusy(false); }
+  };
+  const saveCandidate = async () => {
+    let publicProfile; let privateContact;
+    try { publicProfile = JSON.parse(profileJson); privateContact = JSON.parse(privateJson); if (!publicProfile || Array.isArray(publicProfile) || typeof publicProfile !== "object" || !privateContact || Array.isArray(privateContact) || typeof privateContact !== "object") throw new Error(); }
+    catch { setError("Candidate profile and private contact fields must be valid JSON objects."); return; }
+    setBusy(true); setError(""); setNotice(""); try { const { data } = await growthLivingsAPI.updateCandidate(candidateSlug, { displayName: candidateForm.displayName, headline: candidateForm.headline, ownerEmail: candidateForm.ownerEmail, resumeUrl: candidateForm.resumeUrl, visibility: candidateForm.visibility, publicProfile, privateContact }); await load(); selectCandidate(data.candidate); setNotice("Candidate draft saved. Public access still requires candidate approval."); }
+    catch (err) { setError(messageOf(err)); } finally { setBusy(false); }
+  };
+  const uploadAsset = async (event) => {
+    event.preventDefault(); if (!asset) return;
+    setBusy(true); setError(""); setNotice(""); try { const data = new FormData(); data.append("asset", asset); const response = await growthLivingsAPI.uploadAsset(data); setUploadedAssetUrl(response.data.asset.url); setNotice("Asset uploaded to Savitri’s centralized Cloudinary account. Copy its URL into the relevant draft field."); }
+    catch (err) { setError(messageOf(err)); } finally { setBusy(false); }
+  };
+  const saveCompany = async (event) => {
+    event.preventDefault(); setBusy(true); setError(""); setNotice(""); try { const response = companyId ? await growthLivingsAPI.updateCompany(companyId, companyForm) : await growthLivingsAPI.createCompany(companyForm); await load(); setCompanyId(response.data.company._id); setCompanyForm(response.data.company); setNotice("Company record saved."); }
+    catch (err) { setError(messageOf(err)); } finally { setBusy(false); }
+  };
+  const selectCompany = (id) => { setCompanyId(id); const company = companies.find((item) => item._id === id); setCompanyForm(company ? { ...company } : { ...companyBlank }); };
+  const saveJob = async (event) => {
+    event.preventDefault(); setBusy(true); setError(""); setNotice(""); try { const payload = { ...jobForm, skills: Array.isArray(jobForm.skills) ? jobForm.skills : String(jobForm.skills || "").split(",").map((item) => item.trim()).filter(Boolean), companyId: jobForm.companyId || companyId || companies[0]?._id }; const response = jobId ? await growthLivingsAPI.updateJob(jobId, payload) : await growthLivingsAPI.createJob(payload); await load(); setJobId(response.data.job._id); setJobForm(response.data.job); setNotice("Opportunity saved."); }
+    catch (err) { setError(messageOf(err)); } finally { setBusy(false); }
+  };
+  const selectJob = (id) => { setJobId(id); const job = jobs.find((item) => item._id === id); setJobForm(job ? { ...job, companyId: job.companyId?._id || job.companyId, skills: (job.skills || []).join(", "), closesAt: job.closesAt ? new Date(job.closesAt).toISOString().slice(0, 10) : "" } : { ...jobBlank, companyId: companies[0]?._id || "" }); };
+  const changeApplication = async (id, status) => { setBusy(true); setError(""); try { await growthLivingsAPI.updateApplication(id, { status }); await load(); setNotice("Application status updated."); } catch (err) { setError(messageOf(err)); } finally { setBusy(false); } };
+
+  return <main style={{ display: "grid", gap: 17, color: "#33251a" }}>
+    <header><p style={{ color: "#a66e28", margin: 0 }}>Savitri Livings · Admin</p><h1 style={{ margin: "4px 0", fontFamily: "'Playfair Display',serif" }}>Growth Livings</h1><p style={{ margin: 0, color: "#8c7060" }}>Manage professional product links, candidate portfolios, companies and real opportunities from the existing Admin.</p></header>
+    {error && <p role="alert" style={{ ...box, color: "#9a3028", borderColor: "#e7b8ac" }}>{error}</p>}{notice && <p role="status" style={{ ...box, background: "#f5fbf3", color: "#375c30" }}>{notice}</p>}
+    <nav aria-label="Growth Livings Admin sections" style={{ display: "flex", gap: 5, overflowX: "auto", borderBottom: "1px solid #eadfd3" }}>{tabs.map(([id, label, Icon]) => <button key={id} type="button" onClick={() => setTab(id)} style={{ display: "flex", alignItems: "center", gap: 6, padding: "10px 12px", border: 0, borderBottom: tab === id ? "2px solid #a56832" : "2px solid transparent", background: "transparent", color: tab === id ? "#814a23" : "#826e5d", whiteSpace: "nowrap", cursor: "pointer" }}><Icon size={15} />{label}</button>)}</nav>
+
+    {tab === "overview" && <>
+      <section style={{ ...box, display: "grid", gap: 12 }}><h2 style={{ margin: 0 }}>Landing page</h2><label style={{ display: "flex", alignItems: "center", gap: 8, color: "#66503a" }}><input type="checkbox" checked={settings.enabled} onChange={(event) => setSettings({ ...settings, enabled: event.target.checked })} /> Enable Growth Livings</label><Field label="Title" value={settings.title} onChange={(value) => setSettings({ ...settings, title: value })} /><Field label="Headline" value={settings.headline} onChange={(value) => setSettings({ ...settings, headline: value })} /><Field label="Description" multiline value={settings.description} onChange={(value) => setSettings({ ...settings, description: value })} /></section>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(270px,1fr))", gap: 14 }}>{[["resume", "Resume / Portfolio"], ["trustThem", "Trust Them"]].map(([key, title]) => <section style={{ ...box, display: "grid", gap: 11 }} key={key}><h2 style={{ margin: 0 }}>{title}</h2><Field label="Card title" value={settings.products[key].title} onChange={(value) => updateProduct(key, "title", value)} /><Field label="Description" multiline value={settings.products[key].description} onChange={(value) => updateProduct(key, "description", value)} /><Field label="Deployment URL" value={settings.products[key].url} onChange={(value) => updateProduct(key, "url", value)} placeholder="Set after deploying this frontend" /><Field label="Preview image URL" value={settings.products[key].previewImage} onChange={(value) => updateProduct(key, "previewImage", value)} /><Select label="Product status" value={settings.products[key].status} onChange={(value) => updateProduct(key, "status", value)} options={[["active", "Active"], ["in-development", "In development"], ["coming-soon", "Coming soon"], ["disabled", "Disabled"]]} /></section>)}</div>
+      <section style={{ ...box, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))", gap: 12 }}><h2 style={{ gridColumn: "1/-1", margin: 0 }}>Search metadata</h2><Field label="SEO title" value={settings.seo?.title} onChange={(value) => setSettings({ ...settings, seo: { ...settings.seo, title: value } })} /><Field label="SEO description" value={settings.seo?.description} onChange={(value) => setSettings({ ...settings, seo: { ...settings.seo, description: value } })} /></section>
+      <button type="button" style={{ ...button, justifySelf: "start" }} disabled={busy} onClick={saveSettings}><Save size={15} />{busy ? "Saving…" : "Save Growth settings"}</button>
+    </>}
+
+    {tab === "candidates" && <>
+      <form onSubmit={createCandidate} style={{ ...box, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", alignItems: "end", gap: 11 }}><h2 style={{ gridColumn: "1/-1", margin: 0 }}>Register a candidate draft</h2><Field label="Candidate name" required value={newCandidate.displayName} onChange={(value) => setNewCandidate({ ...newCandidate, displayName: value })} /><Field label="Portfolio slug" required value={newCandidate.slug} onChange={(value) => setNewCandidate({ ...newCandidate, slug: value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })} /><Field label="Linked Savitri account email (optional)" type="email" value={newCandidate.ownerEmail} onChange={(value) => setNewCandidate({ ...newCandidate, ownerEmail: value })} /><button type="submit" style={button} disabled={busy}>Add private draft</button><p style={{ gridColumn: "1/-1", margin: 0, color: "#8c7060", fontSize: 12 }}>No verified Archana Resume.pdf is attached here yet. Add her only as an unpublished draft; never fabricate or publish profile details before her review.</p></form>
+      <section style={{ ...box, display: "grid", gap: 13 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}><h2 style={{ margin: 0 }}>Candidate portfolio drafts</h2><select style={{ ...fieldStyle, width: "auto", minWidth: 220 }} value={candidateSlug} onChange={(event) => { const candidate = candidates.find((item) => item.slug === event.target.value); if (candidate) selectCandidate(candidate); }}><option value="">Choose candidate</option>{candidates.map((candidate) => <option key={candidate.slug} value={candidate.slug}>{candidate.displayName} · {candidate.visibility}</option>)}</select></div>
+        {candidateForm ? <><div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 11 }}><Field label="Name" value={candidateForm.displayName} onChange={(value) => setCandidateForm({ ...candidateForm, displayName: value })} /><Field label="Headline" value={candidateForm.headline} onChange={(value) => setCandidateForm({ ...candidateForm, headline: value })} /><Field label="Linked Savitri account email" type="email" value={candidateForm.ownerEmail} onChange={(value) => setCandidateForm({ ...candidateForm, ownerEmail: value })} /><Field label="Public resume PDF URL" value={candidateForm.resumeUrl} onChange={(value) => setCandidateForm({ ...candidateForm, resumeUrl: value })} /><Select label="Portfolio state" value={candidateForm.visibility} onChange={(value) => setCandidateForm({ ...candidateForm, visibility: value })} options={[["draft", "Draft"], ["published", "Ready after candidate approval"], ["archived", "Archived"]]} /></div><p style={{ margin: 0, padding: 10, borderRadius: 8, background: "#fbf5e8", color: "#715a38", fontSize: 12 }}>Candidate approval: {candidateForm.candidateApprovedAt ? `approved ${new Date(candidateForm.candidateApprovedAt).toLocaleString()}` : "not approved"}. Admin cannot publish the public portfolio until its linked owner approves from Trust Them.</p><Field label="Public profile content JSON (experience, education, skills, projects, public contacts)" multiline rows={11} value={profileJson} onChange={setProfileJson} /><Field label="Private contact data JSON (admin/candidate only)" multiline rows={5} value={privateJson} onChange={setPrivateJson} /><button type="button" style={{ ...button, justifySelf: "start" }} disabled={busy} onClick={saveCandidate}><Save size={15} />Save candidate draft</button></> : <p style={{ color: "#8c7060" }}>No candidate records yet. Registration creates a private draft; use only candidate-verified content.</p>}
+      </section>
+      <section style={{ ...box, display: "grid", gap: 10 }}><h2 style={{ margin: 0 }}>Central media upload</h2><p style={{ margin: 0, color: "#8c7060", fontSize: 13 }}>Upload approved portfolio images, PDFs or GLB/GLTF assets through Savitri’s existing Cloudinary account (8 MB limit). Uploaded assets are not public until placed in a candidate-approved portfolio.</p><form onSubmit={uploadAsset} style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 9 }}><label style={{ display: "inline-flex", alignItems: "center", gap: 7, ...secondary, cursor: "pointer" }}><FileUp size={15} />Choose file<input hidden type="file" accept="image/jpeg,image/png,image/webp,application/pdf,.glb,.gltf" onChange={(event) => setAsset(event.target.files?.[0] || null)} /></label><span style={{ color: "#806b56", fontSize: 12 }}>{asset?.name || "No file selected"}</span><button type="submit" disabled={busy || !asset} style={button}><UploadCloud size={15} />Upload securely</button></form>{uploadedAssetUrl && <div style={{ display: "grid", gap: 5 }}><label style={{ color: "#745c45", fontSize: 13 }}>Uploaded asset URL</label><input readOnly value={uploadedAssetUrl} style={fieldStyle} onFocus={(event) => event.target.select()} /></div>}</section>
+    </>}
+
+    {tab === "companies" && <section style={{ ...box, display: "grid", gap: 12 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}><h2 style={{ margin: 0 }}>Company directory</h2><select style={{ ...fieldStyle, width: "auto" }} value={companyId} onChange={(event) => selectCompany(event.target.value)}><option value="">New company</option>{companies.map((company) => <option key={company._id} value={company._id}>{company.name} · {company.visibility}</option>)}</select></div><p style={{ margin: 0, color: "#8c7060", fontSize: 12 }}>Only published company profiles are visible in Trust Them. No sample companies or hiring metrics are seeded.</p><form onSubmit={saveCompany} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 11 }}>{[["name", "Company name"], ["slug", "URL slug"], ["industry", "Industry"], ["location", "Location"], ["website", "Website URL"], ["logoUrl", "Logo URL"], ["publicEmail", "Public contact email (optional)"], ["summary", "Company overview"]].map(([key, label]) => <Field key={key} label={label} multiline={key === "summary"} type={key === "publicEmail" ? "email" : "text"} value={companyForm[key]} onChange={(value) => setCompanyForm({ ...companyForm, [key]: key === "slug" ? value.toLowerCase().replace(/[^a-z0-9-]/g, "-") : value })} />)}<Select label="Visibility" value={companyForm.visibility} onChange={(value) => setCompanyForm({ ...companyForm, visibility: value })} options={[["draft", "Draft"], ["published", "Published"], ["archived", "Archived"]]} /><button style={{ ...button, alignSelf: "end", justifySelf: "start" }} disabled={busy}><Save size={15} />Save company</button></form></section>}
+
+    {tab === "jobs" && <section style={{ ...box, display: "grid", gap: 12 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}><h2 style={{ margin: 0 }}>Career opportunities</h2><select style={{ ...fieldStyle, width: "auto" }} value={jobId} onChange={(event) => selectJob(event.target.value)}><option value="">New opportunity</option>{jobs.map((job) => <option key={job._id} value={job._id}>{job.title} · {job.visibility}</option>)}</select></div>{!companies.length && <p role="status" style={{ color: "#9a5b2c" }}>Create a company before publishing its opportunities.</p>}<p style={{ margin: 0, color: "#8c7060", fontSize: 12 }}>Only real, Admin-entered jobs are listed publicly. Drafts and closed roles stay out of the candidate directory.</p><form onSubmit={saveJob} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 11 }}><Select label="Company" value={jobForm.companyId || companyId} onChange={(value) => setJobForm({ ...jobForm, companyId: value })} options={companies.map((company) => [company._id, company.name])} /><Field label="Job title" required value={jobForm.title} onChange={(value) => setJobForm({ ...jobForm, title: value })} /><Field label="Short summary" value={jobForm.summary} onChange={(value) => setJobForm({ ...jobForm, summary: value })} /><Field label="Location" value={jobForm.location} onChange={(value) => setJobForm({ ...jobForm, location: value })} /><Field label="Experience requirements" value={jobForm.experience} onChange={(value) => setJobForm({ ...jobForm, experience: value })} /><Field label="Skills (comma separated)" value={jobForm.skills} onChange={(value) => setJobForm({ ...jobForm, skills: value })} /><Select label="Work mode" value={jobForm.workMode} onChange={(value) => setJobForm({ ...jobForm, workMode: value })} options={[["unspecified", "Unspecified"], ["onsite", "On-site"], ["hybrid", "Hybrid"], ["remote", "Remote"]]} /><Select label="Employment type" value={jobForm.employmentType} onChange={(value) => setJobForm({ ...jobForm, employmentType: value })} options={[["full-time", "Full-time"], ["part-time", "Part-time"], ["contract", "Contract"], ["internship", "Internship"]]} /><Field label="External application URL (optional)" value={jobForm.applicationUrl} onChange={(value) => setJobForm({ ...jobForm, applicationUrl: value })} /><Field label="Application deadline (optional)" type="date" value={jobForm.closesAt} onChange={(value) => setJobForm({ ...jobForm, closesAt: value })} /><Select label="Visibility" value={jobForm.visibility} onChange={(value) => setJobForm({ ...jobForm, visibility: value })} options={[["draft", "Draft"], ["published", "Published"], ["closed", "Closed"]]} /><Field label="Full role description" multiline rows={5} value={jobForm.description} onChange={(value) => setJobForm({ ...jobForm, description: value })} /><button style={{ ...button, alignSelf: "end", justifySelf: "start" }} disabled={busy || !companies.length}><Save size={15} />Save opportunity</button></form></section>}
+
+    {tab === "applications" && <section style={{ ...box, display: "grid", gap: 10 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><h2 style={{ margin: 0 }}>Applications</h2><button style={secondary} onClick={() => load().catch((err) => setError(messageOf(err)))}><RefreshCw size={14} />Refresh</button></div>{applications.length ? applications.map((application) => <article key={application._id} style={{ padding: 13, border: "1px solid #eee4da", borderRadius: 9, display: "grid", gridTemplateColumns: "minmax(180px,1fr) auto", alignItems: "center", gap: 12 }}><div><strong>{application.candidateId?.fullName || "Candidate"}</strong><div style={{ color: "#8c7060", fontSize: 12 }}>{application.candidateId?.email || ""} · {application.jobId?.title || "Opportunity"} · shared with candidate's consent</div><small style={{ color: "#9a8065" }}>{new Date(application.consentedAt || application.createdAt).toLocaleString()}</small></div><select aria-label="Application status" style={{ ...fieldStyle, width: "auto" }} value={application.status} disabled={busy} onChange={(event) => changeApplication(application._id, event.target.value)}>{[["submitted", "Submitted"], ["reviewing", "Reviewing"], ["interview", "Interview"], ["closed", "Closed"]].map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></article>) : <p style={{ color: "#8c7060" }}>No applications have been submitted.</p>}</section>}
+  </main>;
+}

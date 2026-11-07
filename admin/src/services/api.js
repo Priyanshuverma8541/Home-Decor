@@ -136,6 +136,23 @@ export const pushAPI = {
   test: (data) => api.post("/api/push/admin/test", data, { params: data?.appId ? { appId: data.appId } : {} }),
 };
 
+export const growthLivingsAPI = {
+  settings: () => api.get("/api/growth-livings/admin/settings"),
+  updateSettings: (data) => api.put("/api/growth-livings/admin/settings", data),
+  candidates: () => api.get("/api/growth-livings/admin/candidates"),
+  createCandidate: (data) => api.post("/api/growth-livings/admin/candidates", data),
+  updateCandidate: (slug, data) => api.patch(`/api/growth-livings/admin/candidates/${encodeURIComponent(slug)}`, data),
+  companies: () => api.get("/api/growth-livings/admin/companies"),
+  createCompany: (data) => api.post("/api/growth-livings/admin/companies", data),
+  updateCompany: (id, data) => api.patch(`/api/growth-livings/admin/companies/${encodeURIComponent(id)}`, data),
+  jobs: () => api.get("/api/growth-livings/admin/jobs"),
+  createJob: (data) => api.post("/api/growth-livings/admin/jobs", data),
+  updateJob: (id, data) => api.patch(`/api/growth-livings/admin/jobs/${encodeURIComponent(id)}`, data),
+  applications: () => api.get("/api/growth-livings/admin/applications"),
+  updateApplication: (id, data) => api.patch(`/api/growth-livings/admin/applications/${encodeURIComponent(id)}`, data),
+  uploadAsset: (form) => api.post("/api/growth-livings/admin/media", form, { headers: { "Content-Type": "multipart/form-data" } }),
+};
+
 export const audienceAPI = {
   getAll: () => api.get("/api/audience/admin"),
 };

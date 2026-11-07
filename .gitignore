@@ -5,3 +5,7 @@
 **/.env
 **/.env.*
 !**/.env.example
+/resume/Archana-Singh/Archana-Portfolio/node_modules/
+/resume/Archana-Singh/Archana-Portfolio/dist/
+/trust-them/node_modules/
+/trust-them/dist/

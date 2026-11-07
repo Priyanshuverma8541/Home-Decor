@@ -31,6 +31,7 @@ const ALLOWED = [
   "http://localhost:5174",
   "http://localhost:5177",
   "http://localhost:5178",
+  "http://localhost:5179",
   "http://localhost:5181",
   process.env.ADMIN_URL,
   process.env.CLIENT_URL,
@@ -38,6 +39,7 @@ const ALLOWED = [
   process.env.KOLKATA_COMMERCE_URL,
   process.env.MAA_ADMIN_URL,
   process.env.MAA_CLIENT_URL,
+  ...(process.env.GROWTH_ALLOWED_ORIGINS || "").split(","),
 ].filter(Boolean).map(u => u.trim().replace(/\/$/, ""));
 
 console.log("✅ CORS origins:", ALLOWED);
@@ -97,6 +99,7 @@ app.use("/api/pages",      require("./routes/pages"));
 app.use("/api/savinexa",   require("./modules/savinexa/routes"));
 app.use("/api/tenants", require("./routes/tenants"));
 app.use("/api/checklists", require("./routes/checklists"));
+app.use("/api/growth-livings", require("./modules/growthLivings/routes"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

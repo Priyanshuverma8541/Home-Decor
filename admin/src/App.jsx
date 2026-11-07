@@ -28,6 +28,7 @@ const PlatformApps = lazy(() => import("./components/pages/PlatformApps.jsx"));
 const SavinexaWebsite = lazy(() => import("./components/savinexa/SavinexaWebsite.jsx"));
 const ClientStores = lazy(() => import("./components/pages/ClientStores.jsx"));
 const ChecklistTemplates = lazy(() => import("./components/pages/ChecklistTemplates.jsx"));
+const GrowthLivings = lazy(() => import("./components/pages/GrowthLivings.jsx"));
 
 export default function App() {
   return <BrowserRouter><AuthProvider><BusinessAuthProvider><Suspense fallback={<PageLoader />}><Routes>
@@ -35,7 +36,7 @@ export default function App() {
     <Route path="/business" element={<BusinessProtectedRoute><BusinessDashboard /></BusinessProtectedRoute>} />
     <Route path="/business/setup" element={<BusinessSetup />} />
     <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-      <Route index element={<Dashboard />} /><Route path="orders" element={<Orders />} /><Route path="products" element={<Products />} /><Route path="crm" element={<CRM />} /><Route path="audience" element={<Audience />} /><Route path="partners" element={<Partners />} /><Route path="campaigns" element={<Campaigns />} /><Route path="analytics" element={<Analytics />} /><Route path="marketplace" element={<Marketplace />} /><Route path="marketing" element={<Marketing />} /><Route path="business-opportunities" element={<BusinessOpportunities />} /><Route path="push-notifications" element={<PushNotifications />} /><Route path="platform" element={<PlatformApps />} /><Route path="client-stores" element={<ClientStores />} /><Route path="privacy" element={<PrivacyDataCenter />} /><Route path="pages" element={<Pages />} /><Route path="savinexa" element={<Savinexa />} /><Route path="savinexa/website" element={<SavinexaWebsite />} /><Route path="developer-zone/checklists" element={<ChecklistTemplates />} /><Route path="settings" element={<Settings />} />
+      <Route index element={<Dashboard />} /><Route path="orders" element={<Orders />} /><Route path="products" element={<Products />} /><Route path="crm" element={<CRM />} /><Route path="audience" element={<Audience />} /><Route path="partners" element={<Partners />} /><Route path="campaigns" element={<Campaigns />} /><Route path="analytics" element={<Analytics />} /><Route path="marketplace" element={<Marketplace />} /><Route path="marketing" element={<Marketing />} /><Route path="business-opportunities" element={<BusinessOpportunities />} /><Route path="push-notifications" element={<PushNotifications />} /><Route path="platform" element={<PlatformApps />} /><Route path="client-stores" element={<ClientStores />} /><Route path="privacy" element={<PrivacyDataCenter />} /><Route path="pages" element={<Pages />} /><Route path="savinexa" element={<Savinexa />} /><Route path="savinexa/website" element={<SavinexaWebsite />} /><Route path="growth-livings" element={<GrowthLivings />} /><Route path="developer-zone/checklists" element={<ChecklistTemplates />} /><Route path="settings" element={<Settings />} />
     </Route>
   </Routes></Suspense></BusinessAuthProvider></AuthProvider></BrowserRouter>;
 }
