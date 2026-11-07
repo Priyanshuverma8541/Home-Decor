@@ -21,7 +21,7 @@ const homeSlides = [
   { title: "ToolHub", copy: "Useful tools for work, learning and creativity.", label: "Explore ToolHub", image: "/brand/campaign/toolhub.webp", alt: "A laptop displaying creative and productivity tools", to: "/tools", theme: "tools" },
   { title: "SL Business", copy: "Explore ideas and support for growing businesses.", label: "Discover SL Business", image: "/brand/campaign/sl-business.webp", alt: "A business workspace with a growth chart", to: "/ecosystem", theme: "business" },
   { title: "Website Builder", copy: "Bring your next idea online with BuildHub.", label: "Explore the builder", image: "/brand/campaign/website-builder.webp", alt: "A laptop with a visual website design editor", href: "https://build-hub-lake.vercel.app/", theme: "website" },
-  { title: "Portfolio AI Builder", copy: "Create a polished home for your work and experience.", label: "Explore portfolio tools", image: "/brand/campaign/portfolio-ai.webp", alt: "Portfolio pages presented across a desktop and phone", to: "/growth-livings", theme: "portfolio" },
+  { title: "Portfolio AI Builder", copy: "Create a polished home for your work and experience.", label: "Build your portfolio", image: "/brand/campaign/portfolio-ai.webp", alt: "Portfolio pages presented across a desktop and phone", to: "/portfolio-builder", theme: "portfolio" },
   { title: "Growth Livings", copy: "Build your professional identity and discover new opportunities.", label: "Explore Growth Livings", image: "/brand/campaign/growth-livings.webp", alt: "A modern business workspace with a digital growth dashboard", to: "/growth-livings", theme: "growth" },
 ];
 

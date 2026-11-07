@@ -39,6 +39,7 @@ const ALLOWED = [
   process.env.KOLKATA_COMMERCE_URL,
   process.env.MAA_ADMIN_URL,
   process.env.MAA_CLIENT_URL,
+  process.env.PORTFOLIO_BUILDER_URL,
   ...(process.env.GROWTH_ALLOWED_ORIGINS || "").split(","),
 ].filter(Boolean).map(u => u.trim().replace(/\/$/, ""));
 
@@ -100,6 +101,7 @@ app.use("/api/savinexa",   require("./modules/savinexa/routes"));
 app.use("/api/tenants", require("./routes/tenants"));
 app.use("/api/checklists", require("./routes/checklists"));
 app.use("/api/growth-livings", require("./modules/growthLivings/routes"));
+app.use("/api/portfolio-builder", require("./modules/portfolioBuilder/routes"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

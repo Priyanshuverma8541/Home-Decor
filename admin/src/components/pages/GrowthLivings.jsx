@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { BriefcaseBusiness, Building2, Check, FileUp, Globe2, RefreshCw, Save, UploadCloud, Users } from "lucide-react";
-import { growthLivingsAPI } from "../../services/api.js";
+import { growthLivingsAPI, portfolioBuilderAPI } from "../../services/api.js";
 
 const defaults = {
   enabled: true,
@@ -8,12 +8,12 @@ const defaults = {
   headline: "Build Your Professional Identity. Discover Opportunities. Grow Together.",
   description: "A connected ecosystem for professional portfolios, networking, recruitment and career opportunities.",
   products: {
-    resume: { title: "Resume / Portfolio", description: "Create a professional identity with a recruiter-ready portfolio and architectural experience.", url: "", status: "in-development", previewImage: "" },
+    resume: { title: "Portfolio Studio", description: "Build a personal portfolio website with live templates, Gemini writing support and one-click publishing.", url: "/portfolio-builder", status: "active", previewImage: "" },
     trustThem: { title: "Trust Them", description: "Connect professionals, recruiters, companies and candidates around career opportunities.", url: "", status: "in-development", previewImage: "" },
   },
   seo: { title: "Growth Livings | Savitri Livings", description: "Professional portfolios, connections and career opportunities from Growth Livings." },
 };
-const tabs = [["overview", "Overview", Globe2], ["candidates", "Portfolios", Users], ["companies", "Companies", Building2], ["jobs", "Opportunities", BriefcaseBusiness], ["applications", "Applications", Users]];
+const tabs = [["overview", "Overview", Globe2], ["builder", "Portfolio websites", Globe2], ["candidates", "Portfolios", Users], ["companies", "Companies", Building2], ["jobs", "Opportunities", BriefcaseBusiness], ["applications", "Applications", Users]];
 const box = { padding: 18, border: "1px solid #eee4da", borderRadius: 12, background: "white" };
 const fieldStyle = { width: "100%", minHeight: 42, padding: "9px 11px", border: "1px solid #e6d9cb", borderRadius: 8, font: "inherit", color: "#33251a", background: "white" };
 const button = { display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 12px", border: 0, borderRadius: 8, background: "#a56832", color: "white", fontWeight: 600, cursor: "pointer" };
@@ -36,6 +36,7 @@ export default function GrowthLivingsAdmin() {
   const [companies, setCompanies] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [applications, setApplications] = useState([]);
+  const [builderProjects, setBuilderProjects] = useState([]);
   const [candidateSlug, setCandidateSlug] = useState("");
   const [candidateForm, setCandidateForm] = useState(null);
   const [profileJson, setProfileJson] = useState("{}");
@@ -54,11 +55,12 @@ export default function GrowthLivingsAdmin() {
   const load = useCallback(async () => {
     const response = await growthLivingsAPI.settings();
     setSettings((current) => ({ ...current, ...response.data.settings, products: { ...current.products, ...response.data.settings.products }, seo: { ...current.seo, ...response.data.settings.seo } }));
-    const list = await Promise.all([growthLivingsAPI.candidates(), growthLivingsAPI.companies(), growthLivingsAPI.jobs(), growthLivingsAPI.applications()]);
-    const [candidatesResponse, companiesResponse, jobsResponse, applicationsResponse] = list;
+    const list = await Promise.all([growthLivingsAPI.candidates(), growthLivingsAPI.companies(), growthLivingsAPI.jobs(), growthLivingsAPI.applications(), portfolioBuilderAPI.projects()]);
+    const [candidatesResponse, companiesResponse, jobsResponse, applicationsResponse, builderResponse] = list;
     const candidateList = candidatesResponse.data.candidates || [];
     const companyList = companiesResponse.data.companies || [];
     setCandidates(candidateList); setCompanies(companyList); setJobs(jobsResponse.data.jobs || []); setApplications(applicationsResponse.data.applications || []);
+    setBuilderProjects(builderResponse.data.projects || []);
     if (candidateList.length && !candidateList.some((candidate) => candidate.slug === candidateSlug)) selectCandidate(candidateList[0]);
     if (!companyId && companyList.length) setCompanyId(String(companyList[0]._id));
   }, [candidateSlug, companyId]);
@@ -101,6 +103,7 @@ export default function GrowthLivingsAdmin() {
   };
   const selectJob = (id) => { setJobId(id); const job = jobs.find((item) => item._id === id); setJobForm(job ? { ...job, companyId: job.companyId?._id || job.companyId, skills: (job.skills || []).join(", "), closesAt: job.closesAt ? new Date(job.closesAt).toISOString().slice(0, 10) : "" } : { ...jobBlank, companyId: companies[0]?._id || "" }); };
   const changeApplication = async (id, status) => { setBusy(true); setError(""); try { await growthLivingsAPI.updateApplication(id, { status }); await load(); setNotice("Application status updated."); } catch (err) { setError(messageOf(err)); } finally { setBusy(false); } };
+  const changeBuilderProject = async (id, status) => { setBusy(true); setError(""); setNotice(""); try { await portfolioBuilderAPI.updateProject(id, { status }); await load(); setNotice("Portfolio website status updated."); } catch (err) { setError(messageOf(err)); } finally { setBusy(false); } };
 
   return <main style={{ display: "grid", gap: 17, color: "#33251a" }}>
     <header><p style={{ color: "#a66e28", margin: 0 }}>Savitri Livings · Admin</p><h1 style={{ margin: "4px 0", fontFamily: "'Playfair Display',serif" }}>Growth Livings</h1><p style={{ margin: 0, color: "#8c7060" }}>Manage professional product links, candidate portfolios, companies and real opportunities from the existing Admin.</p></header>
@@ -113,6 +116,10 @@ export default function GrowthLivingsAdmin() {
       <section style={{ ...box, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))", gap: 12 }}><h2 style={{ gridColumn: "1/-1", margin: 0 }}>Search metadata</h2><Field label="SEO title" value={settings.seo?.title} onChange={(value) => setSettings({ ...settings, seo: { ...settings.seo, title: value } })} /><Field label="SEO description" value={settings.seo?.description} onChange={(value) => setSettings({ ...settings, seo: { ...settings.seo, description: value } })} /></section>
       <button type="button" style={{ ...button, justifySelf: "start" }} disabled={busy} onClick={saveSettings}><Save size={15} />{busy ? "Saving…" : "Save Growth settings"}</button>
     </>}
+
+    {tab === "builder" && <section style={{ ...box, display: "grid", gap: 12 }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}><div><h2 style={{ margin: 0 }}>Portfolio Builder websites</h2><p style={{ margin: "5px 0 0", color: "#8c7060", fontSize: 12 }}>Review builder drafts, ₹99 payment status and Vercel publishing state.</p></div><button type="button" style={secondary} onClick={() => load().catch((err) => setError(messageOf(err)))}><RefreshCw size={14} />Refresh</button></div>
+      {builderProjects.length ? builderProjects.map((project) => <article key={project._id} style={{ display: "grid", gridTemplateColumns: "minmax(220px,1fr) auto", alignItems: "center", gap: 14, padding: 14, border: "1px solid #eee4da", borderRadius: 10 }}><div style={{ minWidth: 0 }}><strong>{project.profile?.name || project.slug}</strong><div style={{ color: "#826e5d", fontSize: 12 }}>{project.email} · {project.slug} · ₹{(project.amount / 100).toFixed(0)} {project.currency}</div><small style={{ color: "#9a8065" }}>Created {new Date(project.createdAt).toLocaleString()} · Payment {project.razorpayPaymentId ? "verified" : project.razorpayOrderId ? "pending" : "not started"}</small>{project.deploymentError && <div role="alert" style={{ marginTop: 5, color: "#a0342c", fontSize: 12 }}>{project.deploymentError}</div>}{project.deploymentUrl && <div><a href={project.deploymentUrl} target="_blank" rel="noreferrer" style={{ color: "#805725", fontSize: 12 }}>Open deployed website ↗</a></div>}</div><div style={{ display: "grid", gap: 6 }}><select aria-label={`Website status for ${project.slug}`} style={{ ...fieldStyle, width: "auto" }} value={project.status} disabled={busy} onChange={(event) => changeBuilderProject(project._id, event.target.value)}>{[["draft", "Draft"], ["payment_pending", "Payment pending"], ["paid", "Paid · ready to deploy"], ["deploying", "Deploying"], ["published", "Published"], ["failed", "Needs attention"]].map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><small style={{ color: "#9a8065", textAlign: "right" }}>{project.publishedAt ? `Published ${new Date(project.publishedAt).toLocaleDateString()}` : project.razorpayOrderId || "No payment order"}</small></div></article>) : <p style={{ color: "#8c7060" }}>No Portfolio Studio websites have been started yet.</p>}
+    </section>}
 
     {tab === "candidates" && <>
       <form onSubmit={createCandidate} style={{ ...box, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", alignItems: "end", gap: 11 }}><h2 style={{ gridColumn: "1/-1", margin: 0 }}>Register a candidate draft</h2><Field label="Candidate name" required value={newCandidate.displayName} onChange={(value) => setNewCandidate({ ...newCandidate, displayName: value })} /><Field label="Portfolio slug" required value={newCandidate.slug} onChange={(value) => setNewCandidate({ ...newCandidate, slug: value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })} /><Field label="Linked Savitri account email (optional)" type="email" value={newCandidate.ownerEmail} onChange={(value) => setNewCandidate({ ...newCandidate, ownerEmail: value })} /><button type="submit" style={button} disabled={busy}>Add private draft</button><p style={{ gridColumn: "1/-1", margin: 0, color: "#8c7060", fontSize: 12 }}>No verified Archana Resume.pdf is attached here yet. Add her only as an unpublished draft; never fabricate or publish profile details before her review.</p></form>

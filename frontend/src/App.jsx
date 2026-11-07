@@ -6,7 +6,6 @@ import { X } from "lucide-react";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { CityProvider } from "./context/CityContext.jsx";
-import { EntertainmentProvider } from "./context/EntertainmentContext.jsx";
 
 // ── Layout ────────────────────────────────────────────────────────
 import Layout from "./components/layout/Layout.jsx";
@@ -16,7 +15,6 @@ import Home from "./components/pages/HomeExperience.jsx";
 import Shop from "./components/pages/Shop.jsx";
 import ProductDetail from "./components/pages/ProductDetail.jsx";
 import Cart from "./components/pages/Cart.jsx";
-import { EntertainmentHome, EntertainmentSearch, PlaylistPage } from "./modules/entertainment/index.js";
 import { Login, Register } from "./components/pages/AuthPages.jsx";
 import { MyAccount, MyOrders } from "./components/pages/AccountPages.jsx";
 import { About, Contact, FAQs, Legal } from "./components/pages/StaticPages.jsx";
@@ -36,6 +34,7 @@ import DeveloperZone from "./components/pages/DeveloperZone.jsx";
 import ChecklistEditor from "./components/pages/ChecklistEditor.jsx";
 import GrowthLivings from "./components/pages/GrowthLivings.jsx";
 import ExplorerLanding from "./components/pages/ExplorerLanding.jsx";
+import PortfolioBuilder from "./components/pages/PortfolioBuilder.jsx";
 
 function AppShell() {
   const { pathname } = useLocation();
@@ -73,6 +72,7 @@ function AppShell() {
           <Route path="account/orders" element={<MyOrders />} />
           <Route path="marketplace" element={<MarketplaceHome />} />
           <Route path="explorer" element={<ExplorerLanding />} />
+          <Route path="portfolio-builder" element={<PortfolioBuilder />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />
           <Route path="savinexa/*" element={<SavinexaRedirect />} />
@@ -82,10 +82,6 @@ function AppShell() {
           <Route path="tools/developer-zone" element={<DeveloperZone />} />
           <Route path="tools/developer-zone/checklist/:templateId" element={<ChecklistEditor />} />
           <Route path="partner-with-us" element={<PartnerWithUs />} />
-          <Route path="entertainment" element={<EntertainmentHome />} />
-          <Route path="entertainment/search" element={<EntertainmentSearch />} />
-          <Route path="entertainment/category/:slug" element={<EntertainmentHome />} />
-          <Route path="entertainment/playlists" element={<PlaylistPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
 
@@ -152,9 +148,7 @@ export default function App() {
       <AuthProvider>
         <CityProvider>
           <CartProvider>
-            <EntertainmentProvider>
-              <AppShell />
-            </EntertainmentProvider>
+            <AppShell />
           </CartProvider>
         </CityProvider>
       </AuthProvider>

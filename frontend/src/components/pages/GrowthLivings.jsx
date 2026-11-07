@@ -7,7 +7,7 @@ const defaults = {
   headline: "Build Your Professional Identity. Discover Opportunities. Grow Together.",
   description: "A connected ecosystem for professional portfolios, networking, recruitment and career opportunities.",
   products: {
-    resume: { title: "Resume / Portfolio", description: "Create extraordinary professional identities through interactive architectural experiences and recruiter-ready digital resumes.", url: "", status: "in-development", previewImage: "" },
+    resume: { title: "Portfolio Studio", description: "Build a personal portfolio website with live templates, Gemini writing support and one-click publishing.", url: "/portfolio-builder", status: "active", previewImage: "" },
     trustThem: { title: "Trust Them", description: "Connect professionals, recruiters, HR teams, companies and candidates around career opportunities.", url: "https://trust-them.vercel.app/", status: "in-development", previewImage: "" },
   },
 };
@@ -42,7 +42,7 @@ export default function GrowthLivings() {
 
   useEffect(() => {
     let active = true;
-    growthLivingsAPI.settings().then(({ data }) => { if (active && data.settings) setSettings((current) => ({ ...current, ...data.settings, products: { ...current.products, ...data.settings.products } })); }).catch(() => { if (active) setError("Live product settings could not be reached. Showing the published default overview."); });
+    growthLivingsAPI.settings().then(({ data }) => { if (active && data.settings) { const products = { ...defaults.products, ...data.settings.products }; if (!products.resume.url) products.resume.url = "/portfolio-builder"; if (products.resume.status === "in-development") products.resume.status = "active"; setSettings((current) => ({ ...current, ...data.settings, products })); } }).catch(() => { if (active) setError("Live product settings could not be reached. Showing the published default overview."); });
     return () => { active = false; };
   }, []);
   useEffect(() => { document.title = `${settings.title || "Growth Livings"} | Savitri Livings`; }, [settings.title]);

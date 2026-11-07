@@ -153,6 +153,11 @@ export const growthLivingsAPI = {
   uploadAsset: (form) => api.post("/api/growth-livings/admin/media", form, { headers: { "Content-Type": "multipart/form-data" } }),
 };
 
+export const portfolioBuilderAPI = {
+  projects: () => api.get("/api/portfolio-builder/admin/projects"),
+  updateProject: (id, data) => api.patch(`/api/portfolio-builder/admin/projects/${encodeURIComponent(id)}`, data),
+};
+
 export const audienceAPI = {
   getAll: () => api.get("/api/audience/admin"),
 };

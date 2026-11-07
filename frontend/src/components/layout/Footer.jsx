@@ -5,7 +5,7 @@ const WA = import.meta.env.VITE_WHATSAPP || "6207855397";
 const IG = import.meta.env.VITE_INSTAGRAM || "livingcrafts__";
 const EMAIL = import.meta.env.VITE_CONTACT_EMAIL || "savitrilivings@gmail.com";
 const GROUPS = [
-  { title: "Discover", links: [{ to: "/shop", label: "Shop Savitri" }, { href: "https://savitri-kolkata.vercel.app/", label: "Savitri Kolkata" }, { to: "/marketplace", label: "Thikana city explorer" }, { to: "/entertainment", label: "Entertainment" }] },
+  { title: "Discover", links: [{ to: "/shop", label: "Shop Savitri" }, { href: "https://savitri-kolkata.vercel.app/", label: "Savitri Kolkata" }, { to: "/marketplace", label: "Thikana city explorer" }] },
   { title: "Business & Community", links: [{ to: "/ecosystem", label: "SL Business" }, { href: "https://build-hub-lake.vercel.app/", label: "BuildHub" }, { to: "/partner-with-us", label: "Partner with us" }, { to: "/tools", label: "Everyday tools" }] },
   { title: "Help & Company", links: [{ to: "/about", label: "About Savitri Livings" }, { to: "/contact", label: "Contact" }, { to: "/faqs", label: "FAQs" }, { to: "/legal#returns", label: "Returns" }, { to: "/legal#privacy", label: "Privacy" }, { to: "/legal#terms", label: "Terms" }] },
 ];

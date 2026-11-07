@@ -11,7 +11,7 @@ const DEFAULT_SETTINGS = {
   headline: "Build Your Professional Identity. Discover Opportunities. Grow Together.",
   description: "A connected ecosystem for professional portfolios, networking, recruitment and career opportunities.",
   products: {
-    resume: { title: "Resume / Portfolio", description: "Create a professional identity with a recruiter-ready portfolio and architectural experience.", url: "", status: "in-development", previewImage: "" },
+    resume: { title: "Resume / Portfolio", description: "Build a personal portfolio website with live templates, Gemini writing support and one-click publishing.", url: "/portfolio-builder", status: "active", previewImage: "" },
     trustThem: { title: "Trust Them", description: "Connect professionals, recruiters, companies and candidates around career opportunities.", url: "", status: "in-development", previewImage: "" },
   },
   seo: { title: "Growth Livings | Savitri Livings", description: "Professional portfolios, connections and career opportunities from Growth Livings." },
@@ -28,7 +28,10 @@ const fail = (res, status, message) => res.status(status).json({ success: false,
 const validSlug = (value) => /^[a-z0-9-]{2,100}$/.test(String(value || ""));
 const settingsValue = async () => {
   const saved = await GrowthSettings.findOne({ key: "growth-livings" }).lean();
-  return saved ? { ...DEFAULT_SETTINGS, ...saved, products: { ...DEFAULT_SETTINGS.products, ...saved.products }, seo: { ...DEFAULT_SETTINGS.seo, ...saved.seo } } : DEFAULT_SETTINGS;
+  const settings = saved ? { ...DEFAULT_SETTINGS, ...saved, products: { ...DEFAULT_SETTINGS.products, ...saved.products }, seo: { ...DEFAULT_SETTINGS.seo, ...saved.seo } } : DEFAULT_SETTINGS;
+  if (!settings.products.resume.url) settings.products.resume.url = "/portfolio-builder";
+  if (settings.products.resume.status === "in-development") settings.products.resume.status = "active";
+  return settings;
 };
 const publicProfile = (candidate) => ({ slug: candidate.slug, name: candidate.displayName, headline: candidate.headline, ...(candidate.publicProfile || {}), ...(candidate.resumeUrl ? { resumeUrl: candidate.resumeUrl } : {}) });
 
