@@ -8,7 +8,7 @@ const defaults = {
   description: "A connected ecosystem for professional portfolios, networking, recruitment and career opportunities.",
   products: {
     resume: { title: "Resume / Portfolio", description: "Create extraordinary professional identities through interactive architectural experiences and recruiter-ready digital resumes.", url: "", status: "in-development", previewImage: "" },
-    trustThem: { title: "Trust Them", description: "Connect professionals, recruiters, HR teams, companies and candidates around career opportunities.", url: "", status: "in-development", previewImage: "" },
+    trustThem: { title: "Trust Them", description: "Connect professionals, recruiters, HR teams, companies and candidates around career opportunities.", url: "https://trust-them.vercel.app/", status: "in-development", previewImage: "" },
   },
 };
 const statusLabel = { active: "Available now", "in-development": "In development", "coming-soon": "Coming soon", disabled: "Unavailable" };
