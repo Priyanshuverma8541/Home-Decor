@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ArrowUpRight, Gift, Gem, Home, Search, Shirt, Store, Utensils, Compass, BriefcaseBusiness, Sparkles, Hammer, Users, ExternalLink, Building2 } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Gift, Gem, Home, Search, Shirt, Store, Utensils, Compass, BriefcaseBusiness, Hammer, Users, ExternalLink, Building2 } from "lucide-react";
 import ExperienceSwitcher from "../layout/ExperienceSwitcher.jsx";
 import { productAPI } from "../../services/api.js";
 import { getProductImage } from "../../utils/productImage.js";
@@ -16,14 +16,27 @@ const collections = [
 const explorerLinks = [
   { title: "Savitri Explorer", copy: "Discover local places, people and opportunities.", Icon: Compass, to: "/marketplace", tone: "cyan", label: "Explore the city" },
   { title: "Growth Livings", copy: "Build your professional identity and find your next opportunity.", Icon: BriefcaseBusiness, to: "/growth-livings", tone: "violet", label: "Grow with us" },
-  { title: "Savinexa", copy: "Explore a thoughtful collection for modern everyday living.", Icon: Sparkles, to: "/savinexa", tone: "gold", label: "Explore Savinexa" },
-  { title: "Tools Hub", copy: "Useful tools and ideas to help you build what’s next.", Icon: Hammer, href: "https://build-hub-lake.vercel.app/", tone: "teal", label: "Open BuildHub" },
+  { title: "Tools Hub", copy: "Useful tools and ideas to help you build what’s next.", Icon: Hammer, to: "/tools", tone: "teal", label: "Explore tools" },
+];
+
+const homeSlides = [
+  { title: "BuildHub", copy: "Plan, design and build your next project.", label: "Explore BuildHub", image: "/brand/campaign/buildhub.webp", alt: "Architectural plans and a modern home construction project", href: "https://build-hub-lake.vercel.app/", theme: "build" },
+  { title: "GangaBhog & Savinexa Client Projects", copy: "Discover thoughtful food and digital experiences.", label: "Explore our projects", image: "/brand/campaign/gangabhog-savinexa.webp", alt: "Indian sweets and an elegant online storefront", to: "/ecosystem", theme: "projects" },
+  { title: "Thikana", copy: "Find local businesses, services and discoveries.", label: "Explore Thikana", image: "/brand/campaign/thikana.webp", alt: "Kolkata at twilight with a local discovery map", to: "/marketplace", theme: "thikana" },
+  { title: "ToolHub", copy: "Useful tools for work, learning and creativity.", label: "Explore ToolHub", image: "/brand/campaign/toolhub.webp", alt: "A laptop displaying creative and productivity tools", to: "/tools", theme: "tools" },
+  { title: "SL Business", copy: "Explore ideas and support for growing businesses.", label: "Discover SL Business", image: "/brand/campaign/sl-business.webp", alt: "A business workspace with a growth chart", to: "/ecosystem", theme: "business" },
+  { title: "Savitri Livings Jewellery", copy: "Find pieces for everyday moments and celebrations.", label: "Shop jewellery", image: "/brand/campaign/jewellery.webp", alt: "Gold necklace and earrings displayed on an ivory bust", to: "/shop?category=jewellery", theme: "jewellery" },
+  { title: "Website Builder", copy: "Bring your next idea online with BuildHub.", label: "Explore the builder", image: "/brand/campaign/website-builder.webp", alt: "A laptop with a visual website design editor", href: "https://build-hub-lake.vercel.app/", theme: "website" },
+  { title: "Portfolio AI Builder", copy: "Create a polished home for your work and experience.", label: "Explore portfolio tools", image: "/brand/campaign/portfolio-ai.webp", alt: "Portfolio pages presented across a desktop and phone", to: "/growth-livings", theme: "portfolio" },
 ];
 
 export default function HomeExperience() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const carouselTouchStart = useRef(null);
   const collectionCards = useMemo(() => collections.map((item) => ({ ...item, product: products.find((product) => item.match.test(`${product.name} ${product.category} ${product.description || ""}`)) })), [products]);
 
   useEffect(() => {
@@ -38,6 +51,15 @@ export default function HomeExperience() {
   };
   const openCollection = (item) => item.href ? window.open(item.href, "_blank", "noopener,noreferrer") : navigate(item.to);
   const featured = products.find((item) => getProductImage(item)) || null;
+  const slide = homeSlides[activeSlide];
+  const changeSlide = (offset) => setActiveSlide((current) => (current + offset + homeSlides.length) % homeSlides.length);
+  const openSlide = () => slide.href ? window.open(slide.href, "_blank", "noopener,noreferrer") : navigate(slide.to);
+
+  useEffect(() => {
+    if (carouselPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const timer = window.setInterval(() => { if (document.visibilityState === "visible") setActiveSlide((current) => (current + 1) % homeSlides.length); }, 5600);
+    return () => window.clearInterval(timer);
+  }, [carouselPaused]);
 
   return <main className="sl-homepage">
     <form className="sl-home-search" role="search" onSubmit={search}>
@@ -48,17 +70,14 @@ export default function HomeExperience() {
 
     <ExperienceSwitcher homepage />
 
-    <section className="sl-mall-hero" aria-label="Discover the Savitri Livings mall">
-      <img className="sl-mall-hero-image" src="/brand/mall-hero-ecosystem.webp" alt="A luminous multi-level Savitri Livings mall atrium with boutiques and a central lotus sculpture" fetchPriority="high" />
-      <div className="sl-mall-hero-shade" />
-      <div className="sl-mall-hero-caption">
-        <span className="sl-home-eyebrow">SAVITRI LIVINGS · LIFESTYLE · LIVING · MORE</span>
-        <h1>Step into<br />Savitri Livings</h1>
-        <p>A world of jewellery, fashion, home décor, gifts and more.</p>
-        <button className="sl-explore-mall" type="button" onClick={() => navigate("/mall")}>Explore the Mall <ArrowRight size={17} /></button>
+    <section className="sl-home-carousel" aria-label="Explore Savitri Livings businesses and services" onMouseEnter={() => setCarouselPaused(true)} onMouseLeave={() => setCarouselPaused(false)} onFocusCapture={() => setCarouselPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setCarouselPaused(false); }} onTouchStart={(event) => { carouselTouchStart.current = event.changedTouches[0]?.clientX ?? null; }} onTouchEnd={(event) => { if (carouselTouchStart.current === null) return; const delta = event.changedTouches[0].clientX - carouselTouchStart.current; if (Math.abs(delta) > 45) changeSlide(delta < 0 ? 1 : -1); carouselTouchStart.current = null; }}>
+      <div className={`sl-home-carousel-slide theme-${slide.theme}`} key={slide.title}>
+        <img className="sl-home-carousel-image" src={slide.image} alt={slide.alt} fetchPriority={activeSlide === 0 ? "high" : "auto"} />
+        <div className="sl-home-carousel-shade" />
+        <div className="sl-home-carousel-copy"><span className="sl-home-eyebrow">SAVITRI LIVINGS · LIFESTYLE · LIVING · MORE</span><h1>{slide.title}</h1><p>{slide.copy}</p><button className="sl-explore-mall" type="button" onClick={openSlide}>{slide.label}<ArrowRight size={17} /></button></div>
+        <div className="sl-home-carousel-controls"><button type="button" aria-label="Previous slide" onClick={() => changeSlide(-1)}><ChevronLeft size={20}/></button><div className="sl-carousel-dots" role="group" aria-label="Choose carousel slide">{homeSlides.map((item, index) => <button key={item.title} type="button" className={index === activeSlide ? "active" : ""} aria-label={`Show slide ${index + 1}: ${item.title}`} aria-current={index === activeSlide ? "true" : undefined} onClick={() => setActiveSlide(index)} />)}</div><span className="sl-carousel-count">{String(activeSlide + 1).padStart(2,"0")} <i>/</i> {String(homeSlides.length).padStart(2,"0")}</span><button type="button" aria-label="Next slide" onClick={() => changeSlide(1)}><ChevronRight size={20}/></button></div>
+        <button className="sl-skip-products" type="button" onClick={() => navigate("/shop")}><span className="sl-grid-icon" aria-hidden="true">⠿</span> Skip to Products <ArrowRight size={16} /></button>
       </div>
-      <button className="sl-skip-products" type="button" onClick={() => navigate("/shop")}><span className="sl-grid-icon" aria-hidden="true">⠿</span> Skip to Products <ArrowRight size={16} /></button>
-      <div className="sl-hero-dots" aria-hidden="true"><i /><i /><i /><i /><i /></div>
     </section>
 
     <section className="sl-explorer" id="sl-explorer" aria-labelledby="sl-explorer-title">
@@ -112,6 +131,11 @@ export default function HomeExperience() {
       @media(max-width:760px){.sl-explorer{padding:42px 15px 46px}.sl-explorer-heading{margin-bottom:19px}.sl-explorer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.sl-explorer-card{min-height:135px;padding:13px 11px;gap:9px;border-radius:14px}.sl-explorer-card-icon{width:33px;height:33px;flex-basis:33px;border-radius:10px}.sl-explorer-card-icon svg{width:18px;height:18px}.sl-explorer-card-copy>b{font-size:.82rem}.sl-explorer-card-copy>small{font-size:.66rem;min-height:38px}.sl-explorer-card-copy>strong{font-size:.62rem}.sl-explorer-card-arrow{right:8px;bottom:8px;width:22px;height:22px}.sl-growth-featured{grid-template-columns:1fr;gap:10px;margin-top:25px}.sl-growth-featured-title{display:block;margin-bottom:2px}.sl-growth-featured-title h3{margin-top:6px}.sl-growth-spotlight{grid-template-columns:.88fr 1.12fr;min-height:135px;border-radius:14px}.sl-spotlight-visual{min-height:135px}.sl-spotlight-copy{gap:6px;padding:13px 11px}.sl-spotlight-copy>b{font-size:.9rem}.sl-spotlight-copy>small{font-size:.67rem}.sl-spotlight-copy>strong{font-size:.62rem}.sl-mini-window{right:5%;top:18px;width:85%;height:100px;padding:16px 9px}.sl-mini-window b{font-size:.53rem}.sl-mini-window small{font-size:.47rem}}
       @media(max-width:390px){.sl-explorer-grid{grid-template-columns:1fr}.sl-explorer-card{min-height:112px;padding:13px}.sl-explorer-card-copy>small{min-height:auto;max-width:230px}.sl-growth-spotlight{grid-template-columns:.82fr 1.18fr}.sl-explorer-heading p{font-size:.82rem}}
       @media(prefers-reduced-motion:reduce){.sl-explore-mall,.sl-collection-art img,.sl-explorer-card,.sl-growth-spotlight{transition:none}}
+      .sl-home-carousel{max-width:1360px;margin:12px auto 22px;padding:0 clamp(14px,2.7vw,34px)}.sl-home-carousel-slide{--carousel-accent:#f1d39d;position:relative;isolation:isolate;height:clamp(280px,27vw,360px);overflow:hidden;border:1px solid rgba(255,240,216,.2);border-radius:22px;background:#2b1b12;color:#fff8ed;box-shadow:0 16px 45px rgba(63,39,20,.17);animation:sl-carousel-enter .55s ease both}.sl-home-carousel-slide.theme-thikana{--carousel-accent:#f5cf8e}.sl-home-carousel-slide.theme-tools,.sl-home-carousel-slide.theme-website,.sl-home-carousel-slide.theme-portfolio{--carousel-accent:#f2cf8d}.sl-home-carousel-image{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:center 51%}.sl-home-carousel-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(31,16,8,.5),rgba(31,16,8,.18) 39%,rgba(31,16,8,0) 72%),linear-gradient(0deg,rgba(22,12,7,.3),transparent 45%)}.sl-home-carousel-copy{position:absolute;left:clamp(22px,5.5vw,76px);top:50%;width:min(430px,48%);transform:translateY(-50%);padding:7px 0 14px}.sl-home-carousel-copy h1{max-width:430px;margin:10px 0 7px;color:#fff8ed;font:500 clamp(2rem,4.3vw,3.45rem)/.98 'Cormorant Garamond',serif;letter-spacing:-.02em;text-wrap:balance}.sl-home-carousel-copy p{max-width:360px;margin:0;color:rgba(255,248,237,.9);font-size:clamp(.82rem,1.2vw,.97rem);line-height:1.48}.sl-home-carousel-copy .sl-explore-mall{margin-top:17px;padding:10px 16px;background:var(--carousel-accent);font-size:.76rem}.sl-home-carousel-controls{position:absolute;left:clamp(22px,5.5vw,76px);bottom:17px;display:flex;align-items:center;gap:9px}.sl-home-carousel-controls>button{width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(255,248,237,.45);border-radius:50%;background:rgba(38,24,15,.48);color:#fff8ed;cursor:pointer;transition:background .18s,transform .18s}.sl-home-carousel-controls>button:hover{background:rgba(255,248,237,.2);transform:scale(1.04)}.sl-carousel-dots{display:flex;align-items:center;gap:6px;padding:0 4px}.sl-carousel-dots button{width:6px;height:6px;padding:0;border:1px solid rgba(255,248,237,.75);border-radius:50%;background:rgba(255,248,237,.34);cursor:pointer;transition:width .2s,background .2s}.sl-carousel-dots button.active{width:20px;border-radius:8px;background:#fff8ed}.sl-carousel-count{margin-left:2px;color:#fff8ed;font:600 .65rem 'DM Sans',sans-serif;letter-spacing:.08em}.sl-carousel-count i{padding:0 4px;color:rgba(255,248,237,.54);font-style:normal}.sl-home-carousel .sl-skip-products{right:18px;bottom:16px;padding:9px 12px;font-size:.64rem}.sl-home-carousel button:focus-visible{outline:2px solid #fff8ed;outline-offset:3px}
+      @keyframes sl-carousel-enter{from{opacity:.75}to{opacity:1}}
+      @media(max-width:760px){.sl-home-carousel{margin:10px auto 18px;padding:0 12px}.sl-home-carousel-slide{height:clamp(220px,62vw,275px);border-radius:17px}.sl-home-carousel-image{object-position:64% center}.sl-home-carousel-shade{background:linear-gradient(90deg,rgba(25,14,8,.56),rgba(27,16,9,.26) 55%,rgba(29,17,9,.05)),linear-gradient(0deg,rgba(22,12,7,.44),transparent 60%)}.sl-home-carousel-copy{left:18px;top:auto;bottom:54px;width:min(310px,75%);padding:0;transform:none}.sl-home-carousel-copy .sl-home-eyebrow{font-size:.48rem;letter-spacing:.11em}.sl-home-carousel-copy h1{margin:6px 0 4px;font-size:clamp(1.65rem,7vw,2.25rem)}.sl-home-carousel-copy p{max-width:270px;font-size:.72rem;line-height:1.36}.sl-home-carousel-copy .sl-explore-mall{margin-top:9px;padding:8px 12px;font-size:.68rem}.sl-home-carousel-controls{left:15px;bottom:12px;gap:5px}.sl-home-carousel-controls>button{width:27px;height:27px}.sl-carousel-dots{gap:5px;padding:0 2px}.sl-carousel-dots button{width:5px;height:5px}.sl-carousel-dots button.active{width:15px}.sl-carousel-count{font-size:.56rem}.sl-home-carousel .sl-skip-products{right:10px;bottom:11px;padding:7px 9px;font-size:.57rem}.sl-home-carousel .sl-grid-icon{display:none}}
+      @media(max-width:390px){.sl-home-carousel-slide{height:224px}.sl-home-carousel-copy{left:15px;bottom:51px;width:77%}.sl-home-carousel-copy h1{font-size:1.62rem}.sl-home-carousel-copy p{max-width:245px;font-size:.67rem}.sl-home-carousel-controls{left:11px;gap:3px}.sl-home-carousel-controls>button{width:24px;height:24px}.sl-home-carousel .sl-skip-products{right:8px;bottom:10px;font-size:.53rem;padding:6px 7px}}
+      @media(prefers-reduced-motion:reduce){.sl-home-carousel-slide{animation:none}.sl-home-carousel-controls>button,.sl-carousel-dots button{transition:none}}
     `}</style>
   </main>;
 }
