@@ -10,6 +10,7 @@ import NotificationButton from "../ui/NotificationButton.jsx";
 const NAV = [
   { to:"/",         label:"Home",     end:true },
   { to:"/shop",     label:"Shop"             },
+  { to:"/mall",     label:"Mall"              },
   { to:"/growth-livings", label:"Growth Livings" },
 ];
 
