@@ -18,6 +18,7 @@ export const businessAPI = {
   createProduct: (slug, data) => client.post(apiPath(slug, "/products"), data),
   updateProduct: (slug, id, data) => client.put(apiPath(slug, `/products/${id}`), data),
   deleteProduct: (slug, id) => client.delete(apiPath(slug, `/products/${id}`)),
+  media: (slug, data) => client.post(apiPath(slug, "/products/media"), data, { headers: { "Content-Type": "multipart/form-data" } }),
   orders: (slug) => client.get(apiPath(slug, "/orders")),
   updateOrder: (slug, id, status) => client.patch(apiPath(slug, `/orders/${id}`), { status }),
   enquiries: (slug) => client.get(apiPath(slug, "/enquiries")),

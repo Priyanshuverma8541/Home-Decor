@@ -80,6 +80,7 @@ router.post("/:slug/admin/login", c.login);
 router.post("/:slug/admin/logout", c.logout);
 router.get("/:slug/admin/me", tenantAdmin, c.me);
 router.get("/:slug/admin/products", tenantAdmin, requireModule("products"), c.adminProducts);
+router.post("/:slug/admin/products/media", tenantAdmin, requireModule("products"), upload.single("image"), c.uploadMedia);
 router.post("/:slug/admin/products", tenantAdmin, requireModule("products"), upload.array("images", 8), c.createProduct);
 router.put("/:slug/admin/products/:id", tenantAdmin, requireModule("products"), upload.array("images", 8), c.updateProduct);
 router.delete("/:slug/admin/products/:id", tenantAdmin, requireModule("products"), c.deleteProduct);
