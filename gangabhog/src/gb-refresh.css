@@ -1,6 +1,6 @@
 /* GangaBhog responsive product-led hero */
 .gb-site .gb-hero.gb-carousel{height:auto;min-height:0;max-height:none;overflow:hidden;position:relative;background:#f7ecd5;color:#372417;border-bottom:1px solid #e3d1ab}
-.gb-carousel-track{display:flex;width:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;}
+.gb-carousel-track{display:flex;width:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;overscroll-behavior-y:auto;touch-action:auto;}
 .gb-carousel-track::-webkit-scrollbar{display:none}
 .gb-carousel-slide{position:relative;isolation:isolate;flex:0 0 100%;min-width:100%;min-height:clamp(540px,56vw,700px);display:grid;grid-template-columns:minmax(0,1.08fr) minmax(290px,.92fr);align-items:center;padding:clamp(30px,6vw,84px) clamp(23px,8.2vw,125px) 85px;overflow:hidden;scroll-snap-align:start;background:linear-gradient(112deg,#fff7e8 0%,#f4dfb4 54%,#dfb25c 100%)}
 .gb-carousel-green{background:linear-gradient(112deg,#fff8e9 0%,#e5e8d4 54%,#96a879 100%)}.gb-carousel-red{background:linear-gradient(112deg,#fff6e6 0%,#f1d9bd 54%,#b86942 100%)}.gb-carousel-cream{background:linear-gradient(112deg,#fffaf0 0%,#eedbb8 58%,#caa45f 100%)}
