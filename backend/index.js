@@ -40,6 +40,7 @@ const ALLOWED = [
   process.env.MAA_ADMIN_URL,
   process.env.MAA_CLIENT_URL,
   process.env.PORTFOLIO_BUILDER_URL,
+  process.env.PRIYANSHU_PORTFOLIO_URL,
   ...(process.env.GROWTH_ALLOWED_ORIGINS || "").split(","),
 ].filter(Boolean).map(u => u.trim().replace(/\/$/, ""));
 
