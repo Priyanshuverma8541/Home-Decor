@@ -93,9 +93,10 @@ const sanitizeSections = (sections) => Array.isArray(sections)
         required: consent?.required === true,
         version: String(consent?.version || "1").slice(0, 40),
       }));
-      else if (Array.isArray(value)) data[key] = value.slice(0, 30).map((item) => String(item).slice(0, 120));
+      else if (key === "items" && item.type === "portfolioGrid" && Array.isArray(value)) data[key] = value.slice(0, 30).map((entry) => ({ title: String(entry?.title || "").slice(0, 160), description: String(entry?.description || "").slice(0, 500), url: safeSectionUrl(entry?.url) }));
+      else if (Array.isArray(value)) data[key] = value.slice(0, 30).map((entry) => String(entry).slice(0, 240));
     }
-    const type = ["hero", "heading", "text", "image", "imageText", "video", "button", "products", "productCarousel", "categoryGrid", "collection", "faq", "form", "countdown", "testimonials", "socialLinks", "whatsapp", "referral", "custom"].includes(item.type) ? item.type : "text";
+    const type = ["hero", "heading", "text", "image", "imageText", "video", "button", "products", "productCarousel", "categoryGrid", "collection", "faq", "form", "countdown", "testimonials", "socialLinks", "whatsapp", "referral", "custom", "portfolioGrid", "skillCloud"].includes(item.type) ? item.type : "text";
     return { ...data, id: String(item.id || `section-${index + 1}`).slice(0, 80), type, visible: item.visible !== false };
   })
   : [];

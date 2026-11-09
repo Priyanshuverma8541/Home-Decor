@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
   vercelProjectSlug: { type: String, default: "" },
   vercelDeploymentId: { type: String, default: "" },
   deploymentUrl: { type: String, default: "" },
+  savitriPageId: { type: mongoose.Schema.Types.ObjectId, ref: "Page", default: null },
   deploymentError: { type: String, default: "" },
   publishedAt: { type: Date, default: null },
 }, { timestamps: true, minimize: false });

@@ -1,26 +1,29 @@
-# Portfolio Studio
+# Savitri Livings Portfolio Builder
 
-Portfolio Studio is part of the Savitri Livings frontend at `/portfolio-builder`. Its Growth Livings card and the homepage's Portfolio AI Builder carousel item open the same experience. Savitri Livings Admin manages orders under **Growth Livings → Portfolio websites**.
+The Portfolio Builder is a Savitri Livings tool at `/portfolio-builder` and is also linked from the Tools page. Its drafts and verified ₹99 payments are stored by the existing Savitri Livings backend. The builder includes a personal portfolio starter for Priyanshu Verma and reusable content blocks for other creators.
 
-## Existing infrastructure used
+## Savitri Pages publishing
 
-- MongoDB stores private drafts, payment status, and Vercel deployment details.
-- The Savitri Livings backend calls Gemini with its server-side `GEMINI_API_KEY`; the browser never receives that key.
-- Razorpay creates an INR 99 order on the server. The backend verifies the checkout signature and confirms a captured payment before publishing.
-- Vercel receives a generated static portfolio under a unique project name based on the name selected by the customer.
+After payment is verified, publishing creates a `Page` record through the existing MongoDB-backed Savitri Pages system. The public URL is `https://home-decor-inky.vercel.app/p/<slug>`. The page is listed under **Admin → Savitri Pages**, where it can be previewed, edited, measured, unpublished, or archived. The same frontend deployment serves all portfolio pages; each portfolio does not create a separate hosting project.
 
-The builder creates a private draft while the user edits. Public contact details are optional and appear on a published site only if the user enters them. The owner edit token is returned once and stored in that browser; Admin never receives it.
+The portfolio page uses the shared page renderer and supports the existing Savitri Pages blocks plus portfolio project cards and skill chips. Enquiry forms use the existing page-form and lead workflows. The public content comes from the creator’s profile; receipt email and editor token remain private to the builder record.
 
-## Required production environment
+## Gemini
 
-Set these on the Savitri Livings Render backend:
+Gemini calls happen only on the backend. Configure these variables on the Savitri Livings Render service:
 
-- `GEMINI_API_KEY` and `GEMINI_MODEL` for Gemini writing help.
-- `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` for checkout. Test-mode credentials do not collect real payments; switch to live-mode credentials before charging customers.
-- `VERCEL_TOKEN` for deployments, and `VERCEL_TEAM_ID` if the Vercel project belongs to a team.
-- `PORTFOLIO_BUILDER_URL` set to the exact deployed Portfolio Studio origin for CORS.
-- Keep `PORTFOLIO_PUBLISHING_ENABLED=false` and `PORTFOLIO_LIVE_PAYMENTS_ENABLED=false` until the hosting plan and live Razorpay credentials are ready. Only set each to `true` after its connection is verified.
+- `GEMINI_API_KEY` — the Google Generative Language API key (never put it in Vite/frontend settings).
+- `GEMINI_MODEL=gemini-3.8-flash` — the currently recommended model for this app.
 
-Set the Savitri frontend's existing `VITE_API_URL` to the backend origin. Do not add server credentials to frontend environment variables.
+If Gemini reports an unavailable model, check `GEMINI_MODEL`; if it reports a rejected key, check the key and ensure the Generative Language API is enabled in its Google project. After changing Render variables, redeploy the backend.
 
-Commercial hosting: Vercel restricts its Hobby plan to personal, non-commercial use. A paid website publishing service needs an account/plan that permits commercial deployments. Confirm the hosting account before enabling paid publishing.
+## Production publishing and payment
+
+Set these on Render only after the Savitri Pages URL and payment configuration are confirmed:
+
+- `SAVITRI_PAGES_ORIGIN=https://home-decor-inky.vercel.app` (optional while using the default URL).
+- `PORTFOLIO_PUBLISHING_ENABLED=true` to allow paid drafts to create a published Savitri Page.
+- `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` using live-mode credentials before charging real customers.
+- `PORTFOLIO_LIVE_PAYMENTS_ENABLED=true` only after live checkout and captured-payment verification are confirmed.
+
+Test Razorpay credentials cannot collect real ₹99 payments. Keep the publish/payment flags off until the live integration is ready. No Vercel token is required for portfolio publishing.

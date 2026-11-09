@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Calculator, Ruler, Wallet } from "lucide-react";
+import { ArrowRight, Calculator, Ruler, Sparkles, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const inputStyle = { width: "100%", minHeight: 44, border: "1px solid #dfd2bd", borderRadius: 10, padding: "10px 12px", background: "#fffdf9", color: "#3e3028", font: "inherit" };
@@ -28,6 +28,7 @@ export default function Tools() {
 
   return <main className="sl-tools"><header><span className="section-tag">SAVITRI LIVINGS · TOOLS</span><h1>Small tools for everyday decisions.</h1><p>Useful calculators that run on your device. Values are not saved or sent to the server.</p></header>
     <Link to="/tools/developer-zone" className="sl-developer-link"><span className="sl-developer-icon">✦</span><span><strong>Developer Zone</strong><small>SFMC checklist tools and field-by-field guidance</small></span><ArrowRight size={18}/></Link>
+    <Link to="/portfolio-builder" className="sl-developer-link sl-portfolio-tool-link"><span className="sl-developer-icon"><Sparkles size={18}/></span><span><strong>Portfolio Builder</strong><small>Design a personal website with templates, rich content blocks, live preview and Savitri Pages publishing</small></span><ArrowRight size={18}/></Link>
     <div className="sl-tools-grid">
       <ToolCard icon={Calculator} title="EMI calculator" description="Estimate a monthly instalment from the principal, annual interest rate and term you enter.">
         <div className="tool-input-grid"><label>Loan amount (₹)<input type="number" min="0" value={principal} onChange={(e) => setPrincipal(e.target.value)} style={inputStyle} /></label><label>Annual interest (%)<input type="number" min="0" step=".1" value={rate} onChange={(e) => setRate(e.target.value)} style={inputStyle} /></label><label>Term (years)<input type="number" min="1" max="50" value={years} onChange={(e) => setYears(e.target.value)} style={inputStyle} /></label></div>
