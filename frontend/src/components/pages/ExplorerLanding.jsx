@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Compass, Hammer, ShoppingBag, Sparkles, Wrench } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Compass, Gamepad2, Hammer, ShoppingBag, Sparkles } from "lucide-react";
 
 const experiences = [
   { name: "Thikana", description: "Discover local businesses, useful services and marketplace finds.", action: "Explore local listings", href: "/marketplace", Icon: ShoppingBag, tone: "sand" },
   { name: "Growth Livings", description: "Create a professional profile and explore career opportunities.", action: "Explore Growth Livings", href: "/growth-livings", Icon: BriefcaseBusiness, tone: "gold" },
   { name: "BuildHub", description: "Tools and resources for planning and building projects.", action: "Open BuildHub", href: "https://build-hub-lake.vercel.app/", Icon: Hammer, external: true, tone: "rose" },
-  { name: "ToolHub", description: "Explore useful tools for work, learning and creativity.", action: "Explore tools", href: "/tools", Icon: Wrench, tone: "olive" },
+  { name: "Games", description: "Take a quick break with a Savitri Livings memory game.", action: "Play a game", href: "/games", Icon: Gamepad2, tone: "olive" },
   { name: "Savinexa", description: "Visit the Savinexa lifestyle and client projects experience.", action: "Visit Savinexa", href: "https://savinexa.vercel.app/", external: true, Icon: Sparkles, tone: "cream" },
 ];
 

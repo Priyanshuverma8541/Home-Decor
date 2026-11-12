@@ -1,12 +1,12 @@
 # Savitri Livings Portfolio Builder
 
-The Portfolio Builder is a Savitri Livings tool at `/portfolio-builder` and is also linked from the Tools page. Its drafts and verified ₹99 payments are stored by the existing Savitri Livings backend. The builder includes a personal portfolio starter for Priyanshu Verma and reusable content blocks for other creators.
+The Portfolio Builder is a free Savitri Livings tool at `/portfolio-builder` and is also linked from Development. Drafts and publishing use the existing Savitri Livings backend and MongoDB. The builder includes a personal portfolio starter for Priyanshu Verma and reusable content blocks for other creators.
 
 ## Savitri Pages publishing
 
-After payment is verified, publishing creates a `Page` record through the existing MongoDB-backed Savitri Pages system. The public URL is `https://home-decor-inky.vercel.app/p/<slug>`. The page is listed under **Admin → Savitri Pages**, where it can be previewed, edited, measured, unpublished, or archived. The same frontend deployment serves all portfolio pages; each portfolio does not create a separate hosting project.
+Clicking Publish creates or updates a `Page` record through the existing MongoDB-backed Savitri Pages system, with no checkout or payment configuration. The public URL is `https://home-decor-inky.vercel.app/p/<slug>`. The page is listed under **Admin → Savitri Pages**, where it can be previewed, edited, measured, unpublished, or archived. The same frontend deployment serves all portfolio pages; each portfolio does not create a separate hosting project.
 
-The portfolio page uses the shared page renderer and supports the existing Savitri Pages blocks plus portfolio project cards and skill chips. Enquiry forms use the existing page-form and lead workflows. The public content comes from the creator’s profile; receipt email and editor token remain private to the builder record.
+The portfolio page uses the shared page renderer and supports the existing Savitri Pages blocks plus portfolio project cards and skill chips. Enquiry forms use the existing page-form and lead workflows. The public content comes from the creator’s profile; the optional public email and editor token remain in the builder record.
 
 ## Gemini
 
@@ -17,13 +17,10 @@ Gemini calls happen only on the backend. Configure these variables on the Savitr
 
 If Gemini reports an unavailable model, check `GEMINI_MODEL`; if it reports a rejected key, check the key and ensure the Generative Language API is enabled in its Google project. After changing Render variables, redeploy the backend.
 
-## Production publishing and payment
+## Production publishing
 
-Set these on Render only after the Savitri Pages URL and payment configuration are confirmed:
+The publisher uses the existing Savitri Livings backend and page records. No payment credentials or portfolio-specific enable flag are needed. Optionally set the public origin:
 
 - `SAVITRI_PAGES_ORIGIN=https://home-decor-inky.vercel.app` (optional while using the default URL).
-- `PORTFOLIO_PUBLISHING_ENABLED=true` to allow paid drafts to create a published Savitri Page.
-- `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` using live-mode credentials before charging real customers.
-- `PORTFOLIO_LIVE_PAYMENTS_ENABLED=true` only after live checkout and captured-payment verification are confirmed.
 
-Test Razorpay credentials cannot collect real ₹99 payments. Keep the publish/payment flags off until the live integration is ready. No Vercel token is required for portfolio publishing.
+No Vercel token is required for portfolio publishing.

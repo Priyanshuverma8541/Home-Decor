@@ -35,6 +35,8 @@ import ChecklistEditor from "./components/pages/ChecklistEditor.jsx";
 import GrowthLivings from "./components/pages/GrowthLivings.jsx";
 import ExplorerLanding from "./components/pages/ExplorerLanding.jsx";
 import PortfolioBuilder from "./components/pages/PortfolioBuilder.jsx";
+import Development from "./components/pages/Development.jsx";
+import Games from "./components/pages/Games.jsx";
 
 function AppShell() {
   const { pathname } = useLocation();
@@ -73,6 +75,8 @@ function AppShell() {
           <Route path="marketplace" element={<MarketplaceHome />} />
           <Route path="explorer" element={<ExplorerLanding />} />
           <Route path="portfolio-builder" element={<PortfolioBuilder />} />
+          <Route path="development" element={<Development />} />
+          <Route path="games" element={<Games />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />
           <Route path="savinexa/*" element={<SavinexaRedirect />} />

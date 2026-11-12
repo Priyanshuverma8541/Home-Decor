@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const schema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true, lowercase: true, trim: true, match: /^[a-z0-9-]{3,52}$/ },
-  email: { type: String, required: true, lowercase: true, trim: true, maxlength: 254 },
+  email: { type: String, default: "", lowercase: true, trim: true, maxlength: 254 },
   profile: { type: mongoose.Schema.Types.Mixed, required: true },
   editorTokenHash: { type: String, required: true, select: false },
   status: { type: String, enum: ["draft", "payment_pending", "paid", "deploying", "published", "failed"], default: "draft", index: true },
-  amount: { type: Number, default: 9900 },
+  amount: { type: Number, default: 0 },
   currency: { type: String, default: "INR" },
   razorpayOrderId: { type: String, default: "" },
   razorpayPaymentId: { type: String, default: "" },
