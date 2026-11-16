@@ -77,7 +77,10 @@ export default function ChecklistEditor() {
   const [evidenceSheet, setEvidenceSheet] = useState(false);
   const cellRefs = useRef({});
   const draftReady = useRef(false);
-  const saveLock = useRef(false);
+  const saveRequest = useRef(null);
+  const saveCallCount = useRef(0);
+  const editRevision = useRef(0);
+  const savedRevision = useRef(0);
   const latestDraft = useRef(null);
   const skipNextDraftLoad = useRef("");
 
@@ -85,6 +88,7 @@ export default function ChecklistEditor() {
     if (draftId && skipNextDraftLoad.current === draftId) { skipNextDraftLoad.current = ""; return undefined; }
     let live = true;
     draftReady.current = false;
+    editRevision.current = 0; savedRevision.current = 0; saveRequest.current = null;
     setLoading(true); setError(""); setDirty(false); setEvidenceSheet(false); setGuidance(null); setActiveField(null); setSelectedCell(null); setUndoStack([]); setRedoStack([]);
     (async () => {
       try {
@@ -143,57 +147,80 @@ export default function ChecklistEditor() {
     setUndoStack((stack) => [...stack.slice(-49), values]);
     setRedoStack([]);
     setValues((previous) => ({ ...previous, [id]: value }));
-    setDirty(true);
+    editRevision.current += 1; setDirty(true);
     setSaveLabel("Unsaved changes");
   }, [values]);
 
   const saveNow = useCallback(async ({ quiet = false } = {}) => {
-    if (!template || saveLock.current) return null;
-    saveLock.current = true;
+    if (!template) return null;
+    if (saveRequest.current) {
+      try {
+        const completedId = await saveRequest.current;
+        if (!completedId) return null;
+        return savedRevision.current === editRevision.current ? completedId : saveNow({ quiet });
+      } catch { return null; }
+    }
+    saveCallCount.current += 1;
     setSaving(true);
     if (!quiet) setSaveLabel("Saving…");
-    try {
-      const snapshot = latestDraft.current;
-      const body = { templateId: snapshot.template.templateId, templateVersion: snapshot.template.version, title: snapshot.title, values: snapshot.values, evidence: snapshot.evidence };
-      const response = snapshot.currentId ? await checklistAPI.saveDraft(snapshot.currentId, body) : await checklistAPI.createDraft(body);
-      const id = response.data.draft._id;
-      setCurrentId(id);
-      const latest = latestDraft.current;
-      const unchanged = latest.title === snapshot.title && latest.values === snapshot.values && latest.evidence === snapshot.evidence;
-      if (unchanged) { setDirty(false); setSaveLabel("All changes saved"); }
-      else { setDirty(true); setSaveLabel("Newer edits are waiting to save"); }
-      if (!snapshot.currentId) { skipNextDraftLoad.current = id; navigate(`/tools/developer-zone/checklist/${encodeURIComponent(templateId)}?draft=${encodeURIComponent(id)}`, { replace: true }); }
-      if (!quiet) toast.success("Checklist saved");
-      return id;
-    } catch (e) {
-      setSaveLabel("Save failed — retry");
-      if (!quiet) toast.error(e.response?.data?.message || "Could not save this checklist");
-      return null;
-    } finally { saveLock.current = false; setSaving(false); }
+    const runSave = async () => {
+      while (true) {
+        const snapshot = latestDraft.current;
+        if (!snapshot?.template) return null;
+        const revision = editRevision.current;
+        const body = { templateId: snapshot.template.templateId, templateVersion: snapshot.template.version, title: snapshot.title, values: snapshot.values, evidence: snapshot.evidence };
+        let response;
+        try { response = snapshot.currentId ? await checklistAPI.saveDraft(snapshot.currentId, body) : await checklistAPI.createDraft(body); }
+        catch (e) {
+          setSaveLabel("Save failed — retry");
+          if (!quiet) toast.error(e.response?.data?.message || "Could not save this checklist");
+          return null;
+        }
+        const id = response.data.draft._id;
+        setCurrentId(id);
+        latestDraft.current = { ...latestDraft.current, currentId: id };
+        if (!snapshot.currentId) { skipNextDraftLoad.current = id; navigate(`/tools/developer-zone/checklist/${encodeURIComponent(templateId)}?draft=${encodeURIComponent(id)}`, { replace: true }); }
+        savedRevision.current = revision;
+        if (editRevision.current === revision) {
+          setDirty(false); setSaveLabel("All changes saved");
+          if (!quiet) toast.success("Checklist saved");
+          return id;
+        }
+        setDirty(true); setSaveLabel("Newer edits are waiting to save");
+      }
+    };
+    const saveTask = runSave();
+    saveRequest.current = saveTask;
+    try { return await saveTask; }
+    finally {
+      if (saveRequest.current === saveTask) saveRequest.current = null;
+      saveCallCount.current -= 1;
+      if (saveCallCount.current <= 0) { saveCallCount.current = 0; setSaving(false); }
+    }
   }, [navigate, templateId]);
 
   useEffect(() => {
     if (!draftReady.current || !dirty || preview) return undefined;
     let timer;
-    const persist = () => { if (saveLock.current) { timer = window.setTimeout(persist, 350); return; } saveNow({ quiet: true }); };
+    const persist = () => { saveNow({ quiet: true }); };
     timer = window.setTimeout(persist, 1000);
     return () => window.clearTimeout(timer);
   }, [dirty, preview, saveNow, values, title, evidence]);
 
-  const changeTitle = (value) => { setTitle(value); setDirty(true); setSaveLabel("Unsaved changes"); };
+  const changeTitle = (value) => { setTitle(value); editRevision.current += 1; setDirty(true); setSaveLabel("Unsaved changes"); };
   const undo = () => {
     if (!undoStack.length) return;
     const previous = undoStack[undoStack.length - 1];
     setRedoStack((stack) => [...stack, values]);
     setUndoStack((stack) => stack.slice(0, -1));
-    setValues(previous); setDirty(true); setSaveLabel("Unsaved changes");
+    setValues(previous); editRevision.current += 1; setDirty(true); setSaveLabel("Unsaved changes");
   };
   const redo = () => {
     if (!redoStack.length) return;
     const next = redoStack[redoStack.length - 1];
     setUndoStack((stack) => [...stack, values]);
     setRedoStack((stack) => stack.slice(0, -1));
-    setValues(next); setDirty(true); setSaveLabel("Unsaved changes");
+    setValues(next); editRevision.current += 1; setDirty(true); setSaveLabel("Unsaved changes");
   };
 
   const addEvidence = async (sheet, event) => {
@@ -208,7 +235,7 @@ export default function ChecklistEditor() {
         const data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result).split(",")[1]); reader.onerror = reject; reader.readAsDataURL(file); });
         next.push({ type: file.type, data });
       }
-      setEvidence((previous) => ({ ...previous, [sheet]: [...(previous[sheet] || []), ...next] })); setDirty(true); setSaveLabel("Unsaved changes");
+      setEvidence((previous) => ({ ...previous, [sheet]: [...(previous[sheet] || []), ...next] })); editRevision.current += 1; setDirty(true); setSaveLabel("Unsaved changes");
     } catch (e) { toast.error(e.message || "Could not read screenshot"); }
     event.target.value = "";
   };
@@ -223,18 +250,34 @@ export default function ChecklistEditor() {
   };
 
   const download = async () => {
-    let id = currentId;
-    if (!id || dirty) id = await saveNow();
-    if (!id) return;
+    const id = await saveNow();
+    if (!id) { toast.error("Save the checklist before exporting the Excel workbook."); return; }
+    setSaveLabel("Preparing Excel workbook…");
     try {
-      const { data } = await checklistAPI.exportDraft(id);
-      const url = URL.createObjectURL(data);
+      const response = await checklistAPI.exportDraft(id);
+      const blob = response.data instanceof Blob ? response.data : new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      if (!blob.size) throw new Error("The exported workbook is empty. Save the checklist and try again.");
+      if (blob.type.includes("application/json")) {
+        const payload = await blob.text().then((text) => JSON.parse(text)).catch(() => ({}));
+        throw new Error(payload.message || "The server returned an export error.");
+      }
+      const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a"); anchor.href = url;
-      const disposition = data.headers?.["content-disposition"] || "";
-      const filename = disposition.match(/filename="?([^";]+)"?/i)?.[1];
-      anchor.download = filename || `SFMC_${templateId}_${new Date().toISOString().slice(0, 10)}.xlsx`;
-      anchor.click(); URL.revokeObjectURL(url);
-    } catch (e) { toast.error(e.response?.data?.message || "Workbook export failed"); }
+      const disposition = response.headers?.["content-disposition"] || "";
+      const filename = disposition.match(/filename\*=(?:UTF-8'')?([^;]+)|filename="?([^";]+)"?/i);
+      const rawFilename = (filename?.[1] || filename?.[2] || `SFMC_${templateId}_${new Date().toISOString().slice(0, 10)}.xlsx`).replace(/^"|"$/g, "");
+      try { anchor.download = decodeURIComponent(rawFilename); } catch { anchor.download = rawFilename; }
+      anchor.style.display = "none"; document.body.appendChild(anchor); anchor.click(); anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+      setSaveLabel("Excel workbook downloaded"); toast.success("Excel workbook downloaded");
+    } catch (e) {
+      let message = e.response?.data?.message || e.message || "Workbook export failed";
+      if (e.response?.data instanceof Blob) {
+        const responseText = await e.response.data.text().catch(() => "");
+        try { message = JSON.parse(responseText).message || message; } catch { /* retain the readable fallback */ }
+      }
+      setSaveLabel("Export failed — retry"); toast.error(message);
+    }
   };
 
   const fillVisibleDeveloperStatuses = () => {
@@ -242,7 +285,7 @@ export default function ChecklistEditor() {
     if (!status || !filteredRows.length) return;
     const patch = {};
     filteredRows.forEach((row) => { if (row.statuses[0]) patch[row.statuses[0].id] = status; });
-    setUndoStack((stack) => [...stack.slice(-49), values]); setRedoStack([]); setValues((previous) => ({ ...previous, ...patch })); setDirty(true); setSaveLabel("Unsaved changes");
+    setUndoStack((stack) => [...stack.slice(-49), values]); setRedoStack([]); setValues((previous) => ({ ...previous, ...patch })); editRevision.current += 1; setDirty(true); setSaveLabel("Unsaved changes");
   };
 
   if (loading) return <main className="sl-check-app"><div className="sl-check-loading">Opening your spreadsheet…</div></main>;
@@ -294,7 +337,7 @@ export default function ChecklistEditor() {
 
     <nav className="sl-x-sheet-tabs" aria-label="Workbook sheets"><button type="button" className="sl-x-sheet-arrow" aria-label="Previous worksheet" onClick={() => { setEvidenceSheet(false); const index = (template.worksheets || []).indexOf(activeSheet); setActiveSheet(checklistSheets[Math.max(0, index - 1)] || checklistSheets[0] || "Peer Review"); }}><ArrowLeft size={14}/></button>{checklistSheets.map((sheet) => <button type="button" key={sheet} className={`sl-x-sheet-tab${activeSheet === sheet && !evidenceSheet ? " is-active" : ""}`} onClick={() => { setActiveSheet(sheet); setEvidenceSheet(false); }}>{sheet}</button>)}{peerFields.length > 0 && <button type="button" className={`sl-x-sheet-tab${isPeerReview && !evidenceSheet ? " is-active" : ""}`} onClick={() => { setActiveSheet("Peer Review"); setEvidenceSheet(false); }}>Project details</button>}{(template.evidenceSheets || []).length > 0 && <button type="button" className={`sl-x-sheet-tab${evidenceSheet ? " is-active" : ""}`} onClick={() => setEvidenceSheet(true)}>Evidence</button>}<button type="button" className="sl-x-sheet-arrow" aria-label="Next worksheet" onClick={() => { setEvidenceSheet(false); const index = checklistSheets.indexOf(activeSheet); setActiveSheet(checklistSheets[Math.min(checklistSheets.length - 1, index + 1)] || checklistSheets[0] || "Peer Review"); }}><ArrowDownAZ size={14}/></button></nav>
 
-    {isEvidence && <section className="sl-x-evidence-sheet"><div className="sl-x-evidence-title"><span className="sl-x-section-label">WORKBOOK EVIDENCE</span><h2>Screenshots & supporting proof</h2><p>These images are inserted into the matching evidence worksheet when you export the Excel file. Sample screenshots from the original template are never copied.</p></div>{template.evidenceSheets.map((sheet) => <article key={sheet} className="sl-x-evidence-card"><div><b>{sheet}</b><small>PNG or JPEG · up to 2 MB each · maximum 5 per sheet</small></div><label className="sl-x-file-button">Add screenshots<input type="file" accept="image/png,image/jpeg" multiple onChange={(event) => addEvidence(sheet, event)}/></label><div className="sl-x-thumbs">{(evidence[sheet] || []).map((item, index) => <div key={`${sheet}-${index}`}><img src={`data:${item.type};base64,${item.data}`} alt={`${sheet} evidence ${index + 1}`}/><button type="button" onClick={() => { setEvidence((previous) => ({ ...previous, [sheet]: previous[sheet].filter((_, i) => i !== index) })); setDirty(true); setSaveLabel("Unsaved changes"); }}>Remove</button></div>)}</div></article>)}</section>}
+    {isEvidence && <section className="sl-x-evidence-sheet"><div className="sl-x-evidence-title"><span className="sl-x-section-label">WORKBOOK EVIDENCE</span><h2>Screenshots & supporting proof</h2><p>These images are inserted into the matching evidence worksheet when you export the Excel file. Sample screenshots from the original template are never copied.</p></div>{template.evidenceSheets.map((sheet) => <article key={sheet} className="sl-x-evidence-card"><div><b>{sheet}</b><small>PNG or JPEG · up to 2 MB each · maximum 5 per sheet</small></div><label className="sl-x-file-button">Add screenshots<input type="file" accept="image/png,image/jpeg" multiple onChange={(event) => addEvidence(sheet, event)}/></label><div className="sl-x-thumbs">{(evidence[sheet] || []).map((item, index) => <div key={`${sheet}-${index}`}><img src={`data:${item.type};base64,${item.data}`} alt={`${sheet} evidence ${index + 1}`}/><button type="button" onClick={() => { setEvidence((previous) => ({ ...previous, [sheet]: previous[sheet].filter((_, i) => i !== index) })); editRevision.current += 1; setDirty(true); setSaveLabel("Unsaved changes"); }}>Remove</button></div>)}</div></article>)}</section>}
 
     <aside className="sl-x-guidance-panel" aria-label="Cell guidance"><div className="sl-x-guidance-head"><div><span>CHECKLIST HELPER</span><b>{activeReference?.label || "Selected cell"}</b></div><button type="button" title="Clear selected guidance" onClick={() => setGuidance(null)}><X size={16}/></button></div>{activeReference?.description && <><span className="sl-x-guidance-tag">{activeReference.section || activeReference.category || "Checklist item"}</span><p className="sl-x-guidance-description">{activeReference.description}</p></>}{guidance?.state === "loading" && <p className="sl-x-guidance-muted">Gemini is preparing field guidance…</p>}{guidance?.state === "error" && <p className="sl-x-guidance-error">{guidance.message}</p>}{guidance?.state === "ready" && Object.entries(guidanceLabels).map(([key, label]) => guidance.data?.[key] && <div className="sl-x-guidance-entry" key={key}><b>{label}</b><p>{guidance.data[key]}</p></div>)}{!guidance && <p className="sl-x-guidance-muted">Select a field or choose Guidance on a checklist item to see help here.</p>}{activeReference && <button className="sl-x-guidance-button" type="button" onClick={() => requestGuidance(activeReference)} disabled={guidance?.state === "loading"}><Sparkles size={14}/>{guidance?.state === "loading" ? "Getting guidance…" : "Explain selected item"}</button>}</aside>
 
