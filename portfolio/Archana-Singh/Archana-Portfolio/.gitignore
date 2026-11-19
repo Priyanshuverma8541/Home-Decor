@@ -1,0 +1,11 @@
+# Local environment files contain credentials; keep deployment secrets server-side.
+.env
+.env.*
+!.env.example
+.env
+**/.env.*
+!**/.env.example
+node_modules
+/resume/Archana-Singh/Archana-Portfolio/dist/
+/trust-them/node_modules/
+/trust-them/dist/
