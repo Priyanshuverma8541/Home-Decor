@@ -267,9 +267,10 @@ export default function ChecklistEditor() {
       const filename = disposition.match(/filename\*=(?:UTF-8'')?([^;]+)|filename="?([^";]+)"?/i);
       const rawFilename = (filename?.[1] || filename?.[2] || `SFMC_${templateId}_${new Date().toISOString().slice(0, 10)}.xlsx`).replace(/^"|"$/g, "");
       try { anchor.download = decodeURIComponent(rawFilename); } catch { anchor.download = rawFilename; }
-      anchor.style.display = "none"; document.body.appendChild(anchor); anchor.click(); anchor.remove();
-      window.setTimeout(() => URL.revokeObjectURL(url), 30000);
-      setSaveLabel("Excel workbook downloaded"); toast.success("Excel workbook downloaded");
+      anchor.style.position = "fixed"; anchor.style.left = "-10000px"; anchor.style.top = "0"; anchor.style.width = "1px"; anchor.style.height = "1px"; anchor.style.opacity = "0"; document.body.appendChild(anchor); anchor.click(); anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 120000);
+      setSaveLabel("Excel workbook ready");
+      toast.success(<span>Workbook ready. If the download did not start, <a href={url} download={anchor.download} style={{ color: "#c2ee6a", textDecoration: "underline", fontWeight: 700 }}>click here to download it</a>.</span>, { duration: 15000 });
     } catch (e) {
       let message = e.response?.data?.message || e.message || "Workbook export failed";
       if (e.response?.data instanceof Blob) {

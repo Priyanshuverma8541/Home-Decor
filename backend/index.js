@@ -63,6 +63,7 @@ const corsOptions = {
   credentials: true,
   methods: ["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
   allowedHeaders: ["Content-Type","Authorization","X-Page-Preview","X-Privacy-Subject-Id","X-Savitri-Public-Key","X-Tenant-Session"],
+  exposedHeaders: ["Content-Disposition"],
   optionsSuccessStatus: 200,
 };
 
