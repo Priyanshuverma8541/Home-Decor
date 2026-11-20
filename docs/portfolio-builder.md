@@ -13,7 +13,11 @@ The portfolio page uses the shared page renderer and supports the existing Savit
 Gemini calls happen only on the backend. Configure these variables on the Savitri Livings Render service:
 
 - `GEMINI_API_KEY` — the Google Generative Language API key (never put it in Vite/frontend settings).
-- `GEMINI_MODEL=gemini-3.8-flash` — the currently recommended model for this app.
+- `GEMINI_MODEL=gemini-3.8-flash` — primary model.
+- `GEMINI_FALLBACK_MODELS=gemini-3.5-flash,gemini-3.5-flash-lite` — optional ordered fallbacks; these are also the backend defaults.
+
+The backend retries with the next model when Google reports temporary capacity, quota, server, network, or timeout errors. It does not retry rejected keys or invalid model names.
+
 
 If Gemini reports an unavailable model, check `GEMINI_MODEL`; if it reports a rejected key, check the key and ensure the Generative Language API is enabled in its Google project. After changing Render variables, redeploy the backend.
 
