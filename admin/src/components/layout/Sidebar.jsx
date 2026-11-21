@@ -1,9 +1,11 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles, Compass, ContactRound } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
   { to:"/",          Icon:LayoutDashboard, label:"Dashboard",   end:true },
+  { to:"/explorer",  Icon:Compass,         label:"Savitri Explorer" },
+  { to:"/explorer/hr-crm", Icon:ContactRound, label:"HR Networking CRM" },
   { to:"/orders",    Icon:ShoppingBag,     label:"Orders"              },
   { to:"/products",  Icon:Package,         label:"Products"            },
   { to:"/crm",       Icon:Users,           label:"CRM & Leads"         },

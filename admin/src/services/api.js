@@ -158,6 +158,14 @@ export const portfolioBuilderAPI = {
   updateProject: (id, data) => api.patch(`/api/portfolio-builder/admin/projects/${encodeURIComponent(id)}`, data),
 };
 
+export const explorerHRAPI = {
+  contacts: (params) => api.get("/api/explorer/admin/hr/contacts", { params }),
+  createContact: (data) => api.post("/api/explorer/admin/hr/contacts", data),
+  updateContact: (id, data) => api.patch(`/api/explorer/admin/hr/contacts/${encodeURIComponent(id)}`, data),
+  activities: (id) => api.get(`/api/explorer/admin/hr/contacts/${encodeURIComponent(id)}/activities`),
+  addActivity: (id, data) => api.post(`/api/explorer/admin/hr/contacts/${encodeURIComponent(id)}/activities`, data),
+};
+
 export const audienceAPI = {
   getAll: () => api.get("/api/audience/admin"),
 };
