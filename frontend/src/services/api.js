@@ -80,6 +80,7 @@ export const checklistAPI = {
   draft: (id) => api.get(`/api/checklists/drafts/${encodeURIComponent(id)}`),
   createDraft: (data) => api.post("/api/checklists/drafts", data),
   saveDraft: (id, data) => api.put(`/api/checklists/drafts/${encodeURIComponent(id)}`, data),
+  exportValues: (data) => api.post("/api/checklists/drafts/export", data, { responseType: "blob" }),
   guidance: (data) => api.post("/api/checklists/guidance", data),
   exportDraft: (id) => api.get(`/api/checklists/drafts/${encodeURIComponent(id)}/export`, { responseType: "blob" }),
 };

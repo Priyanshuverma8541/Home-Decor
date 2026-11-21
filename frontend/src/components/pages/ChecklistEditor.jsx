@@ -254,10 +254,11 @@ export default function ChecklistEditor() {
 
   const download = async () => {
     try {
-      const id = await saveNow();
-      if (!id) { toast.error("Checklist could not be saved. Check your connection or sign in again, then choose Save now and retry the export."); return; }
+      const id = await saveNow({ quiet: true });
       setSaveLabel("Preparing Excel workbook…");
-      const response = await checklistAPI.exportDraft(id);
+      const response = id
+        ? await checklistAPI.exportDraft(id)
+        : await checklistAPI.exportValues({ templateId: template.templateId, templateVersion: template.version, title, values, evidence });
       const blob = response.data instanceof Blob ? response.data : new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       if (!blob.size) throw new Error("The exported workbook is empty. Save the checklist and try again.");
       if (blob.type.includes("application/json")) {
@@ -272,8 +273,8 @@ export default function ChecklistEditor() {
       try { anchor.download = decodeURIComponent(rawFilename); } catch { anchor.download = rawFilename; }
       anchor.style.position = "fixed"; anchor.style.left = "-10000px"; anchor.style.top = "0"; anchor.style.width = "1px"; anchor.style.height = "1px"; anchor.style.opacity = "0"; document.body.appendChild(anchor); anchor.click(); anchor.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 120000);
-      setSaveLabel("Excel workbook ready");
-      toast.success(<span>Workbook ready. If the download did not start, <a href={url} download={anchor.download} style={{ color: "#c2ee6a", textDecoration: "underline", fontWeight: 700 }}>click here to download it</a>.</span>, { duration: 15000 });
+      setSaveLabel(id ? "Excel workbook ready" : "Workbook downloaded · draft not saved");
+      toast.success(<span>{id ? "Workbook ready." : "Workbook ready; the draft could not be saved."} If the download did not start, <a href={url} download={anchor.download} style={{ color: "#c2ee6a", textDecoration: "underline", fontWeight: 700 }}>click here to download it</a>.</span>, { duration: 15000 });
     } catch (e) {
       let message = e.response?.data?.message || e.message || "Workbook export failed";
       if (e.response?.data instanceof Blob) {
