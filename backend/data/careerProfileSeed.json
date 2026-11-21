@@ -1,0 +1,28 @@
+{
+  "profileKey": "archana-singh",
+  "fullName": "Archana Singh",
+  "location": "Kolkata, West Bengal, India",
+  "linkedInUrl": "https://www.linkedin.com/in/archana-singh-40a2b7270",
+  "summary": "Early-career Civil Engineering professional currently working as a Graduate Engineer Trainee in Project Management at McNally Bharat Engineering Company Limited. Experience includes EPC site progress monitoring, quantity estimation, BOQ/BBS preparation, vendor payment and PO tracking, progress reporting, QA/QC and HSE exposure, plus BIM training and industrial site internships. Targeting junior Construction Engineer, Site Engineer, Planning Engineer, Quantity Surveyor/Estimator and BIM support roles.",
+  "experienceLevel": "early_career",
+  "targetRoles": ["Graduate Engineer Trainee", "Junior Construction Engineer", "Site Engineer", "Junior Planning Engineer", "Quantity Surveyor / Estimator", "BIM / Revit Modeler"],
+  "skills": [
+    { "group": "Site execution & project coordination", "items": ["Site execution and supervision", "Progress monitoring", "Workflow coordination", "QA/QC", "HSE compliance", "Cross-functional coordination", "Construction drawing interpretation"] },
+    { "group": "Quantity surveying & estimation", "items": ["BOQ preparation", "Material take-off (MTO)", "Bar Bending Schedule (BBS)", "Concrete estimation", "Reinforcement estimation", "Structural steel estimation", "Quantity estimation"] },
+    { "group": "Commercial & contracts", "items": ["Vendor billing", "Contract payment tracking", "Purchase Order documentation", "Cost tracking", "Stakeholder management"] },
+    { "group": "Software & reporting", "items": ["Autodesk Revit (BIM)", "AutoCAD 2D/3D", "Advanced MS Excel", "Project progress reporting", "3D modeling", "Revit families", "Rendered views"] }
+  ],
+  "experience": [
+    { "title": "Graduate Engineer Trainee – Project Management", "employer": "McNally Bharat Engineering Company Limited", "location": "Kolkata, India", "startDate": "Feb 2026", "endDate": "Present", "details": ["Monitor daily site progress and coordinate project teams on EPC and industrial infrastructure work.", "Estimate quantities for cement, brickwork, plaster and reinforcement from construction drawings.", "Maintain Excel progress reports, contract payment status, PO documentation and project records.", "Prepare BBS and material quantity sheets; follow up on procurement, planning, approvals and quality clearances."] },
+    { "title": "BIM Intern", "employer": "Trisita Engineering LLP", "location": "Kolkata, India", "startDate": "Jul 2025", "endDate": "Aug 2025", "details": ["Completed 90 hours of Autodesk Revit BIM training.", "Converted 2D AutoCAD drawings into coordinated 3D models and created architectural models, Revit families and rendered views."] },
+    { "title": "Civil Engineering Intern", "employer": "Indian Oil Corporation Limited (IOCL), Haldia Refinery", "location": "Haldia, India", "startDate": "Jun 2025", "endDate": "Jul 2025", "details": ["Observed industrial site HSE, workflow and quality-control practices.", "Assisted with concreting supervision, placement, curing and site quality inspections."] }
+  ],
+  "education": [
+    { "qualification": "B.Tech, Civil Engineering", "institution": "Haldia Institute of Technology, West Bengal", "period": "2023–2026", "result": "79.36%" },
+    { "qualification": "Diploma, Civil Engineering", "institution": "Iswar Chandra Vidyasagar Polytechnic, Jhargram, West Bengal", "period": "2020–2023", "result": "80.10%" }
+  ],
+  "leadership": [
+    { "title": "Class Representative & Placement Coordinator", "organization": "Civil Engineering Department, Haldia Institute of Technology", "period": "2023–2026", "details": ["Served as a liaison between faculty, administration and students for academic planning, event management and corporate placement coordination."] }
+  ],
+  "resumeSource": "User-provided resume text"
+}

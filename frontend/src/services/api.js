@@ -88,6 +88,15 @@ export const checklistAPI = {
 export const livingsAIAPI = {
   chat: (data) => api.post("/api/livings-ai/chat", data),
 };
+export const careerGrowthAPI = {
+  summary: () => api.get("/api/career-growth/summary"),
+  profile: () => api.get("/api/career-growth/profile"),
+  companies: (params) => api.get("/api/career-growth/companies", { params }),
+  jobs: (params) => api.get("/api/career-growth/jobs", { params }),
+  applications: (params) => api.get("/api/career-growth/applications", { params }),
+  createApplication: (data) => api.post("/api/career-growth/applications", data),
+  updateApplication: (id, data) => api.patch(`/api/career-growth/applications/${id}`, data),
+};
 
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),

@@ -165,6 +165,19 @@ export const explorerHRAPI = {
   activities: (id) => api.get(`/api/explorer/admin/hr/contacts/${encodeURIComponent(id)}/activities`),
   addActivity: (id, data) => api.post(`/api/explorer/admin/hr/contacts/${encodeURIComponent(id)}/activities`, data),
 };
+export const careerGrowthAdminAPI = {
+  summary: () => api.get("/api/career-growth/summary"),
+  profile: () => api.get("/api/career-growth/profile"),
+  importResume: () => api.post("/api/career-growth/profile/import-resume"),
+  companies: (params) => api.get("/api/career-growth/companies", { params }),
+  importStarterCompanies: () => api.post("/api/career-growth/companies/import-starter"),
+  createCompany: (data) => api.post("/api/career-growth/companies", data),
+  updateCompany: (id, data) => api.patch(`/api/career-growth/companies/${id}`, data),
+  jobs: (params) => api.get("/api/career-growth/jobs", { params }),
+  createJob: (data) => api.post("/api/career-growth/jobs", data),
+  updateJob: (id, data) => api.patch(`/api/career-growth/jobs/${id}`, data),
+  applications: (params) => api.get("/api/career-growth/applications", { params }),
+};
 
 export const audienceAPI = {
   getAll: () => api.get("/api/audience/admin"),
