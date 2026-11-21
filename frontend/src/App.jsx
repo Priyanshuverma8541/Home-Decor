@@ -38,6 +38,7 @@ import PortfolioBuilder from "./components/pages/PortfolioBuilder.jsx";
 import Development from "./components/pages/Development.jsx";
 import Games from "./components/pages/Games.jsx";
 import LivingsAI from "./components/pages/LivingsAI.jsx";
+import CareerGrowth from "./components/pages/CareerGrowth.jsx";
 
 function AppShell() {
   const { pathname } = useLocation();
@@ -85,6 +86,7 @@ function AppShell() {
           <Route path="savinexa/*" element={<SavinexaRedirect />} />
           <Route path="ecosystem" element={<Ecosystem />} />
           <Route path="growth-livings" element={<GrowthLivings />} />
+          <Route path="career-growth" element={<CareerGrowth />} />
           <Route path="tools" element={<Tools />} />
           <Route path="tools/developer-zone" element={<DeveloperZone />} />
           <Route path="tools/developer-zone/checklist/:templateId" element={<ChecklistEditor />} />
