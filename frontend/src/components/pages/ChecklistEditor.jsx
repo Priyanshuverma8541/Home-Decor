@@ -156,9 +156,8 @@ export default function ChecklistEditor() {
     if (saveRequest.current) {
       try {
         const completedId = await saveRequest.current;
-        if (!completedId) return null;
-        return savedRevision.current === editRevision.current ? completedId : saveNow({ quiet });
-      } catch { return null; }
+        if (completedId) return savedRevision.current === editRevision.current ? completedId : saveNow({ quiet });
+      } catch { /* Retry below so a failed background save does not block an explicit save/export. */ }
     }
     saveCallCount.current += 1;
     setSaving(true);
@@ -170,10 +169,14 @@ export default function ChecklistEditor() {
         const revision = editRevision.current;
         const body = { templateId: snapshot.template.templateId, templateVersion: snapshot.template.version, title: snapshot.title, values: snapshot.values, evidence: snapshot.evidence };
         let response;
-        try { response = snapshot.currentId ? await checklistAPI.saveDraft(snapshot.currentId, body) : await checklistAPI.createDraft(body); }
+        try {
+          response = snapshot.currentId ? await checklistAPI.saveDraft(snapshot.currentId, body) : await checklistAPI.createDraft(body);
+          const id = response?.data?.draft?._id;
+          if (!id) throw new Error(response?.data?.message || "The server did not return a saved checklist ID. Please retry.");
+        }
         catch (e) {
           setSaveLabel("Save failed — retry");
-          if (!quiet) toast.error(e.response?.data?.message || "Could not save this checklist");
+          if (!quiet) toast.error(e.response?.data?.message || e.message || "Could not save this checklist");
           return null;
         }
         const id = response.data.draft._id;
@@ -250,10 +253,10 @@ export default function ChecklistEditor() {
   };
 
   const download = async () => {
-    const id = await saveNow();
-    if (!id) { toast.error("Save the checklist before exporting the Excel workbook."); return; }
-    setSaveLabel("Preparing Excel workbook…");
     try {
+      const id = await saveNow();
+      if (!id) { toast.error("Checklist could not be saved. Check your connection or sign in again, then choose Save now and retry the export."); return; }
+      setSaveLabel("Preparing Excel workbook…");
       const response = await checklistAPI.exportDraft(id);
       const blob = response.data instanceof Blob ? response.data : new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       if (!blob.size) throw new Error("The exported workbook is empty. Save the checklist and try again.");
