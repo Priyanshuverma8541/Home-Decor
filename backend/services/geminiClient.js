@@ -11,7 +11,7 @@ class GeminiRequestError extends Error {
   }
 }
 
-async function generateGeminiContent({ contents, generationConfig, timeoutMs = 25000 }) {
+async function generateGeminiContent({ contents, generationConfig, systemInstruction, timeoutMs = 25000 }) {
   const apiKey = (process.env.GEMINI_API_KEY || "").trim();
   if (!apiKey) throw new GeminiRequestError(503, "NOT_CONFIGURED");
 
@@ -28,7 +28,7 @@ async function generateGeminiContent({ contents, generationConfig, timeoutMs = 2
       response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        body: JSON.stringify({ contents, generationConfig }),
+        body: JSON.stringify({ contents, generationConfig, ...(systemInstruction ? { systemInstruction } : {}) }),
         signal: AbortSignal.timeout(requestTimeoutMs),
       });
     } catch (error) {

@@ -102,6 +102,7 @@ app.use("/api/pages",      require("./routes/pages"));
 app.use("/api/savinexa",   require("./modules/savinexa/routes"));
 app.use("/api/tenants", require("./routes/tenants"));
 app.use("/api/checklists", require("./routes/checklists"));
+app.use("/api/livings-ai", require("./routes/livingsAI"));
 app.use("/api/growth-livings", require("./modules/growthLivings/routes"));
 app.use("/api/portfolio-builder", require("./modules/portfolioBuilder/routes"));
 

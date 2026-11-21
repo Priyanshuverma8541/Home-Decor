@@ -1,0 +1,54 @@
+.livings-ai-page{min-height:100vh;padding:24px 22px 40px;background:radial-gradient(ellipse at 50% -15%,#f4e6ca 0,transparent 44%),#f7f5f0;color:#2d372f;font-family:'DM Sans',Arial,sans-serif}
+.livings-ai-shell{max-width:1040px;margin:0 auto}
+.livings-ai-heading{display:flex;align-items:center;gap:16px;margin:16px 0 24px}
+.livings-ai-orb,.livings-ai-welcome-icon{display:grid;place-items:center;flex:none;color:#f1d18b;background:linear-gradient(145deg,#355c49,#19392d);box-shadow:0 12px 28px #31544324}
+.livings-ai-orb{width:58px;height:58px;border:1px solid #c9ae76;border-radius:19px}
+.livings-ai-eyebrow{color:#a47a3d;font-size:10px;font-weight:800;letter-spacing:.17em}
+.livings-ai-heading h1{margin:4px 0 1px;color:#2c4034;font:600 34px Georgia,serif}
+.livings-ai-heading p{margin:0;color:#7a756a;font-size:13px}
+.livings-ai-audience{display:flex;align-items:center;gap:7px;margin-left:auto;padding:9px 12px;border:1px solid #e5ddcf;border-radius:99px;background:#fffdf9;color:#746650;font-size:11px}
+.livings-ai-live-dot{width:7px;height:7px;border-radius:50%;background:#68a77b;box-shadow:0 0 0 3px #68a77b20}
+.livings-ai-workspace{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:min(680px,calc(100vh - 245px));overflow:hidden;border:1px solid #e6dfd3;border-radius:20px;background:#fffdfa;box-shadow:0 20px 55px #44341d0d}
+.livings-ai-context{padding:20px 16px;border-right:1px solid #eee8dd;background:linear-gradient(180deg,#fbf8f1,#fffdfa)}
+.livings-ai-context>div{display:flex;align-items:center;gap:7px;color:#916d35;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+.livings-ai-context b{display:block;margin-top:15px;color:#3f493e;font:600 15px Georgia,serif}
+.livings-ai-context small{display:block;margin-top:8px;color:#898174;font-size:11px;line-height:1.6}
+.livings-ai-conversation{display:flex;min-height:0;flex-direction:column;overflow:auto}
+.livings-ai-welcome{display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:46px 28px;text-align:center}
+.livings-ai-welcome-icon{width:48px;height:48px;border-radius:16px}
+.livings-ai-welcome h2{margin:16px 0 7px;color:#354638;font:600 23px Georgia,serif}
+.livings-ai-welcome>p{max-width:440px;margin:0;color:#7d786e;font-size:13px;line-height:1.65}
+.livings-ai-suggestions{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:min(100%,580px);margin-top:27px}
+.livings-ai-suggestions button{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;padding:10px 12px;border:1px solid #e8e1d5;border-radius:11px;background:#fff;color:#596154;text-align:left;font:500 11px 'DM Sans',Arial,sans-serif;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.livings-ai-suggestions button:hover{transform:translateY(-1px);border-color:#c9ad73;background:#fffaf0}
+.livings-ai-suggestions button svg{flex:none;color:#a17b3f;transform:rotate(45deg)}
+.livings-ai-message-list{padding:24px 24px 12px}
+.livings-ai-message{display:flex;gap:11px;margin-bottom:22px}
+.livings-ai-avatar{display:grid;place-items:center;flex:none;width:29px;height:29px;border-radius:10px;background:#eaf0e8;color:#41634c;font-size:12px;font-weight:700}
+.livings-ai-message.is-user .livings-ai-avatar{background:#f2e7d5;color:#8a6833}
+.livings-ai-message-body{min-width:0;max-width:760px}
+.livings-ai-message-name{display:block;margin:1px 0 6px;color:#8d7c60;font-size:10px;font-weight:800;letter-spacing:.04em}
+.livings-ai-message-body>p{margin:0;color:#40473f;font-size:13px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}
+.livings-ai-sources{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:11px}
+.livings-ai-sources>span{display:flex;align-items:center;gap:4px;color:#998b74;font-size:10px}
+.livings-ai-sources a,.livings-ai-sources>span:not(:first-child){display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border:1px solid #ece5d8;border-radius:99px;background:#fcfaf5;color:#716044;text-decoration:none;font-size:10px}
+.livings-ai-sources a:hover{border-color:#c9ad73;color:#47361d}
+.livings-ai-composer-area{grid-column:2;padding:0 20px 14px;background:#fffdfa}
+.livings-ai-composer{display:flex;align-items:flex-end;gap:10px;padding:10px;border:1px solid #ded8cd;border-radius:14px;background:white;box-shadow:0 4px 15px #47361d08}
+.livings-ai-composer:focus-within{border-color:#b99659;box-shadow:0 0 0 3px #b9965914}
+.livings-ai-composer textarea{flex:1;resize:none;min-height:48px;max-height:130px;padding:6px 7px;border:0;outline:0;background:transparent;color:#354238;font:13px 'DM Sans',Arial,sans-serif;line-height:1.55}
+.livings-ai-composer textarea::placeholder{color:#aaa397}
+.livings-ai-composer>button{display:grid;place-items:center;flex:none;width:37px;height:37px;border:0;border-radius:11px;background:#315443;color:white;cursor:pointer;transition:background .15s,transform .15s}
+.livings-ai-composer>button:hover:not(:disabled){transform:translateY(-1px);background:#244735}
+.livings-ai-composer>button:disabled{opacity:.4;cursor:default}
+.livings-ai-composer-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px;color:#a09789;font-size:10px}
+.livings-ai-composer-meta button{display:flex;align-items:center;gap:5px;padding:4px;border:0;background:transparent;color:#8c7652;font:inherit;cursor:pointer}
+.livings-ai-composer-meta button:disabled{opacity:.4;cursor:default}
+.livings-ai-error{margin:0 0 8px;color:#a34b3e;font-size:12px}
+.livings-ai-typing{display:flex;gap:4px;padding:7px 0}
+.livings-ai-typing i{width:6px;height:6px;border-radius:50%;background:#a9a08e;animation:livings-ai-pulse 1s infinite ease-in-out}
+.livings-ai-typing i:nth-child(2){animation-delay:.15s}.livings-ai-typing i:nth-child(3){animation-delay:.3s}
+.livings-ai-footer{max-width:780px;margin:12px auto 0;color:#a1998c;text-align:center;font-size:10px;line-height:1.5}
+@keyframes livings-ai-pulse{0%,65%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+@media(max-width:700px){.livings-ai-page{padding:18px 10px 28px}.livings-ai-heading{gap:11px;margin:12px 4px 16px}.livings-ai-orb{width:47px;height:47px;border-radius:15px}.livings-ai-heading h1{font-size:28px}.livings-ai-heading p{font-size:11px}.livings-ai-audience{padding:7px 9px;font-size:9px}.livings-ai-workspace{grid-template-columns:1fr;min-height:calc(100vh - 225px);border-radius:15px}.livings-ai-context{padding:10px 14px;border-right:0;border-bottom:1px solid #eee8dd}.livings-ai-context b{display:inline;margin:0 0 0 8px;font:600 12px Georgia,serif}.livings-ai-context small{margin-top:5px;font-size:10px}.livings-ai-context>div{display:inline-flex}.livings-ai-welcome{padding:28px 16px}.livings-ai-welcome h2{font-size:20px}.livings-ai-suggestions{grid-template-columns:1fr;margin-top:18px}.livings-ai-suggestions button{min-height:42px}.livings-ai-message-list{padding:17px 12px 8px}.livings-ai-composer-area{grid-column:1;padding:0 10px 11px}.livings-ai-composer-meta{font-size:9px}.livings-ai-footer{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.livings-ai-typing i{animation:none;opacity:.7}.livings-ai-suggestions button,.livings-ai-composer>button{transition:none}}

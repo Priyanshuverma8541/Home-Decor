@@ -225,3 +225,10 @@ export const checklistAdminAPI = {
   activate: (id) => api.patch(`/api/checklists/admin/templates/${encodeURIComponent(id)}/activate`),
   deactivate: (id) => api.patch(`/api/checklists/admin/templates/${encodeURIComponent(id)}/deactivate`),
 };
+
+export const livingsAIAdminAPI = {
+  knowledge: () => api.get("/api/livings-ai/admin/knowledge"),
+  createKnowledge: (data) => api.post("/api/livings-ai/admin/knowledge", data),
+  updateKnowledge: (id, data) => api.patch(`/api/livings-ai/admin/knowledge/${encodeURIComponent(id)}`, data),
+  deleteKnowledge: (id) => api.delete(`/api/livings-ai/admin/knowledge/${encodeURIComponent(id)}`),
+};

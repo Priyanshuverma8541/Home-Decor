@@ -1,6 +1,6 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { Sparkles, X } from "lucide-react";
 
 // ── Contexts ──────────────────────────────────────────────────────
 import { AuthProvider } from "./context/AuthContext.jsx";
@@ -37,10 +37,12 @@ import ExplorerLanding from "./components/pages/ExplorerLanding.jsx";
 import PortfolioBuilder from "./components/pages/PortfolioBuilder.jsx";
 import Development from "./components/pages/Development.jsx";
 import Games from "./components/pages/Games.jsx";
+import LivingsAI from "./components/pages/LivingsAI.jsx";
 
 function AppShell() {
   const { pathname } = useLocation();
   const standaloneExplorer = pathname === "/explorer";
+  const showLivingsAILauncher = pathname !== "/livings-ai" && !pathname.startsWith("/login") && !pathname.startsWith("/register") && !pathname.startsWith("/tools/developer-zone/checklist");
   const [permissionOpen, setPermissionOpen] = useState(false);
   const [privacyLauncherVisible, setPrivacyLauncherVisible] = useState(
     () => localStorage.getItem("savitri-hide-privacy-launcher") !== "true"
@@ -77,6 +79,7 @@ function AppShell() {
           <Route path="portfolio-builder" element={<PortfolioBuilder />} />
           <Route path="development" element={<Development />} />
           <Route path="games" element={<Games />} />
+          <Route path="livings-ai" element={<LivingsAI />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />
           <Route path="savinexa/*" element={<SavinexaRedirect />} />
@@ -93,6 +96,8 @@ function AppShell() {
         <Route path="register" element={<Register />} />
         <Route path="p/:slug" element={<PageRenderer Navbar={Navbar} Footer={Footer} />} />
       </Routes>
+
+      {!standaloneExplorer && showLivingsAILauncher && <Link to="/livings-ai" state={{ from: pathname }} aria-label="Open LivingsAI" style={{ position:"fixed", right:18, bottom:"calc(150px + env(safe-area-inset-bottom,0px))", zIndex:80, display:"flex", alignItems:"center", gap:8, minHeight:44, padding:"0 15px", border:"1px solid rgba(244,206,124,.55)", borderRadius:999, background:"linear-gradient(135deg,#315443,#1a3c34)", boxShadow:"0 12px 28px rgba(26,60,52,.28)", color:"white", textDecoration:"none", fontSize:13, fontWeight:700 }}><Sparkles size={16} color="#f4ce7c"/>LivingsAI</Link>}
 
       {!standaloneExplorer && privacyLauncherVisible && (
         <div style={{ position: "fixed", right: 18, bottom: "calc(88px + env(safe-area-inset-bottom,0px))", zIndex: 1000 }}>

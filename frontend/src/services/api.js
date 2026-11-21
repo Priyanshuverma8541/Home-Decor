@@ -85,6 +85,10 @@ export const checklistAPI = {
   exportDraft: (id) => api.get(`/api/checklists/drafts/${encodeURIComponent(id)}/export`, { responseType: "blob" }),
 };
 
+export const livingsAIAPI = {
+  chat: (data) => api.post("/api/livings-ai/chat", data),
+};
+
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),
   listings: (params) => api.get("/api/marketplace/listings", { params }),

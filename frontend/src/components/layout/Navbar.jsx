@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useCity } from "../../context/CityContext.jsx";
 import NotificationButton from "../ui/NotificationButton.jsx";
 
-const NAV = [];
+const NAV = [{ to:"/livings-ai", label:"LivingsAI" }];
 
 export default function Navbar() {
   const [open,     setOpen]     = useState(false);

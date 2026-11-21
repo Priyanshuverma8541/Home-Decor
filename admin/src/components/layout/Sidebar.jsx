@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
@@ -23,6 +23,7 @@ const LINKS = [
   { to:"/savinexa/website", Icon:Paintbrush, label:"SaviNexa Website" },
   { to:"/growth-livings", Icon:TrendingUp, label:"Growth Livings" },
   { to:"/developer-zone/checklists", Icon:FileSpreadsheet, label:"SFMC Checklists" },
+  { to:"/livings-ai", Icon:Sparkles, label:"LivingsAI Knowledge" },
   { to:"/settings",  Icon:Settings,        label:"Settings"            },
 ];
 
