@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles, Compass, ContactRound, BriefcaseBusiness } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles, Compass, ContactRound, BriefcaseBusiness, Coins } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
@@ -7,6 +7,7 @@ const LINKS = [
   { to:"/explorer",  Icon:Compass,         label:"Savitri Explorer" },
   { to:"/explorer/hr-crm", Icon:ContactRound, label:"HR Networking CRM" },
   { to:"/career-growth", Icon:BriefcaseBusiness, label:"Archana Career Growth" },
+  { to:"/skillup-earn", Icon:Coins, label:"SkillUp, Earn & Wallet" },
   { to:"/orders",    Icon:ShoppingBag,     label:"Orders"              },
   { to:"/products",  Icon:Package,         label:"Products"            },
   { to:"/crm",       Icon:Users,           label:"CRM & Leads"         },

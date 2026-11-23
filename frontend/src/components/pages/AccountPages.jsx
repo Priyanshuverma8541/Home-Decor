@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, useLocation, Outlet } from "react-router-dom";
 import { motion } from "framer-motion";
 import { io } from "socket.io-client";
-import { Package, User, ArrowRight, MapPin, Phone } from "lucide-react";
+import { Package, User, ArrowRight, MapPin, Phone, ShoppingCart, Coins } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { orderAPI, API_BASE_URL } from "../../services/api.js";
+import { orderAPI, API_BASE_URL, walletAPI } from "../../services/api.js";
+import { useCart } from "../../context/CartContext.jsx";
 import { PageLoader, EmptyState, StatusBadge } from "../ui/Shared.jsx";
 import toast from "react-hot-toast";
 
@@ -119,9 +120,12 @@ export function MyOrders() {
 
 export function MyAccount() {
   const { user, logout } = useAuth();
+  const { totalItems } = useCart();
   const [orders, setOrders] = useState([]);
+  const [points, setPoints] = useState(0);
   useEffect(() => {
     orderAPI.myOrders().then(({ data }) => setOrders(data.orders||[])).catch(() => {});
+    walletAPI.summary().then(({ data }) => setPoints(data.wallet?.availablePoints || 0)).catch(() => {});
   }, []);
 
   return (
@@ -137,6 +141,15 @@ export function MyAccount() {
               <h1 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"1.75rem", color:"#1c1409" }}>{user?.fullName}</h1>
               <p style={{ fontSize:"0.8rem", color:"#8c7258", marginTop:2 }}>{user?.city} customer</p>
             </div>
+          </div>
+
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem", marginBottom:"1rem" }} className="acc-grid">
+            <Link to="/cart" className="card" style={{ display:"flex", alignItems:"center", gap:12, padding:"1rem", color:"inherit", textDecoration:"none" }}>
+              <ShoppingCart style={{ width:19,height:19,color:"#1a3c34" }}/><span><b style={{display:"block"}}>Shopping Cart</b><small style={{color:"#8c7258"}}>{totalItems} items ready for checkout</small></span><ArrowRight style={{marginLeft:"auto",width:15}}/>
+            </Link>
+            <Link to="/account/wallet" className="card" style={{ display:"flex", alignItems:"center", gap:12, padding:"1rem", color:"inherit", textDecoration:"none" }}>
+              <Coins style={{ width:19,height:19,color:"#1a3c34" }}/><span><b style={{display:"block"}}>Livings Wallet</b><small style={{color:"#8c7258"}}>{points} SL Points</small></span><ArrowRight style={{marginLeft:"auto",width:15}}/>
+            </Link>
           </div>
 
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1rem", marginBottom:"1.5rem" }} className="acc-grid">

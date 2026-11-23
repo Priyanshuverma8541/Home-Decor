@@ -98,6 +98,20 @@ export const careerGrowthAPI = {
   updateApplication: (id, data) => api.patch(`/api/career-growth/applications/${id}`, data),
 };
 
+export const skillUpAPI = {
+  content: (params) => api.get("/api/skillup/content", { params }),
+  mine: () => api.get("/api/skillup/mine"),
+  createBlog: (data) => api.post("/api/skillup/blogs", data),
+};
+export const earnAPI = { opportunities: () => api.get("/api/earn/opportunities") };
+export const walletAPI = {
+  summary: () => api.get("/api/wallet"),
+  startGame: () => api.post("/api/wallet/games/start"),
+  revealCard: (id, index) => api.post(`/api/wallet/games/${id}/reveal`, { index }),
+  requestWithdrawal: (data) => api.post("/api/wallet/withdrawals", data),
+  requestPurchase: (data) => api.post("/api/wallet/purchases", data),
+};
+
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),
   listings: (params) => api.get("/api/marketplace/listings", { params }),

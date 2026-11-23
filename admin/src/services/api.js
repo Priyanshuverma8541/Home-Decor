@@ -178,6 +178,23 @@ export const careerGrowthAdminAPI = {
   updateJob: (id, data) => api.patch(`/api/career-growth/jobs/${id}`, data),
   applications: (params) => api.get("/api/career-growth/applications", { params }),
 };
+export const skillUpAdminAPI = {
+  content: () => api.get("/api/skillup/admin/content"),
+  create: (data) => api.post("/api/skillup/admin/content", data),
+  update: (id, data) => api.patch(`/api/skillup/admin/content/${id}`, data),
+  seed: () => api.post("/api/skillup/admin/seed-starter"),
+};
+export const earnAdminAPI = {
+  opportunities: () => api.get("/api/earn/admin/opportunities"),
+  create: (data) => api.post("/api/earn/admin/opportunities", data),
+  update: (id, data) => api.patch(`/api/earn/admin/opportunities/${id}`, data),
+};
+export const walletAdminAPI = {
+  purchases: () => api.get("/api/wallet/admin/purchases"),
+  updatePurchase: (id, data) => api.patch(`/api/wallet/admin/purchases/${id}`, data),
+  withdrawals: () => api.get("/api/wallet/admin/withdrawals"),
+  updateWithdrawal: (id, data) => api.patch(`/api/wallet/admin/withdrawals/${id}`, data),
+};
 
 export const audienceAPI = {
   getAll: () => api.get("/api/audience/admin"),

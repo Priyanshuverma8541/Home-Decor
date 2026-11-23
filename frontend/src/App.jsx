@@ -39,6 +39,9 @@ import Development from "./components/pages/Development.jsx";
 import Games from "./components/pages/Games.jsx";
 import LivingsAI from "./components/pages/LivingsAI.jsx";
 import CareerGrowth from "./components/pages/CareerGrowth.jsx";
+import SkillUp from "./components/pages/SkillUp.jsx";
+import Earn from "./components/pages/Earn.jsx";
+import Wallet from "./components/pages/Wallet.jsx";
 
 function AppShell() {
   const { pathname } = useLocation();
@@ -75,6 +78,9 @@ function AppShell() {
           <Route path="legal" element={<Legal />} />
           <Route path="account" element={<MyAccount />} />
           <Route path="account/orders" element={<MyOrders />} />
+          <Route path="account/wallet" element={<Wallet />} />
+          <Route path="skillup" element={<SkillUp />} />
+          <Route path="earn" element={<Earn />} />
           <Route path="marketplace" element={<MarketplaceHome />} />
           <Route path="explorer" element={<ExplorerLanding />} />
           <Route path="portfolio-builder" element={<PortfolioBuilder />} />

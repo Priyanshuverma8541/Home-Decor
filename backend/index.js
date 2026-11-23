@@ -106,6 +106,9 @@ app.use("/api/livings-ai", require("./routes/livingsAI"));
 app.use("/api/growth-livings", require("./modules/growthLivings/routes"));
 app.use("/api/explorer/admin/hr", require("./routes/explorerHR"));
 app.use("/api/career-growth", require("./routes/careerGrowth"));
+app.use("/api/skillup", require("./routes/skillUp"));
+app.use("/api/earn", require("./routes/earn"));
+app.use("/api/wallet", require("./routes/wallet"));
 app.use("/api/portfolio-builder", require("./modules/portfolioBuilder/routes"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
