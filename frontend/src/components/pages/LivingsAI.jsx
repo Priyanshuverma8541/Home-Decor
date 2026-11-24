@@ -11,12 +11,18 @@ const suggestions = [
   "Where can I find my orders?",
   "What tools are available for developers?",
 ];
+const transportSuggestions = [
+  "Which buses go from Dum Dum to New Town?",
+  "How can I travel from Howrah Station to Esplanade?",
+  "Can I find a bus from Kalyani to Kolkata?",
+  "I need to travel from Hatisala. What nearby stop should I use?",
+];
 
 function pageName(path) {
   const routes = [
     [/^\/$/, "Savitri Livings home"], [/^\/shop/, "Shop"], [/^\/product/, "Product details"],
     [/^\/cart/, "Cart"], [/^\/account/, "My Account"], [/^\/marketplace/, "Marketplace"],
-    [/^\/ecosystem/, "Ecosystem"], [/^\/growth-livings/, "Growth Livings"], [/^\/development/, "Development"],
+    [/^\/ecosystem/, "Ecosystem"], [/^\/growth-livings/, "Growth Livings"], [/^\/development/, "Development"], [/^\/transport/, "Kolkata Transport"],
     [/^\/tools\/developer-zone\/checklist/, "SFMC Checklist Editor"], [/^\/tools\/developer-zone/, "Developer Zone"],
     [/^\/partner-with-us/, "Partner with Us"], [/^\/faqs/, "FAQs"], [/^\/contact/, "Contact"],
   ];
@@ -39,6 +45,7 @@ export default function LivingsAI() {
   const { user } = useAuth();
   const fromPath = location.state?.from || new URLSearchParams(location.search).get("from") || "/";
   const currentPage = useMemo(() => pageName(fromPath), [fromPath]);
+  const transportMode = fromPath.startsWith("/transport") || new URLSearchParams(location.search).get("topic") === "transport";
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
@@ -75,7 +82,7 @@ export default function LivingsAI() {
       <section className="livings-ai-workspace" aria-label="LivingsAI conversation">
         <div className="livings-ai-context"><div><CircleHelp size={16}/><span>Page context</span></div><b>{currentPage}</b><small>LivingsAI uses this page name to tailor its guidance. It does not receive your private page records.</small></div>
         <div className="livings-ai-conversation" aria-live="polite">
-          {!messages.length ? <div className="livings-ai-welcome"><div className="livings-ai-welcome-icon"><Bot size={24}/></div><h2>What would you like to know?</h2><p>Ask about Savitri Livings, find a feature, or get help understanding the page you came from.</p><div className="livings-ai-suggestions">{suggestions.map((suggestion) => <button key={suggestion} type="button" onClick={(event) => send(event, suggestion)} disabled={sending}>{suggestion}<ArrowUp size={14}/></button>)}</div></div> : <div className="livings-ai-message-list">{messages.map((message) => <article key={message.id} className={`livings-ai-message is-${message.role}`}><div className="livings-ai-avatar">{message.role === "assistant" ? <Sparkles size={15}/> : user?.fullName?.[0] || "Y"}</div><div className="livings-ai-message-body"><span className="livings-ai-message-name">{message.role === "assistant" ? "LivingsAI" : user?.fullName || "You"}</span><p>{message.text}</p><ReferenceList references={message.references}/></div></article>)}{sending && <article className="livings-ai-message is-assistant"><div className="livings-ai-avatar"><Sparkles size={15}/></div><div className="livings-ai-message-body"><span className="livings-ai-message-name">LivingsAI</span><div className="livings-ai-typing"><i/><i/><i/></div></div></article>}<div ref={endRef}/></div>}
+          {!messages.length ? <div className="livings-ai-welcome"><div className="livings-ai-welcome-icon"><Bot size={24}/></div><h2>{transportMode ? "Ask about getting around Kolkata" : "What would you like to know?"}</h2><p>{transportMode ? "Ask for bus routes between stops. LivingsAI checks the supplied route data and tells you when details need verification." : "Ask about Savitri Livings, find a feature, or get help understanding the page you came from."}</p><div className="livings-ai-suggestions">{(transportMode ? transportSuggestions : suggestions).map((suggestion) => <button key={suggestion} type="button" onClick={(event) => send(event, suggestion)} disabled={sending}>{suggestion}<ArrowUp size={14}/></button>)}</div></div> : <div className="livings-ai-message-list">{messages.map((message) => <article key={message.id} className={`livings-ai-message is-${message.role}`}><div className="livings-ai-avatar">{message.role === "assistant" ? <Sparkles size={15}/> : user?.fullName?.[0] || "Y"}</div><div className="livings-ai-message-body"><span className="livings-ai-message-name">{message.role === "assistant" ? "LivingsAI" : user?.fullName || "You"}</span><p>{message.text}</p><ReferenceList references={message.references}/></div></article>)}{sending && <article className="livings-ai-message is-assistant"><div className="livings-ai-avatar"><Sparkles size={15}/></div><div className="livings-ai-message-body"><span className="livings-ai-message-name">LivingsAI</span><div className="livings-ai-typing"><i/><i/><i/></div></div></article>}<div ref={endRef}/></div>}
         </div>
         <div className="livings-ai-composer-area">
           {error && <p className="livings-ai-error" role="alert">{error}</p>}
@@ -87,3 +94,4 @@ export default function LivingsAI() {
     </div>
   </main>;
 }
+

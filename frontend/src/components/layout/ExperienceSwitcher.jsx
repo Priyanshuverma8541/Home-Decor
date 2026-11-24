@@ -1,11 +1,12 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { BriefcaseBusiness, Compass, Code2, Gem, Gamepad2, Hammer, BookOpen, Coins } from "lucide-react";
+import { BriefcaseBusiness, Compass, Code2, Gem, Gamepad2, Hammer, BookOpen, Coins, Bus } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { canAccessCareerGrowth } from "../../utils/careerGrowthAccess.js";
 
 const tabs = [
   { label: "Shop", description: "Discover products", to: "/shop", Icon: Gem, title: "Shop Savitri Livings" },
   { label: "SL Explorer", description: "Explore your city", to: "/marketplace", Icon: Compass, title: "Explore local listings and services" },
+  { label: "Transport", description: "Plan city journeys", to: "/transport", Icon: Bus, title: "Kolkata and nearby public transport" },
 ];
 
 export default function ExperienceSwitcher({ hidden = false, homepage = false }) {
@@ -15,7 +16,8 @@ export default function ExperienceSwitcher({ hidden = false, homepage = false })
   if (hidden) return null;
   return <nav className={`experience-switcher${homepage ? " experience-switcher-home" : ""}`} aria-label="Savitri Livings experiences">
     {tabs.map(({ label, description, to, Icon, title }) => {
-      const className = ({ isActive } = {}) => `experience-tab experience-tab-shop${(isActive || (to === "/shop" && (pathname === "/" || pathname.startsWith("/product/")))) ? " is-active" : ""}`;
+      const tabClass = `experience-tab experience-tab-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}`;
+      const className = ({ isActive } = {}) => `${tabClass}${(isActive || (to === "/shop" && (pathname === "/" || pathname.startsWith("/product/")))) ? " is-active" : ""}`;
       const content = <><Icon aria-hidden="true" size={homepage ? 24 : 16} /><span>{label}<small>{description}</small></span></>;
       return <NavLink key={to} to={label === "SL Explorer" ? "/explorer" : to} title={title} className={className}>{content}</NavLink>;
     })}
@@ -45,11 +47,12 @@ export default function ExperienceSwitcher({ hidden = false, homepage = false })
       .experience-switcher-home .experience-tab{min-height:92px;flex-direction:column;gap:7px;padding:12px 8px;border:1px solid transparent;border-radius:18px;white-space:normal;text-align:center;font-size:.82rem;box-shadow:0 5px 18px rgba(62,44,25,.06)}
       .experience-switcher-home .experience-tab>span{line-height:1.15}.experience-switcher-home .experience-tab small{margin-top:4px;font-size:.67rem;color:inherit;opacity:.78}
       .experience-switcher-home .experience-tab-shop{background:#f6e3bf;color:#644017;border-color:#e0bd7b}.experience-switcher-home .experience-tab-shop.is-active{background:#f2d39b;color:#4b2d12}.experience-switcher-home .experience-tab-career{background:#e5eee8;color:#315b48;border-color:#cbdccc}
-      .experience-switcher-home .experience-tab:nth-child(2){background:#e6eee2;color:#355a3d}.experience-switcher-home .experience-tab-development{background:#e5e9fa;color:#374c81}.experience-switcher-home .experience-tab-build{background:#f5e5d4;color:#754b25}.experience-switcher-home .experience-tab-games{background:#f3e8ed;color:#77435a}
+      .experience-switcher-home .experience-tab:nth-child(2){background:#e6eee2;color:#355a3d}.experience-switcher-home .experience-tab-development{background:#e5e9fa;color:#374c81}.experience-switcher-home .experience-tab-build{background:#f5e5d4;color:#754b25}.experience-switcher-home .experience-tab-games{background:#f3e8ed;color:#77435a}.experience-switcher-home .experience-tab-transport{background:#e3f0e8;color:#286247;border-color:#cde3d3}
       .experience-switcher-home .experience-tab-skillup{background:#e7e8fa;color:#45467d;border-color:#d7d8f0}.experience-switcher-home .experience-tab-earn{background:#e3f0e8;color:#286247;border-color:#cde3d3}
       @media(max-width:520px){.experience-switcher{justify-content:flex-start;gap:2px;padding-inline:8px}.experience-tab{gap:5px;padding:0 10px;font-size:.7rem}.experience-switcher:not(.experience-switcher-home) .experience-tab small{display:none}.experience-switcher-home{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding-inline:14px}.experience-switcher-home .experience-tab{min-height:82px;padding:9px 5px;border-radius:15px;font-size:.67rem}.experience-switcher-home .experience-tab svg{width:22px;height:22px}.experience-switcher-home .experience-tab small{font-size:.56rem}}
       @media(max-width:360px){.experience-switcher-home{gap:5px;padding-inline:10px}.experience-switcher-home .experience-tab{min-height:78px;font-size:.61rem}}
     `}</style>
   </nav>;
 }
+
 

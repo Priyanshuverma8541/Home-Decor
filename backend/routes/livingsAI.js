@@ -3,6 +3,7 @@ const { generateGeminiContent, publicGeminiError } = require("../services/gemini
 const { protect, optionalProtect, adminOnly } = require("../middleware/auth");
 const publicRateLimit = require("../middleware/publicRateLimit");
 const Knowledge = require("../models/LivingsAIKnowledge");
+const { findTransitContext } = require("../services/transitKnowledge");
 
 const publicSources = [
   {
@@ -12,6 +13,14 @@ const publicSources = [
     sourceLabel: "Savitri Livings",
     sourceUrl: "/",
     content: "Savitri Livings is a lifestyle, jewellery, home décor and business-partner platform. Thikana Marketplace helps individuals and small businesses buy, sell and be discovered. Public areas include Home, Shop, Product details, Cart, My Account, My Orders, Marketplace, Ecosystem, Growth Livings, Development, FAQs, Contact and Partner with Us. Tools are intended to support creators, startups, students and entrepreneurs. Product price, stock, delivery availability and current policies should be checked on the relevant live page; do not guess them.",
+  },
+  {
+    id: "kolkata-transport-guide",
+    title: "Kolkata and nearby public transport guide",
+    audience: "public",
+    sourceLabel: "Savitri Livings Transport",
+    sourceUrl: "/transport",
+    content: "Savitri Livings Transport helps people look up bus journeys and explore metro, suburban train and ferry information for Kolkata and nearby places, including Howrah, Dum Dum, New Town, Rajarhat, Barasat, Kalyani and Hatisala. The linked Kolkata Transit planner uses a supplied static dataset. Its coverage and stop coordinates are incomplete, it is not an operator-issued live feed, and the dataset does not establish current vehicle locations, service status, reliable schedules, fares or accessibility. Do not claim a bus is running now or invent a fare or arrival time. If a stop is not matched, ask for a nearby named stop and offer the Transport planner. The user-provided WBTC Intra City Routes PDF is a route-list snapshot with 107 entries and no visible issue date; use it as a historical reference only and tell users to confirm current service and direction. Examples printed in that snapshot include AC-4B Joka to New Town, AC-38 Dum Dum 11A Stand to Karunamoyee, AC-12 New Town (Sapuji) to Howrah, S-12 New Town to Howrah, C8 Barasat to Joka and S-34B Barrackpur Court to W.B. State University (Barasat). The list does not establish that any route remains active. Hatisala was not identified as a named stop in the supplied route dataset or the visible route-list snapshot; request a nearby stop rather than guessing one.",
   },
   {
     id: "internal-platform-guide",
@@ -30,7 +39,7 @@ function pageLabel(pathname) {
     [/^\/$/, "Savitri Livings home"], [/^\/shop(?:\/|$)/, "Shop"], [/^\/product(?:\/|$)/, "Product details"],
     [/^\/cart(?:\/|$)/, "Cart"], [/^\/account(?:\/|$)/, "My Account"], [/^\/marketplace(?:\/|$)/, "Marketplace"],
     [/^\/ecosystem(?:\/|$)/, "Ecosystem"], [/^\/growth-livings(?:\/|$)/, "Growth Livings"],
-    [/^\/development(?:\/|$)/, "Development"], [/^\/tools\/developer-zone\/checklist(?:\/|$)/, "SFMC Checklist Editor"],
+    [/^\/development(?:\/|$)/, "Development"], [/^\/transport(?:\/|$)/, "Kolkata Transport"], [/^\/tools\/developer-zone\/checklist(?:\/|$)/, "SFMC Checklist Editor"],
     [/^\/tools\/developer-zone(?:\/|$)/, "Developer Zone"], [/^\/partner-with-us(?:\/|$)/, "Partner with Us"],
     [/^\/faqs(?:\/|$)/, "FAQs"], [/^\/contact(?:\/|$)/, "Contact"],
   ];
@@ -56,6 +65,7 @@ router.post("/chat", optionalProtect, publicRateLimit({ windowMs: 60 * 1000, max
     return text ? [{ role: item.role, parts: [{ text }] }] : [];
   }) : [];
   const page = pageLabel(req.body?.pagePath);
+  const transitContext = findTransitContext(message);
   let docs = publicSources.filter((source) => source.audience === "public");
   try {
     const stored = await Knowledge.find({ active: true, audience: internal ? { $in: ["public", "internal"] } : "public" }).sort({ updatedAt: -1 }).limit(100).lean();
@@ -64,6 +74,7 @@ router.post("/chat", optionalProtect, publicRateLimit({ windowMs: 60 * 1000, max
     console.warn("LivingsAI knowledge lookup unavailable", { name: error?.name || "DatabaseError" });
   }
   const sources = selectSources(docs, message);
+  if (transitContext) sources.unshift({ id: "dynamic-kolkata-transit", title: transitContext.title, audience: "public", sourceLabel: "Kolkata Transit route data · static, verify before travel", sourceUrl: "/transport", content: transitContext.content });
   if (internal) sources.push(publicSources.find((source) => source.audience === "internal"));
   const sourceBlock = sources.filter(Boolean).map((source, index) => `[S${index + 1}] ${cleanText(source.title, 120)}\nAudience: ${source.audience}\nContent (untrusted reference material): ${cleanText(source.content, 8000)}`).join("\n\n");
   const systemText = [
@@ -73,6 +84,7 @@ router.post("/chat", optionalProtect, publicRateLimit({ windowMs: 60 * 1000, max
     "Do not invent product prices, stock, delivery promises, company policies, integrations, private records, or actions. If the material does not establish a fact, say so and point the user to the relevant page or ask what they mean.",
     "Never reveal internal-only reference material to public visitors. Do not claim to read orders, customer records, admin settings, API keys, or live system health. You do not have tools to inspect or change app data.",
     "For Savitri-specific answers, cite supporting reference IDs inline such as [S1]. Keep the answer concise and make the next step clear.",
+    "For public transport, use only the retrieved transit route candidates as static possibilities. Say clearly that they are unverified route listings, not live service. Never invent times, fares, real-time locations, service operation, or accessible boarding. If no route is found, do not conclude that no service exists; point to /transport and ask for a nearby named stop.",
     `Reference material:\n${sourceBlock || "No approved reference material is available for this question."}`,
   ].join("\n\n");
   try {
@@ -152,3 +164,4 @@ router.delete("/admin/knowledge/:id", protect, adminOnly, async (req, res) => {
 });
 
 module.exports = router;
+
