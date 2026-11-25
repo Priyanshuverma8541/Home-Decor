@@ -1,4 +1,4 @@
-import { ArrowRight, BriefcaseBusiness, Code2, ExternalLink, FileCheck2, Globe2, Layers3, Megaphone, Palette, Sparkles, Workflow } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, Code2, Download, ExternalLink, FileCheck2, Globe2, Layers3, Megaphone, Palette, Sparkles, Workflow } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const adminPages = "https://home-decor-n2z6.vercel.app/pages";
@@ -8,6 +8,7 @@ const cards = [
   { title: "Portfolio Builder", eyebrow: "SHOWCASE YOUR WORK", copy: "Create a responsive portfolio with templates, flexible content blocks, live preview and Gemini writing help.", icon: Palette, tone: "violet", action: "Open the builder", to: "/portfolio-builder" },
   { title: "Savitri Pages", eyebrow: "PUBLISH · MANAGE", copy: "Build and manage landing pages with the same Savitri Pages workspace used by the Admin team.", icon: Globe2, tone: "gold", action: "Open Pages in Admin", href: adminPages },
   { title: "AI Builder", eyebrow: "GEMINI CREATIVE GUIDE", copy: "Shape portfolio introductions and project stories with optional AI suggestions grounded in your own details.", icon: Sparkles, tone: "pink", action: "Create with AI", to: "/portfolio-builder" },
+  { title: "Savitri Media Downloader", eyebrow: "AUTHORIZED DIRECT MEDIA", copy: "Download an accessible direct media file you have permission to use. Social links open in their original platform.", icon: Download, tone: "amber", action: "Open Media Downloader", to: "/media-downloader" },
   { title: "Website Builder", eyebrow: "BUILDHUB", copy: "Move from an idea to a designed website with Savitri’s connected BuildHub platform.", icon: Layers3, tone: "blue", action: "Open BuildHub", href: "https://build-hub-lake.vercel.app/" },
 ];
 

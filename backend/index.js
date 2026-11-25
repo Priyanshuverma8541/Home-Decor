@@ -110,6 +110,7 @@ app.use("/api/skillup", require("./routes/skillUp"));
 app.use("/api/earn", require("./routes/earn"));
 app.use("/api/wallet", require("./routes/wallet"));
 app.use("/api/portfolio-builder", require("./modules/portfolioBuilder/routes"));
+app.use("/api/media-downloader", require("./routes/mediaDownloader"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────
 app.use((req, res) => res.status(404).json({ success: false, message: "Route not found" }));

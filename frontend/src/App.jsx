@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Sparkles, X } from "lucide-react";
 
 // ── Contexts ──────────────────────────────────────────────────────
@@ -43,6 +43,7 @@ import SkillUp from "./components/pages/SkillUp.jsx";
 import Earn from "./components/pages/Earn.jsx";
 import Wallet from "./components/pages/Wallet.jsx";
 import Transport from "./components/pages/Transport.jsx";
+const MediaDownloader = lazy(() => import("./components/pages/MediaDownloader.jsx"));
 
 function AppShell() {
   const { pathname } = useLocation();
@@ -88,6 +89,7 @@ function AppShell() {
           <Route path="portfolio-builder" element={<PortfolioBuilder />} />
           <Route path="development" element={<Development />} />
           <Route path="games" element={<Games />} />
+          <Route path="media-downloader" element={<Suspense fallback={<main className="sl-check-app"><div className="sl-check-loading">Opening Media Downloader…</div></main>}><MediaDownloader /></Suspense>} />
           <Route path="livings-ai" element={<LivingsAI />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />

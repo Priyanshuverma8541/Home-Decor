@@ -62,6 +62,13 @@ export const leadAPI = {
 };
 
 export const ecosystemAPI = { getAll: () => api.get("/api/ecosystem") };
+export const mediaDownloaderAPI = {
+  inspect: (url) => api.post("/api/media-downloader/inspect", { url }),
+  download: (url, onDownloadProgress) => api.get("/api/media-downloader/download", {
+    params: { url }, responseType: "blob", timeout: 180000,
+    onDownloadProgress,
+  }),
+};
 export const pagesAPI = {
   published: (slug) => api.get(`/api/pages/${encodeURIComponent(slug)}`),
   preview: (slug, token) => api.get(`/api/pages/preview/${encodeURIComponent(slug)}`, { headers: { "X-Page-Preview": token } }),
