@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, Calculator, Download, Ruler, Sparkles, Wallet } from "lucide-react";
+import { ArrowRight, Calculator, Download, Ruler, Sparkles, Wallet, Layers3 } from "lucide-react";
 import { Link } from "react-router-dom";
 import PublishedModules from "./PublishedModules.jsx";
 
@@ -30,6 +30,7 @@ export default function Tools() {
   return <main className="sl-tools"><header><span className="section-tag">SAVITRI LIVINGS · TOOLS</span><h1>Small tools for everyday decisions.</h1><p>Useful calculators that run on your device. Values are not saved or sent to the server.</p></header>
     <Link to="/tools/developer-zone" className="sl-developer-link"><span className="sl-developer-icon">✦</span><span><strong>Developer Zone</strong><small>SFMC checklist tools and field-by-field guidance</small></span><ArrowRight size={18}/></Link>
     <Link to="/portfolio-builder" className="sl-developer-link sl-portfolio-tool-link"><span className="sl-developer-icon"><Sparkles size={18}/></span><span><strong>Portfolio Builder</strong><small>Design a personal website with templates, rich content blocks, live preview and Savitri Pages publishing</small></span><ArrowRight size={18}/></Link>
+    <Link to="/buildhub" className="sl-developer-link"><span className="sl-developer-icon"><Layers3 size={18}/></span><span><strong>BuildHub</strong><small>Explore student projects, business work, mentorship and digital services</small></span><ArrowRight size={18}/></Link>
     <Link to="/developer" className="sl-developer-link"><span className="sl-developer-icon"><Sparkles size={18}/></span><span><strong>Developer workspace</strong><small>View assigned modules, submit versions and follow review feedback</small></span><ArrowRight size={18}/></Link>
     <Link to="/media-downloader" className="sl-developer-link"><span className="sl-developer-icon"><Download size={18}/></span><span><strong>Savitri Media Downloader</strong><small>Download public direct media files you have permission to use; social platforms remain linked to their official viewers</small></span><ArrowRight size={18}/></Link>
     <PublishedModules placement="tools" title="Published tools and modules" />

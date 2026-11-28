@@ -16,12 +16,12 @@ const collections = [
 
 const homeSlides = [
   { title: "Savitri Livings Jewellery", copy: "Find pieces for everyday moments and celebrations.", label: "Shop jewellery", image: "/brand/campaign/jewellery.webp", alt: "Gold necklace and earrings displayed on an ivory bust", to: "/shop?category=jewellery", theme: "jewellery" },
-  { title: "BuildHub", copy: "Plan, design and build your next project.", label: "Explore BuildHub", image: "/brand/campaign/buildhub.webp", alt: "Architectural plans and a modern home construction project", href: "https://build-hub-lake.vercel.app/", theme: "build" },
+  { title: "BuildHub", copy: "Learn from real projects and bring your digital idea to life.", label: "Explore BuildHub", image: "/brand/campaign/buildhub.webp", alt: "A digital project workspace for learning and building", href: "/buildhub", theme: "build" },
   { title: "GangaBhog & Savinexa Client Projects", copy: "Discover thoughtful food and digital experiences.", label: "Explore Savinexa", image: "/brand/campaign/gangabhog-savinexa.webp", alt: "Indian sweets and an elegant online storefront", href: "https://savinexa.vercel.app/", theme: "projects" },
   { title: "Thikana", copy: "Find local businesses, services and discoveries.", label: "Explore Thikana", image: "/brand/campaign/thikana.webp", alt: "Kolkata at twilight with a local discovery map", to: "/marketplace", theme: "thikana" },
   { title: "Games", copy: "Take a thoughtful little break with Savitri Livings.", label: "Play a game", image: "/brand/campaign/toolhub.webp", alt: "A warm digital workspace from the Savitri Livings platform", to: "/games", theme: "tools" },
   { title: "SL Business", copy: "Explore ideas and support for growing businesses.", label: "Discover SL Business", image: "/brand/campaign/sl-business.webp", alt: "A business workspace with a growth chart", to: "/ecosystem", theme: "business" },
-  { title: "Website Builder", copy: "Bring your next idea online with BuildHub.", label: "Explore the builder", image: "/brand/campaign/website-builder.webp", alt: "A laptop with a visual website design editor", href: "https://build-hub-lake.vercel.app/", theme: "website" },
+  { title: "Website Builder", copy: "Bring your next idea online with BuildHub.", label: "Explore the builder", image: "/brand/campaign/website-builder.webp", alt: "A laptop with a visual website design editor", href: "/buildhub", theme: "website" },
   { title: "Portfolio AI Builder", copy: "Create a polished home for your work and experience.", label: "Build your portfolio", image: "/brand/campaign/portfolio-ai.webp", alt: "Portfolio pages presented across a desktop and phone", to: "/portfolio-builder", theme: "portfolio" },
   { title: "Growth Livings", copy: "Build your professional identity and discover new opportunities.", label: "Explore Growth Livings", image: "/brand/campaign/growth-livings.webp", alt: "A modern business workspace with a digital growth dashboard", to: "/growth-livings", theme: "growth" },
 ];
@@ -45,11 +45,11 @@ export default function HomeExperience() {
     event.preventDefault();
     navigate(query.trim() ? `/shop?search=${encodeURIComponent(query.trim())}` : "/shop");
   };
-  const openCollection = (item) => item.href ? window.open(item.href, "_blank", "noopener,noreferrer") : navigate(item.to);
+  const openCollection = (item) => item.href ? (item.href.startsWith("/") ? navigate(item.href) : window.open(item.href, "_blank", "noopener,noreferrer")) : navigate(item.to);
   const featured = products.find((item) => getProductImage(item)) || null;
   const slide = homeSlides[activeSlide];
   const changeSlide = (offset) => setActiveSlide((current) => (current + offset + homeSlides.length) % homeSlides.length);
-  const openSlide = () => slide.href ? window.open(slide.href, "_blank", "noopener,noreferrer") : navigate(slide.to);
+  const openSlide = () => slide.href ? (slide.href.startsWith("/") ? navigate(slide.href) : window.open(slide.href, "_blank", "noopener,noreferrer")) : navigate(slide.to);
 
   useEffect(() => {
     if (carouselPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;

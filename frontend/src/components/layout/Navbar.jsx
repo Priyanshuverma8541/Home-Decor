@@ -78,8 +78,8 @@ export default function Navbar() {
                       <motion.div role="menu" initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:6 }} transition={{ duration:.15 }}
                         style={{ position:"absolute", left:0, top:"calc(100% + 1px)", width:220, padding:"0.35rem", background:"#5b3c1d", borderRadius:12, border:"1px solid rgba(255,255,255,.12)", boxShadow:"0 12px 40px rgba(0,0,0,.3)", zIndex:200 }}>
                         <NavLink to="/ecosystem" role="menuitem" onClick={() => setEcosystemMenu(false)} style={{ display:"block", padding:"0.65rem 0.75rem", borderRadius:8, color:"rgba(255,255,255,.76)", fontSize:"0.85rem", textDecoration:"none" }}>Ecosystem overview</NavLink>
-                        <a href="https://build-hub-lake.vercel.app/" target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => setEcosystemMenu(false)}
-                          style={{ display:"block", padding:"0.65rem 0.75rem", borderRadius:8, color:"#f4ce7c", fontSize:"0.85rem", fontWeight:600, textDecoration:"none" }}>BuildHub</a>
+                        <NavLink to="/buildhub" role="menuitem" onClick={() => setEcosystemMenu(false)}
+                          style={{ display:"block", padding:"0.65rem 0.75rem", borderRadius:8, color:"#f4ce7c", fontSize:"0.85rem", fontWeight:600, textDecoration:"none" }}>BuildHub</NavLink>
                         {["Marketing", "Business", "Other Ecosystem Apps"].map((item) => (
                           <button key={item} type="button" role="menuitem" disabled style={{ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", padding:"0.65rem 0.75rem", border:0, borderRadius:8, background:"transparent", color:"rgba(255,255,255,.42)", fontSize:"0.85rem", fontFamily:"'DM Sans',sans-serif", textAlign:"left", cursor:"default" }}>
                             {item}<span style={{ fontSize:"0.65rem", color:"rgba(255,255,255,.34)" }}>Coming soon</span>
@@ -223,7 +223,7 @@ export default function Navbar() {
                       {ecosystemMenu && (
                         <div role="menu" style={{ margin:"0.15rem 0 0.5rem 0.75rem", paddingLeft:"0.5rem", borderLeft:"1px solid rgba(255,255,255,.18)" }}>
                           <NavLink to="/ecosystem" role="menuitem" onClick={() => setEcosystemMenu(false)} style={{ display:"block", padding:"0.65rem 0.75rem", color:"rgba(255,255,255,.65)", fontSize:"0.85rem", textDecoration:"none" }}>Ecosystem overview</NavLink>
-                          <a href="https://build-hub-lake.vercel.app/" target="_blank" rel="noopener noreferrer" role="menuitem" onClick={() => { setEcosystemMenu(false); setOpen(false); }} style={{ display:"block", padding:"0.65rem 0.75rem", color:"#f4ce7c", fontSize:"0.85rem", fontWeight:600, textDecoration:"none" }}>BuildHub</a>
+                          <NavLink to="/buildhub" role="menuitem" onClick={() => { setEcosystemMenu(false); setOpen(false); }} style={{ display:"block", padding:"0.65rem 0.75rem", color:"#f4ce7c", fontSize:"0.85rem", fontWeight:600, textDecoration:"none" }}>BuildHub</NavLink>
                           {["Marketing", "Business", "Other Ecosystem Apps"].map((item) => (
                             <div key={item} aria-disabled="true" style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:8, padding:"0.65rem 0.75rem", color:"rgba(255,255,255,.38)", fontSize:"0.85rem" }}>
                               {item}<span style={{ fontSize:"0.65rem", color:"rgba(255,255,255,.3)", flexShrink:0 }}>Coming soon</span>

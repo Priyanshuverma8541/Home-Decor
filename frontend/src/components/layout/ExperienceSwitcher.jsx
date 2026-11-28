@@ -27,9 +27,9 @@ export default function ExperienceSwitcher({ hidden = false, homepage = false })
     <NavLink to="/development" title="Explore Savitri Livings development tools" className={({ isActive }) => `experience-tab experience-tab-development${isActive ? " is-active" : ""}`}>
       <Code2 aria-hidden="true" size={homepage ? 24 : 16} /><span>Development<small>{homepage ? "Build and grow" : "Tools & platforms"}</small></span>
     </NavLink>
-    <a className="experience-tab experience-tab-build" href="https://build-hub-lake.vercel.app/" target="_blank" rel="noopener noreferrer" title="Open BuildHub in a new tab">
+    <NavLink className={({ isActive }) => `experience-tab experience-tab-build${isActive ? " is-active" : ""}`} to="/buildhub" title="Explore BuildHub inside Savitri Livings">
       <Hammer aria-hidden="true" size={homepage ? 24 : 16} /><span>BuildHub<small>Build something</small></span>
-    </a>
+    </NavLink>
     <NavLink to="/games" title="Play Savitri Livings games" className={({ isActive }) => `experience-tab experience-tab-games${isActive ? " is-active" : ""}`}>
       <Gamepad2 aria-hidden="true" size={homepage ? 24 : 16} /><span>Games<small>Play & unwind</small></span>
     </NavLink>

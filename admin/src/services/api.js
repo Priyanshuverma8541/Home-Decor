@@ -262,6 +262,24 @@ export const moduleAdminAPI = {
   audit: () => api.get("/api/modules/admin/audit"),
 };
 
+export const buildHubAdminAPI = {
+  overview: () => api.get("/api/buildhub/admin/overview"),
+  projects: (params) => api.get("/api/buildhub/admin/projects", { params }),
+  createProject: (data) => api.post("/api/buildhub/admin/projects", data, { headers: { "Content-Type": "multipart/form-data" } }),
+  updateProject: (id, data) => api.put(`/api/buildhub/admin/projects/${encodeURIComponent(id)}`, data, { headers: { "Content-Type": "multipart/form-data" } }),
+  toggleProject: (id) => api.patch(`/api/buildhub/admin/projects/${encodeURIComponent(id)}/toggle`),
+  deleteProject: (id) => api.delete(`/api/buildhub/admin/projects/${encodeURIComponent(id)}`),
+  orders: (params) => api.get("/api/buildhub/admin/orders", { params }),
+  updateOrder: (id, data) => api.patch(`/api/buildhub/admin/orders/${encodeURIComponent(id)}`, data),
+  leads: (params) => api.get("/api/buildhub/admin/leads", { params }),
+  updateLead: (id, data) => api.patch(`/api/buildhub/admin/leads/${encodeURIComponent(id)}`, data),
+  deleteLead: (id) => api.delete(`/api/buildhub/admin/leads/${encodeURIComponent(id)}`),
+  settings: () => api.get("/api/buildhub/admin/settings"),
+  updateSettings: (data) => api.put("/api/buildhub/admin/settings", data),
+  uploadQR: (data) => api.post("/api/buildhub/admin/settings/upload-qr", data, { headers: { "Content-Type": "multipart/form-data" } }),
+  uploadPhoto: (data) => api.post("/api/buildhub/admin/settings/upload-photo", data, { headers: { "Content-Type": "multipart/form-data" } }),
+};
+
 export const tenantAPI = {
   list: () => api.get("/api/tenants/admin"),
   create: (data) => api.post("/api/tenants/admin", data),

@@ -9,7 +9,7 @@ const cards = [
   { title: "Savitri Pages", eyebrow: "PUBLISH · MANAGE", copy: "Build and manage landing pages with the same Savitri Pages workspace used by the Admin team.", icon: Globe2, tone: "gold", action: "Open Pages in Admin", href: adminPages },
   { title: "AI Builder", eyebrow: "GEMINI CREATIVE GUIDE", copy: "Shape portfolio introductions and project stories with optional AI suggestions grounded in your own details.", icon: Sparkles, tone: "pink", action: "Create with AI", to: "/portfolio-builder" },
   { title: "Savitri Media Downloader", eyebrow: "AUTHORIZED DIRECT MEDIA", copy: "Download an accessible direct media file you have permission to use. Social links open in their original platform.", icon: Download, tone: "amber", action: "Open Media Downloader", to: "/media-downloader" },
-  { title: "Website Builder", eyebrow: "BUILDHUB", copy: "Move from an idea to a designed website with Savitri’s connected BuildHub platform.", icon: Layers3, tone: "blue", action: "Open BuildHub", href: "https://build-hub-lake.vercel.app/" },
+  { title: "BuildHub", eyebrow: "WEBSITES · PROJECTS · MENTORSHIP", copy: "Explore student projects, business work and guided digital development inside Savitri Livings.", icon: Layers3, tone: "gold", action: "Open BuildHub", to: "/buildhub" },
 ];
 
 export default function Development() {

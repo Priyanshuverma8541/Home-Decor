@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles, Compass, ContactRound, BriefcaseBusiness, Coins, Blocks } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Users, Megaphone, Settings, LogOut, Leaf, UserCheck, BarChart2, Store, ShieldCheck, FileText, KeyRound, Paintbrush, FileSpreadsheet, TrendingUp, Sparkles, Compass, ContactRound, BriefcaseBusiness, Coins, Blocks, Hammer } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const LINKS = [
@@ -20,6 +20,7 @@ const LINKS = [
   { to:"/push-notifications", Icon:Megaphone, label:"Push Notifications" },
   { to:"/platform", Icon:KeyRound, label:"Platform Apps & Keys" },
   { to:"/modules", Icon:Blocks, label:"Product & Module Management" },
+  { to:"/buildhub", Icon:Hammer, label:"BuildHub" },
   { to:"/client-stores", Icon:Store, label:"Client Stores" },
   { to:"/business-opportunities", Icon:UserCheck, label:"Opportunities" },
   { to:"/privacy",   Icon:ShieldCheck,      label:"Privacy Data"        },

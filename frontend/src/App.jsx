@@ -45,11 +45,11 @@ import Wallet from "./components/pages/Wallet.jsx";
 import Transport from "./components/pages/Transport.jsx";
 import ModuleProductRoute from "./components/pages/ModuleProductRoute.jsx";
 import DeveloperDashboard from "./components/pages/DeveloperDashboard.jsx";
+import BuildHub from "./components/pages/BuildHub.jsx";
 const MediaDownloader = lazy(() => import("./components/pages/MediaDownloader.jsx"));
 
 function AppShell() {
   const { pathname } = useLocation();
-  const standaloneExplorer = pathname === "/explorer";
   const showLivingsAILauncher = pathname !== "/livings-ai" && !pathname.startsWith("/login") && !pathname.startsWith("/register") && !pathname.startsWith("/tools/developer-zone/checklist");
   const [permissionOpen, setPermissionOpen] = useState(false);
   const [privacyLauncherVisible, setPrivacyLauncherVisible] = useState(
@@ -90,6 +90,7 @@ function AppShell() {
           <Route path="explorer" element={<ExplorerLanding />} />
           <Route path="portfolio-builder" element={<PortfolioBuilder />} />
           <Route path="development" element={<Development />} />
+          <Route path="buildhub" element={<BuildHub />} />
           <Route path="games" element={<Games />} />
           <Route path="media-downloader" element={<Suspense fallback={<main className="sl-check-app"><div className="sl-check-loading">Opening Media Downloader…</div></main>}><MediaDownloader /></Suspense>} />
           <Route path="developer" element={<DeveloperDashboard />} />
@@ -113,9 +114,9 @@ function AppShell() {
         <Route path="p/:slug" element={<PageRenderer Navbar={Navbar} Footer={Footer} />} />
       </Routes>
 
-      {!standaloneExplorer && showLivingsAILauncher && <Link to="/livings-ai" state={{ from: pathname }} aria-label="Open LivingsAI" style={{ position:"fixed", right:18, bottom:"calc(150px + env(safe-area-inset-bottom,0px))", zIndex:80, display:"flex", alignItems:"center", gap:8, minHeight:44, padding:"0 15px", border:"1px solid rgba(244,206,124,.55)", borderRadius:999, background:"linear-gradient(135deg,#315443,#1a3c34)", boxShadow:"0 12px 28px rgba(26,60,52,.28)", color:"white", textDecoration:"none", fontSize:13, fontWeight:700 }}><Sparkles size={16} color="#f4ce7c"/>LivingsAI</Link>}
+      {showLivingsAILauncher && <Link to="/livings-ai" state={{ from: pathname }} aria-label="Open LivingsAI" style={{ position:"fixed", right:18, bottom:"calc(150px + env(safe-area-inset-bottom,0px))", zIndex:80, display:"flex", alignItems:"center", gap:8, minHeight:44, padding:"0 15px", border:"1px solid rgba(244,206,124,.55)", borderRadius:999, background:"linear-gradient(135deg,#315443,#1a3c34)", boxShadow:"0 12px 28px rgba(26,60,52,.28)", color:"white", textDecoration:"none", fontSize:13, fontWeight:700 }}><Sparkles size={16} color="#f4ce7c"/>LivingsAI</Link>}
 
-      {!standaloneExplorer && privacyLauncherVisible && (
+      {privacyLauncherVisible && (
         <div style={{ position: "fixed", right: 18, bottom: "calc(88px + env(safe-area-inset-bottom,0px))", zIndex: 1000 }}>
           <button
             type="button"
@@ -161,8 +162,8 @@ function AppShell() {
         </div>
       )}
 
-      {!standaloneExplorer && <PermissionCenter open={permissionOpen} onClose={() => setPermissionOpen(false)} />}
-      {!standaloneExplorer && <EngagementPrompts />}
+      <PermissionCenter open={permissionOpen} onClose={() => setPermissionOpen(false)} />
+      <EngagementPrompts />
     </>
   );
 }

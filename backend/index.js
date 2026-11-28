@@ -102,6 +102,7 @@ app.use("/api/audience", require("./routes/audience"));
 app.use("/api/overview", require("./routes/overview"));
 app.use("/api/entertainment", require("./routes/entertainment"));
 app.use("/api/pages",      require("./routes/pages"));
+app.use("/api/buildhub", require("./modules/buildhub/routes"));
 app.use("/api/savinexa",   require("./modules/savinexa/routes"));
 app.use("/api/tenants", require("./routes/tenants"));
 app.use("/api/checklists", require("./routes/checklists"));

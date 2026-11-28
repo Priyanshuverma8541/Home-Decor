@@ -126,6 +126,16 @@ export const walletAPI = {
   requestPurchase: (data) => api.post("/api/wallet/purchases", data),
 };
 
+export const buildHubAPI = {
+  settings: () => api.get("/api/buildhub/settings"),
+  projects: (params) => api.get("/api/buildhub/projects", { params }),
+  project: (slug) => api.get(`/api/buildhub/projects/${encodeURIComponent(slug)}`),
+  validateCoupon: (data) => api.post("/api/buildhub/settings/validate-coupon", data),
+  createOrder: (data) => api.post("/api/buildhub/orders", data),
+  lookupOrder: (number) => api.get(`/api/buildhub/orders/lookup/${encodeURIComponent(number)}`),
+  createLead: (data) => api.post("/api/buildhub/leads", data),
+};
+
 export const marketplaceAPI = {
   categories: () => api.get("/api/marketplace/categories"),
   listings: (params) => api.get("/api/marketplace/listings", { params }),
