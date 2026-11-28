@@ -4,6 +4,7 @@ import { ArrowRight, ChevronLeft, ChevronRight, Gift, Gem, Home, Search, Shirt, 
 import ExperienceSwitcher from "../layout/ExperienceSwitcher.jsx";
 import { productAPI } from "../../services/api.js";
 import { getProductImage } from "../../utils/productImage.js";
+import PublishedModules from "./PublishedModules.jsx";
 
 const collections = [
   { title: "Jewellery", Icon: Gem, match: /jewel|ring|necklace|earring|bridal/i, to: "/shop" },
@@ -93,6 +94,8 @@ export default function HomeExperience() {
       <img src={featured ? getProductImage(featured) : "/brand/home.png"} alt={featured?.name || "Savitri Livings lifestyle collection"} loading="lazy" />
       <div className="sl-feature-overlay"><span>THOUGHTFULLY CHOSEN</span><h2>Everyday elegance</h2><p>Find pieces and experiences that feel like you.</p><button type="button" onClick={() => featured ? navigate(`/product/${featured._id}`) : navigate("/shop")}>Discover more <ArrowRight size={16} /></button></div>
     </section>
+
+    <PublishedModules placement="homepage" title="Discover more from Savitri Livings" />
 
     <style>{`
       .sl-homepage{--sl-brown:#56391e;--sl-ink:#30241b;--sl-gold:#d2a75f;background:#fffdf9;color:var(--sl-ink);padding-bottom:22px}

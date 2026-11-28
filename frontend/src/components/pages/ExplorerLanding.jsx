@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Building2, Compass, Gamepad2, Hammer, Network, ShoppingBag, Users } from "lucide-react";
+import PublishedModules from "./PublishedModules.jsx";
 
 const experiences = [
   { name: "Growth Livings", description: "Explore professional portfolios, profile tools and career growth experiences.", action: "Explore Growth Livings", href: "/growth-livings", Icon: BriefcaseBusiness, tone: "gold", status: "Available" },
@@ -28,6 +29,7 @@ export default function ExplorerLanding() {
           return external ? <a className={`experience-card tone-${tone}`} style={{ animationDelay: `${index * 65}ms` }} key={name} href={href} target="_blank" rel="noopener noreferrer">{content}</a> : <a className={`experience-card tone-${tone}`} style={{ animationDelay: `${index * 65}ms` }} key={name} href={href}>{content}</a>;
         })}</div>
       </section>
+      <PublishedModules placement="networking" title="Published networking experiences" />
       <footer className="explorer-footer"><span>SL EXPLORER</span><span>Discover · Connect · Grow</span></footer>
     </main>
     <style>{`

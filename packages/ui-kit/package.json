@@ -1,0 +1,9 @@
+{
+  "name": "@savitri/ui-kit",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "main": "src/index.jsx",
+  "types": "index.d.ts",
+  "peerDependencies": { "react": ">=18" }
+}

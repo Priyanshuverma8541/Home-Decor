@@ -5,6 +5,36 @@
 **/.env
 **/.env.*
 !**/.env.example
+
+# Dependencies and generated build output
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.vercel/
+**/.vercel/
+
+# Local logs, caches, editor files, and OS metadata
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+.cache/
+**/.cache/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local-only secrets, keys, and certificate files
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Existing project-specific generated folders
 /resume/Archana-Singh/Archana-Portfolio/node_modules/
 /resume/Archana-Singh/Archana-Portfolio/dist/
 /trust-them/node_modules/

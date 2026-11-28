@@ -1,0 +1,10 @@
+:root {
+  --savitri-ink: #3e3028;
+  --savitri-muted: #806f59;
+  --savitri-gold: #bd8e45;
+  --savitri-gold-soft: #f4ead8;
+  --savitri-surface: #fffdf9;
+  --savitri-border: #e9dfd0;
+  --savitri-radius-card: 16px;
+  --savitri-shadow-card: 0 10px 30px rgb(67 48 27 / 8%);
+}

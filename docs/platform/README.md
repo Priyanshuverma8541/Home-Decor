@@ -1,5 +1,7 @@
 # Savitri Platform foundation
 
+The separate controlled product and developer lifecycle is documented in [`module-platform.md`](../module-platform.md).
+
 Savitri Livings remains on its existing backend and admin. The current platform foundation adds an application registry and credential-scoped event API alongside the existing `/api/push` routes.
 
 ## Application and credential management

@@ -1,0 +1,8 @@
+@import "@savitri/ui-kit/src/tokens.css";
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: #f8f5ee; font-family: Inter, system-ui, sans-serif; }
+.starter-shell { width: min(860px, 100%); margin: auto; padding: clamp(24px, 6vw, 68px) 18px; color: var(--savitri-ink); }
+.starter-kicker { color: #96703a; font-size: .68rem; font-weight: 800; letter-spacing: .12em; }
+.starter-shell h1 { margin: 5px 0 8px; font: 500 clamp(2rem, 6vw, 3.4rem)/1 'Cormorant Garamond', Georgia, serif; }
+.starter-shell p:not(.starter-kicker) { color: var(--savitri-muted); line-height: 1.6; }

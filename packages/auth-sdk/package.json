@@ -1,0 +1,9 @@
+{
+  "name": "@savitri/auth-sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "main": "src/index.js",
+  "types": "index.d.ts",
+  "dependencies": { "@savitri/api-sdk": "file:../api-sdk", "@savitri/shared-types": "file:../shared-types" }
+}

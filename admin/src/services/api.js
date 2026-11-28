@@ -244,6 +244,24 @@ export const platformAPI = {
   revokeKey: (appId, id) => api.delete(`/api/platform/v1/admin/applications/${appId}/keys/${id}`),
 };
 
+export const moduleAdminAPI = {
+  dashboard: () => api.get("/api/modules/admin"),
+  products: () => api.get("/api/modules/admin/products"),
+  createProduct: (data) => api.post("/api/modules/admin/products", data),
+  updateProduct: (id, data) => api.patch(`/api/modules/admin/products/${encodeURIComponent(id)}`, data),
+  assign: (id, data) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/assignments`, data),
+  updateAssignment: (id, data) => api.patch(`/api/modules/admin/assignments/${encodeURIComponent(id)}`, data),
+  submissions: (status) => api.get("/api/modules/admin/submissions", { params: status ? { status } : {} }),
+  review: (id, data) => api.patch(`/api/modules/admin/submissions/${encodeURIComponent(id)}/review`, data),
+  publish: (id) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/publish`, {}),
+  unpublish: (id) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/unpublish`, {}),
+  suspend: (id) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/suspend`, {}),
+  restore: (id) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/restore`, {}),
+  archive: (id) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/archive`, {}),
+  rollback: (id, version) => api.post(`/api/modules/admin/products/${encodeURIComponent(id)}/rollback`, { version }),
+  audit: () => api.get("/api/modules/admin/audit"),
+};
+
 export const tenantAPI = {
   list: () => api.get("/api/tenants/admin"),
   create: (data) => api.post("/api/tenants/admin", data),

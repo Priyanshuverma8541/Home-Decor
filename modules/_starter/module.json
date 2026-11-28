@@ -1,0 +1,14 @@
+{
+  "productId": "sample-module",
+  "name": "Sample module",
+  "description": "Replace with a concise description of the product.",
+  "category": "tools",
+  "integrationType": "deployed",
+  "version": "0.1.0",
+  "routeSection": "tools",
+  "frontendRoute": "/tools/sample-module",
+  "authenticationRequired": false,
+  "allowedRoles": [],
+  "permissions": [],
+  "visibility": { "homepage": false, "tools": true, "games": false, "jobs": false, "networking": false, "directRoute": true, "featured": false }
+}

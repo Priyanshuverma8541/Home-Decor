@@ -1,0 +1,9 @@
+{
+  "name": "savitri-module-starter",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "dev": "vite --host 0.0.0.0", "build": "vite build", "preview": "vite preview" },
+  "dependencies": { "@savitri/ui-kit": "file:../../packages/ui-kit", "react": "^18.3.1", "react-dom": "^18.3.1" },
+  "devDependencies": { "@vitejs/plugin-react": "^4.3.4", "vite": "^5.4.0" }
+}

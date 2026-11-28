@@ -70,6 +70,9 @@ const corsOptions = {
 app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 
+// GitHub signs the exact request bytes. Mount this route before express.json parses the body.
+app.use("/api/modules/github/webhook", express.raw({ type: "application/json", limit: "1mb" }), require("./routes/moduleGithubWebhook"));
+
 // ── BODY PARSERS ──────────────────────────────────────────────────────────────
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
@@ -110,6 +113,7 @@ app.use("/api/skillup", require("./routes/skillUp"));
 app.use("/api/earn", require("./routes/earn"));
 app.use("/api/wallet", require("./routes/wallet"));
 app.use("/api/portfolio-builder", require("./modules/portfolioBuilder/routes"));
+app.use("/api/modules", require("./routes/modules"));
 app.use("/api/media-downloader", require("./routes/mediaDownloader"));
 
 // ── 404 & ERROR ───────────────────────────────────────────────────────────────

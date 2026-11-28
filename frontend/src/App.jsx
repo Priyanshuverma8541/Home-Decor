@@ -43,6 +43,8 @@ import SkillUp from "./components/pages/SkillUp.jsx";
 import Earn from "./components/pages/Earn.jsx";
 import Wallet from "./components/pages/Wallet.jsx";
 import Transport from "./components/pages/Transport.jsx";
+import ModuleProductRoute from "./components/pages/ModuleProductRoute.jsx";
+import DeveloperDashboard from "./components/pages/DeveloperDashboard.jsx";
 const MediaDownloader = lazy(() => import("./components/pages/MediaDownloader.jsx"));
 
 function AppShell() {
@@ -90,6 +92,7 @@ function AppShell() {
           <Route path="development" element={<Development />} />
           <Route path="games" element={<Games />} />
           <Route path="media-downloader" element={<Suspense fallback={<main className="sl-check-app"><div className="sl-check-loading">Opening Media Downloader…</div></main>}><MediaDownloader /></Suspense>} />
+          <Route path="developer" element={<DeveloperDashboard />} />
           <Route path="livings-ai" element={<LivingsAI />} />
           <Route path="marketplace/listing/:id" element={<ListingDetail />} />
           <Route path="marketplace/sell" element={<SellerHub />} />
@@ -100,6 +103,7 @@ function AppShell() {
           <Route path="tools" element={<Tools />} />
           <Route path="tools/developer-zone" element={<DeveloperZone />} />
           <Route path="tools/developer-zone/checklist/:templateId" element={<ChecklistEditor />} />
+          <Route path=":section/:productId" element={<ModuleProductRoute internalEntries={{ "portfolio-builder": PortfolioBuilder, games: Games, "developer-zone": DeveloperZone, "media-downloader": MediaDownloader }} />} />
           <Route path="partner-with-us" element={<PartnerWithUs />} />
           <Route path="*" element={<NotFound />} />
         </Route>

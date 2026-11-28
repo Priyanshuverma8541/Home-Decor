@@ -8,6 +8,7 @@
     "test:tenant-isolation": "node --test tests/tenantIsolation.test.js",
     "test:checklists": "node --test tests/checklistsWorkbook.test.js",
     "test:media-downloader": "node --test tests/mediaDownloader*.test.js",
+    "test:modules": "node --test tests/moduleRegistry.test.js tests/moduleGithubWebhook.test.js",
     "dev": "nodemon index.js",
     "seed:marketplace": "node scripts/seedMarketplaceCategories.js",
     "seed:jewellery": "node scripts/seedJewelleryProducts.js",

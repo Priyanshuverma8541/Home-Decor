@@ -69,6 +69,13 @@ export const mediaDownloaderAPI = {
     onDownloadProgress,
   }),
 };
+export const moduleAPI = {
+  discover: (placement) => api.get(`/api/modules/discover/${encodeURIComponent(placement)}`),
+  resolve: (section, productId) => api.get(`/api/modules/resolve/${encodeURIComponent(section)}/${encodeURIComponent(productId)}`),
+  assignments: () => api.get("/api/modules/developer/assignments"),
+  updateAssignment: (id, data) => api.patch(`/api/modules/developer/assignments/${encodeURIComponent(id)}`, data),
+  submit: (id, data) => api.post(`/api/modules/developer/assignments/${encodeURIComponent(id)}/submissions`, data),
+};
 export const pagesAPI = {
   published: (slug) => api.get(`/api/pages/${encodeURIComponent(slug)}`),
   preview: (slug, token) => api.get(`/api/pages/preview/${encodeURIComponent(slug)}`, { headers: { "X-Page-Preview": token } }),
